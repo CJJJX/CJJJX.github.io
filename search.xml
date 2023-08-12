@@ -1558,4 +1558,320 @@
         <tag>vue</tag>
       </tags>
   </entry>
+  <entry>
+    <title>vue学习Day5</title>
+    <url>/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/</url>
+    <content><![CDATA[<h2 id="一、今日学习目标"><a href="#一、今日学习目标" class="headerlink" title="一、今日学习目标"></a>一、今日学习目标</h2><h3 id="1-自定义指令"><a href="#1-自定义指令" class="headerlink" title="1.自定义指令"></a>1.自定义指令</h3><ul>
+<li>基本语法（全局、局部注册）</li>
+<li>指令的值</li>
+<li>v-loading的指令封装</li>
+</ul>
+<h3 id="2-插槽"><a href="#2-插槽" class="headerlink" title="2.插槽"></a>2.插槽</h3><ul>
+<li>默认插槽</li>
+<li>具名插槽</li>
+<li>作用域插槽</li>
+</ul>
+<h3 id="3-综合案例：商品列表"><a href="#3-综合案例：商品列表" class="headerlink" title="3.综合案例：商品列表"></a>3.综合案例：商品列表</h3><ul>
+<li>MyTag组件封装</li>
+<li>MyTable组件封装</li>
+</ul>
+<h3 id="4-路由入门"><a href="#4-路由入门" class="headerlink" title="4.路由入门"></a>4.路由入门</h3><ul>
+<li>单页应用程序</li>
+<li>路由</li>
+<li>VueRouter的基本使用</li>
+</ul>
+<h2 id="二、自定义指令"><a href="#二、自定义指令" class="headerlink" title="二、自定义指令"></a>二、自定义指令</h2><h3 id="1-指令介绍"><a href="#1-指令介绍" class="headerlink" title="1.指令介绍"></a>1.指令介绍</h3><ul>
+<li><p>内置指令：<strong>v-html、v-if、v-bind、v-on</strong>… 这都是Vue给咱们内置的一些指令，可以直接使用</p>
+</li>
+<li><p>自定义指令：同时Vue也支持让开发者，自己注册一些指令。这些指令被称为<strong>自定义指令</strong></p>
+<p>每个指令都有自己各自独立的功能</p>
+</li>
+</ul>
+<h3 id="2-自定义指令"><a href="#2-自定义指令" class="headerlink" title="2.自定义指令"></a>2.自定义指令</h3><p>概念：自己定义的指令，可以<strong>封装一些DOM操作</strong>，扩展额外的功能</p>
+<h3 id="3-自定义指令语法"><a href="#3-自定义指令语法" class="headerlink" title="3.自定义指令语法"></a>3.自定义指令语法</h3><ul>
+<li><p>全局注册</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">//在main.js中</span><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">directive</span>(<span class="hljs-string">&#x27;指令名&#x27;</span>, &#123;<br>  <span class="hljs-string">&quot;inserted&quot;</span> (el) &#123;<br>    <span class="hljs-comment">// 可以对 el 标签，扩展额外功能</span><br>    el.<span class="hljs-title function_">focus</span>()<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>局部注册</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">//在Vue组件的配置项中<br>directives: &#123;<br>  &quot;指令名&quot;: &#123;<br>    inserted () &#123;<br>      // 可以对 el 标签，扩展额外功能<br>      el.focus()<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>使用指令</p>
+<p>注意：在使用指令的时候，一定要<strong>先注册</strong>，<strong>再使用</strong>，否则会报错<br>使用指令语法： v-指令名。如：<input type="text" v-focus>  </p>
+<p><strong>注册</strong>指令时<strong>不用</strong>加<strong>v-前缀</strong>，但<strong>使用时</strong>一定要<strong>加v-前缀</strong></p>
+</li>
+</ul>
+<h3 id="4-指令中的配置项介绍"><a href="#4-指令中的配置项介绍" class="headerlink" title="4.指令中的配置项介绍"></a>4.指令中的配置项介绍</h3><p>inserted:被绑定元素插入父节点时调用的钩子函数</p>
+<p>el：使用指令的那个DOM元素</p>
+<h3 id="5-代码示例"><a href="#5-代码示例" class="headerlink" title="5.代码示例"></a>5.代码示例</h3><p>需求：当页面加载时，让元素获取焦点（<strong>autofocus在safari浏览器有兼容性</strong>）</p>
+<p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;div&gt;<br>  &lt;h1&gt;自定义指令&lt;/h1&gt;<br>  &lt;input v-focus ref=&quot;inp&quot; type=&quot;text&quot;&gt;<br>&lt;/div&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-总结"><a href="#6-总结" class="headerlink" title="6.总结"></a>6.总结</h3><p>1.自定义指令的作用是什么？</p>
+<p>2.使用自定义指令的步骤是哪两步？</p>
+<h2 id="三、自定义指令-指令的值"><a href="#三、自定义指令-指令的值" class="headerlink" title="三、自定义指令-指令的值"></a>三、自定义指令-指令的值</h2><h3 id="1-需求"><a href="#1-需求" class="headerlink" title="1.需求"></a>1.需求</h3><p>实现一个 color 指令 - 传入不同的颜色, 给标签设置文字颜色</p>
+<h3 id="2-语法"><a href="#2-语法" class="headerlink" title="2.语法"></a>2.语法</h3><p>1.在绑定指令时，可以通过“等号”的形式为指令 绑定 具体的参数值</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-color</span>=<span class="hljs-string">&quot;color&quot;</span>&gt;</span>我是内容<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>2.通过 binding.value 可以拿到指令值，<strong>指令值修改会 触发 update 函数</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-attr">directives</span>: &#123;<br>  <span class="hljs-attr">color</span>: &#123;<br>    inserted (el, binding) &#123;<br>      el.<span class="hljs-property">style</span>.<span class="hljs-property">color</span> = binding.<span class="hljs-property">value</span><br>    &#125;,<br>    update (el, binding) &#123;<br>      el.<span class="hljs-property">style</span>.<span class="hljs-property">color</span> = binding.<span class="hljs-property">value</span><br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-代码示例"><a href="#3-代码示例" class="headerlink" title="3.代码示例"></a>3.代码示例</h3><p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div&gt;<br>     &lt;!--显示红色--&gt; <br>    &lt;h2 v-color=&quot;color1&quot;&gt;指令的值1测试&lt;/h2&gt;<br>     &lt;!--显示蓝色--&gt; <br>    &lt;h2 v-color=&quot;color2&quot;&gt;指令的值2测试&lt;/h2&gt;<br>     &lt;button&gt;<br>        改变第一个h1的颜色<br>    &lt;/button&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  data () &#123;<br>    return &#123;<br>      color1: &#x27;red&#x27;,<br>      color2: &#x27;blue&#x27;<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br><br>&lt;style&gt;<br><br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、自定义指令-v-loading指令的封装"><a href="#四、自定义指令-v-loading指令的封装" class="headerlink" title="四、自定义指令-v-loading指令的封装"></a>四、自定义指令-v-loading指令的封装</h2><h3 id="1-场景"><a href="#1-场景" class="headerlink" title="1.场景"></a>1.场景</h3><p>实际开发过程中，发送请求需要时间，在请求的数据未回来时，页面会处于<strong>空白状态</strong>  &#x3D;&gt;  用户体验不好</p>
+<h3 id="2-需求"><a href="#2-需求" class="headerlink" title="2.需求"></a>2.需求</h3><p>封装一个 v-loading 指令，实现加载中的效果</p>
+<h3 id="3-分析"><a href="#3-分析" class="headerlink" title="3.分析"></a>3.分析</h3><p>1.本质 loading效果就是一个蒙层，盖在了盒子上</p>
+<p>2.数据请求中，开启loading状态，添加蒙层</p>
+<p>3.数据请求完毕，关闭loading状态，移除蒙层</p>
+<h3 id="4-实现"><a href="#4-实现" class="headerlink" title="4.实现"></a>4.实现</h3><p>1.准备一个 loading类，通过伪元素定位，设置宽高，实现蒙层</p>
+<p>2.开启关闭 loading状态（添加移除蒙层），本质只需要添加移除类即可</p>
+<p>3.结合自定义指令的语法进行封装复用</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.loading</span><span class="hljs-selector-pseudo">:before</span> &#123;<br>  <span class="hljs-attribute">content</span>: <span class="hljs-string">&quot;&quot;</span>;<br>  <span class="hljs-attribute">position</span>: absolute;<br>  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;<br>  <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;<br>  <span class="hljs-attribute">background</span>: <span class="hljs-number">#fff</span> <span class="hljs-built_in">url</span>(<span class="hljs-string">&quot;./loading.gif&quot;</span>) no-repeat center;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-准备代码"><a href="#5-准备代码" class="headerlink" title="5.准备代码"></a>5.准备代码</h3><figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;main&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">v-for</span>=<span class="hljs-string">&quot;item in list&quot;</span> <span class="hljs-attr">:key</span>=<span class="hljs-string">&quot;item.id&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;news&quot;</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;left&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>&#123;&#123; item.title &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;info&quot;</span>&gt;</span><br>              <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>&#123;&#123; item.source &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>              <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>&#123;&#123; item.time &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;right&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">:src</span>=<span class="hljs-string">&quot;item.img&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span><br>          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span> <br>  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-comment">// 安装axios =&gt;  yarn add axios || npm i axios</span></span><br><span class="language-javascript"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span></span><br><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-comment">// 接口地址：http://hmajax.itheima.net/api/news</span></span><br><span class="language-javascript"><span class="hljs-comment">// 请求方式：get</span></span><br><span class="language-javascript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;</span><br><span class="language-javascript">  data () &#123;</span><br><span class="language-javascript">    <span class="hljs-keyword">return</span> &#123;</span><br><span class="language-javascript">      <span class="hljs-attr">list</span>: [],</span><br><span class="language-javascript">      <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">false</span>,</span><br><span class="language-javascript">      <span class="hljs-attr">isLoading2</span>: <span class="hljs-literal">false</span></span><br><span class="language-javascript">    &#125;</span><br><span class="language-javascript">  &#125;,</span><br><span class="language-javascript">  <span class="hljs-keyword">async</span> created () &#123;</span><br><span class="language-javascript">    <span class="hljs-comment">// 1. 发送请求获取数据</span></span><br><span class="language-javascript">    <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> axios.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;http://hmajax.itheima.net/api/news&#x27;</span>)</span><br><span class="language-javascript">    </span><br><span class="language-javascript">    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> &#123;</span><br><span class="language-javascript">      <span class="hljs-comment">// 2. 更新到 list 中，用于页面渲染 v-for</span></span><br><span class="language-javascript">      <span class="hljs-variable language_">this</span>.<span class="hljs-property">list</span> = res.<span class="hljs-property">data</span>.<span class="hljs-property">data</span></span><br><span class="language-javascript">    &#125;, <span class="hljs-number">2000</span>)</span><br><span class="language-javascript">  &#125;</span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css"><span class="hljs-selector-class">.loading</span><span class="hljs-selector-pseudo">:before</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">content</span>: <span class="hljs-string">&#x27;&#x27;</span>;</span><br><span class="language-css">  <span class="hljs-attribute">position</span>: absolute;</span><br><span class="language-css">  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;</span><br><span class="language-css">  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;</span><br><span class="language-css">  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">  <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">  <span class="hljs-attribute">background</span>: <span class="hljs-number">#fff</span> <span class="hljs-built_in">url</span>(<span class="hljs-string">&#x27;./loading.gif&#x27;</span>) no-repeat center;</span><br><span class="language-css">&#125;</span><br><span class="language-css"></span><br><span class="language-css"><span class="hljs-selector-class">.box2</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">width</span>: <span class="hljs-number">400px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">height</span>: <span class="hljs-number">400px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">border</span>: <span class="hljs-number">2px</span> solid <span class="hljs-number">#000</span>;</span><br><span class="language-css">  <span class="hljs-attribute">position</span>: relative;</span><br><span class="language-css">&#125;</span><br><span class="language-css"></span><br><span class="language-css"></span><br><span class="language-css"></span><br><span class="language-css"><span class="hljs-selector-class">.box</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">width</span>: <span class="hljs-number">800px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">500px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">border</span>: <span class="hljs-number">3px</span> solid orange;</span><br><span class="language-css">  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">5px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">position</span>: relative;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.news</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">display</span>: flex;</span><br><span class="language-css">  <span class="hljs-attribute">height</span>: <span class="hljs-number">120px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">width</span>: <span class="hljs-number">600px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span> auto;</span><br><span class="language-css">  <span class="hljs-attribute">padding</span>: <span class="hljs-number">20px</span> <span class="hljs-number">0</span>;</span><br><span class="language-css">  <span class="hljs-attribute">cursor</span>: pointer;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.news</span> <span class="hljs-selector-class">.left</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">flex</span>: <span class="hljs-number">1</span>;</span><br><span class="language-css">  <span class="hljs-attribute">display</span>: flex;</span><br><span class="language-css">  <span class="hljs-attribute">flex-direction</span>: column;</span><br><span class="language-css">  <span class="hljs-attribute">justify-content</span>: space-between;</span><br><span class="language-css">  <span class="hljs-attribute">padding-right</span>: <span class="hljs-number">10px</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.news</span> <span class="hljs-selector-class">.left</span> <span class="hljs-selector-class">.title</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.news</span> <span class="hljs-selector-class">.left</span> <span class="hljs-selector-class">.info</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">color</span>: <span class="hljs-number">#999999</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.news</span> <span class="hljs-selector-class">.left</span> <span class="hljs-selector-class">.info</span> <span class="hljs-selector-tag">span</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">margin-right</span>: <span class="hljs-number">20px</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.news</span> <span class="hljs-selector-class">.right</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">width</span>: <span class="hljs-number">160px</span>;</span><br><span class="language-css">  <span class="hljs-attribute">height</span>: <span class="hljs-number">120px</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.news</span> <span class="hljs-selector-class">.right</span> <span class="hljs-selector-tag">img</span> &#123;</span><br><span class="language-css">  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">  <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">  <span class="hljs-attribute">object-fit</span>: cover;</span><br><span class="language-css">&#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、插槽-默认插槽"><a href="#五、插槽-默认插槽" class="headerlink" title="五、插槽-默认插槽"></a>五、插槽-默认插槽</h2><h3 id="1-作用"><a href="#1-作用" class="headerlink" title="1.作用"></a>1.作用</h3><p>让组件内部的一些 <strong>结构</strong> 支持 <strong>自定义</strong></p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682410215245.png" alt="68241021524"></p>
+<h3 id="2-需求-1"><a href="#2-需求-1" class="headerlink" title="2.需求"></a>2.需求</h3><p>将需要多次显示的对话框,封装成一个组件</p>
+<h3 id="3-问题"><a href="#3-问题" class="headerlink" title="3.问题"></a>3.问题</h3><p>组件的内容部分，<strong>不希望写死</strong>，希望能使用的时候<strong>自定义</strong>。怎么办</p>
+<h3 id="4-插槽的基本语法"><a href="#4-插槽的基本语法" class="headerlink" title="4.插槽的基本语法"></a>4.插槽的基本语法</h3><ol>
+<li>组件内需要定制的结构部分，改用**<slot></slot>**占位</li>
+<li>使用组件时, **<MyDialog></MyDialog>**标签内部, 传入结构替换slot</li>
+<li>给插槽传入内容时，可以传入<strong>纯文本、html标签、组件</strong></li>
+</ol>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682410329794.png" alt="68241032979"></p>
+<h3 id="5-代码示例-1"><a href="#5-代码示例-1" class="headerlink" title="5.代码示例"></a>5.代码示例</h3><p>MyDialog.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div class=&quot;dialog&quot;&gt;<br>    &lt;div class=&quot;dialog-header&quot;&gt;<br>      &lt;h3&gt;友情提示&lt;/h3&gt;<br>      &lt;span class=&quot;close&quot;&gt;✖️&lt;/span&gt;<br>    &lt;/div&gt;<br><br>    &lt;div class=&quot;dialog-content&quot;&gt;<br>      您确定要进行删除操作吗？<br>    &lt;/div&gt;<br>    &lt;div class=&quot;dialog-footer&quot;&gt;<br>      &lt;button&gt;取消&lt;/button&gt;<br>      &lt;button&gt;确认&lt;/button&gt;<br>    &lt;/div&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  data () &#123;<br>    return &#123;<br><br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br><br>&lt;style scoped&gt;<br>* &#123;<br>  margin: 0;<br>  padding: 0;<br>&#125;<br>.dialog &#123;<br>  width: 470px;<br>  height: 230px;<br>  padding: 0 25px;<br>  background-color: #ffffff;<br>  margin: 40px auto;<br>  border-radius: 5px;<br>&#125;<br>.dialog-header &#123;<br>  height: 70px;<br>  line-height: 70px;<br>  font-size: 20px;<br>  border-bottom: 1px solid #ccc;<br>  position: relative;<br>&#125;<br>.dialog-header .close &#123;<br>  position: absolute;<br>  right: 0px;<br>  top: 0px;<br>  cursor: pointer;<br>&#125;<br>.dialog-content &#123;<br>  height: 80px;<br>  font-size: 18px;<br>  padding: 15px 0;<br>&#125;<br>.dialog-footer &#123;<br>  display: flex;<br>  justify-content: flex-end;<br>&#125;<br>.dialog-footer button &#123;<br>  width: 65px;<br>  height: 35px;<br>  background-color: #ffffff;<br>  border: 1px solid #e1e3e9;<br>  cursor: pointer;<br>  outline: none;<br>  margin-left: 10px;<br>  border-radius: 3px;<br>&#125;<br>.dialog-footer button:last-child &#123;<br>  background-color: #007acc;<br>  color: #fff;<br>&#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+<p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div&gt;<br>    &lt;MyDialog&gt;<br>    &lt;/MyDialog&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>import MyDialog from &#x27;./components/MyDialog.vue&#x27;<br>export default &#123;<br>  data () &#123;<br>    return &#123;<br><br>    &#125;<br>  &#125;,<br>  components: &#123;<br>    MyDialog<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br><br>&lt;style&gt;<br>body &#123;<br>  background-color: #b3b3b3;<br>&#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-总结-1"><a href="#6-总结-1" class="headerlink" title="6.总结"></a>6.总结</h3><p>场景：组件内某一部分结构不确定，想要自定义怎么办</p>
+<p>使用：插槽的步骤分为哪几步？</p>
+<h2 id="六、插槽-后备内容（默认值）"><a href="#六、插槽-后备内容（默认值）" class="headerlink" title="六、插槽-后备内容（默认值）"></a>六、插槽-后备内容（默认值）</h2><h3 id="1-问题"><a href="#1-问题" class="headerlink" title="1.问题"></a>1.问题</h3><p>通过插槽完成了内容的定制，传什么显示什么, 但是如果不传，则是空白</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682411494612.png" alt="68241149461"></p>
+<p>能否给插槽设置 默认显示内容 呢？</p>
+<h3 id="2-插槽的后备内容"><a href="#2-插槽的后备内容" class="headerlink" title="2.插槽的后备内容"></a>2.插槽的后备内容</h3><p>封装组件时，可以为预留的 <code>&lt;slot&gt;</code> 插槽提供后备内容（默认内容）。</p>
+<h3 id="3-语法"><a href="#3-语法" class="headerlink" title="3.语法"></a>3.语法</h3><p>在 <slot> 标签内，放置内容, 作为默认显示内容</slot></p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682412365046.png" alt="68241233912"></p>
+<h3 id="4-效果"><a href="#4-效果" class="headerlink" title="4.效果"></a>4.效果</h3><ul>
+<li><p>外部使用组件时，不传东西，则slot会显示后备内容 </p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682412432656.png" alt="68241243265"></p>
+</li>
+<li><p>外部使用组件时，传东西了，则slot整体会被换掉</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682412459027.png" alt="68241245902"></p>
+</li>
+</ul>
+<h3 id="5-代码示例-2"><a href="#5-代码示例-2" class="headerlink" title="5.代码示例"></a>5.代码示例</h3><p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div&gt;<br>    &lt;MyDialog&gt;&lt;/MyDialog&gt;<br>    &lt;MyDialog&gt;<br>      你确认要退出么<br>    &lt;/MyDialog&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>import MyDialog from &#x27;./components/MyDialog.vue&#x27;<br>export default &#123;<br>  data () &#123;<br>    return &#123;<br><br>    &#125;<br>  &#125;,<br>  components: &#123;<br>    MyDialog<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br><br>&lt;style&gt;<br>body &#123;<br>  background-color: #b3b3b3;<br>&#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="七、插槽-具名插槽"><a href="#七、插槽-具名插槽" class="headerlink" title="七、插槽-具名插槽"></a>七、插槽-具名插槽</h2><h3 id="1-需求-1"><a href="#1-需求-1" class="headerlink" title="1.需求"></a>1.需求</h3><p>一个组件内有多处结构，需要外部传入标签，进行定制 <img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682413134876.png" alt="68241313487"></p>
+<p>上面的弹框中有<strong>三处不同</strong>，但是<strong>默认插槽</strong>只能<strong>定制一个位置</strong>，这时候怎么办呢?</p>
+<h3 id="2-具名插槽语法"><a href="#2-具名插槽语法" class="headerlink" title="2.具名插槽语法"></a>2.具名插槽语法</h3><ul>
+<li><p>多个slot使用name属性区分名字 </p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682413391727.png" alt="68241339172"></p>
+</li>
+<li><p>template配合v-slot:名字来分发对应标签</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682413411921.png" alt="68241341192"></p>
+</li>
+</ul>
+<h3 id="3-v-slot的简写"><a href="#3-v-slot的简写" class="headerlink" title="3.v-slot的简写"></a>3.v-slot的简写</h3><p>v-slot写起来太长，vue给我们提供一个简单写法 <strong>v-slot —&gt; #</strong></p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h3><ul>
+<li>组件内 有多处不确定的结构 怎么办?</li>
+<li>具名插槽的语法是什么？</li>
+<li>v-slot:插槽名可以简化成什么?</li>
+</ul>
+<h2 id="八、作用域插槽"><a href="#八、作用域插槽" class="headerlink" title="八、作用域插槽"></a>八、作用域插槽</h2><h3 id="1-插槽分类"><a href="#1-插槽分类" class="headerlink" title="1.插槽分类"></a>1.插槽分类</h3><ul>
+<li><p>默认插槽</p>
+</li>
+<li><p>具名插槽</p>
+<p>插槽只有两种，作用域插槽不属于插槽的一种分类</p>
+</li>
+</ul>
+<h3 id="2-作用"><a href="#2-作用" class="headerlink" title="2.作用"></a>2.作用</h3><p>定义slot 插槽的同时, 是可以<strong>传值</strong>的。给 <strong>插槽</strong> 上可以 <strong>绑定数据</strong>，将来 <strong>使用组件时可以用</strong></p>
+<h3 id="3-场景"><a href="#3-场景" class="headerlink" title="3.场景"></a>3.场景</h3><p>封装表格组件</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682414342139.png" alt="68241434213"></p>
+<h3 id="4-使用步骤"><a href="#4-使用步骤" class="headerlink" title="4.使用步骤"></a>4.使用步骤</h3><ol>
+<li><p>给 slot 标签, 以 添加属性的方式传值</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;slot :id=&quot;item.id&quot; msg=&quot;测试文本&quot;&gt;&lt;/slot&gt;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>所有添加的属性, 都会被收集到一个对象中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&#123; id: 3, msg: &#x27;测试文本&#x27; &#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>在template中, 通过  <code> #插槽名= &quot;obj&quot;</code> 接收，默认插槽名为 default</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;MyTable :list=&quot;list&quot;&gt;<br>  &lt;template #default=&quot;obj&quot;&gt;<br>    &lt;button @click=&quot;del(obj.id)&quot;&gt;删除&lt;/button&gt;<br>  &lt;/template&gt;<br>&lt;/MyTable&gt;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="5-代码示例-3"><a href="#5-代码示例-3" class="headerlink" title="5.代码示例"></a>5.代码示例</h3><p>MyTable.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;table class=&quot;my-table&quot;&gt;<br>    &lt;thead&gt;<br>      &lt;tr&gt;<br>        &lt;th&gt;序号&lt;/th&gt;<br>        &lt;th&gt;姓名&lt;/th&gt;<br>        &lt;th&gt;年纪&lt;/th&gt;<br>        &lt;th&gt;操作&lt;/th&gt;<br>      &lt;/tr&gt;<br>    &lt;/thead&gt;<br>    &lt;tbody&gt;<br>      &lt;tr&gt;<br>        &lt;td&gt;1&lt;/td&gt;<br>        &lt;td&gt;赵小云&lt;/td&gt;<br>        &lt;td&gt;19&lt;/td&gt;<br>        &lt;td&gt;<br>          &lt;button&gt;<br>          	查看    <br>    	  &lt;/button&gt;<br>        &lt;/td&gt;<br>      &lt;/tr&gt;<br>        &lt;tr&gt;<br>        &lt;td&gt;1&lt;/td&gt;<br>        &lt;td&gt;张小花&lt;/td&gt;<br>        &lt;td&gt;19&lt;/td&gt;<br>        &lt;td&gt;<br>          &lt;button&gt;<br>          	查看    <br>    	  &lt;/button&gt;<br>        &lt;/td&gt;<br>      &lt;/tr&gt;<br>        &lt;tr&gt;<br>        &lt;td&gt;1&lt;/td&gt;<br>        &lt;td&gt;孙大明&lt;/td&gt;<br>        &lt;td&gt;19&lt;/td&gt;<br>        &lt;td&gt;<br>          &lt;button&gt;<br>          	查看    <br>    	  &lt;/button&gt;<br>        &lt;/td&gt;<br>      &lt;/tr&gt;<br>    &lt;/tbody&gt;<br>  &lt;/table&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  props: &#123;<br>    data: Array<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br><br>&lt;style scoped&gt;<br>.my-table &#123;<br>  width: 450px;<br>  text-align: center;<br>  border: 1px solid #ccc;<br>  font-size: 24px;<br>  margin: 30px auto;<br>&#125;<br>.my-table thead &#123;<br>  background-color: #1f74ff;<br>  color: #fff;<br>&#125;<br>.my-table thead th &#123;<br>  font-weight: normal;<br>&#125;<br>.my-table thead tr &#123;<br>  line-height: 40px;<br>&#125;<br>.my-table th,<br>.my-table td &#123;<br>  border-bottom: 1px solid #ccc;<br>  border-right: 1px solid #ccc;<br>&#125;<br>.my-table td:last-child &#123;<br>  border-right: none;<br>&#125;<br>.my-table tr:last-child td &#123;<br>  border-bottom: none;<br>&#125;<br>.my-table button &#123;<br>  width: 65px;<br>  height: 35px;<br>  font-size: 18px;<br>  border: 1px solid #ccc;<br>  outline: none;<br>  border-radius: 3px;<br>  cursor: pointer;<br>  background-color: #ffffff;<br>  margin-left: 5px;<br>&#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+<p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div&gt;<br>    &lt;MyTable :data=&quot;list&quot;&gt;&lt;/MyTable&gt;<br>    &lt;MyTable :data=&quot;list2&quot;&gt;&lt;/MyTable&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>  import MyTable from &#x27;./components/MyTable.vue&#x27;<br>  export default &#123;<br>    data () &#123;<br>      return &#123;<br>     	list: [<br>            &#123; id: 1, name: &#x27;张小花&#x27;, age: 18 &#125;,<br>            &#123; id: 2, name: &#x27;孙大明&#x27;, age: 19 &#125;,<br>            &#123; id: 3, name: &#x27;刘德忠&#x27;, age: 17 &#125;,<br>          ],<br>          list2: [<br>            &#123; id: 1, name: &#x27;赵小云&#x27;, age: 18 &#125;,<br>            &#123; id: 2, name: &#x27;刘蓓蓓&#x27;, age: 19 &#125;,<br>            &#123; id: 3, name: &#x27;姜肖泰&#x27;, age: 17 &#125;,<br>          ]<br>      &#125;<br>    &#125;,<br>    components: &#123;<br>      MyTable<br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-总结-2"><a href="#6-总结-2" class="headerlink" title="6.总结"></a>6.总结</h3><p>1.作用域插槽的作用是什么？</p>
+<p>2.作用域插槽的使用步骤是什么？</p>
+<h2 id="九、综合案例-商品列表-MyTag组件抽离"><a href="#九、综合案例-商品列表-MyTag组件抽离" class="headerlink" title="九、综合案例 - 商品列表-MyTag组件抽离"></a>九、综合案例 - 商品列表-MyTag组件抽离</h2><p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682416406585.png" alt="68241640658"></p>
+<h3 id="1-需求说明"><a href="#1-需求说明" class="headerlink" title="1.需求说明"></a>1.需求说明</h3><ol>
+<li><strong>my-tag 标签组件封装</strong></li>
+</ol>
+<p>​    (1) 双击显示输入框，输入框获取焦点</p>
+<p>​    (2) 失去焦点，隐藏输入框</p>
+<p>​    (3) 回显标签信息</p>
+<p>​    (4) 内容修改，回车 → 修改标签信息</p>
+<ol start="2">
+<li><strong>my-table 表格组件封装</strong></li>
+</ol>
+<p>​    (1) 动态传递表格数据渲染</p>
+<p>​    (2) 表头支持用户自定义</p>
+<p>​    (3) 主体支持用户自定义</p>
+<h3 id="2-代码准备"><a href="#2-代码准备" class="headerlink" title="2.代码准备"></a>2.代码准备</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div class=&quot;table-case&quot;&gt;<br>    &lt;table class=&quot;my-table&quot;&gt;<br>      &lt;thead&gt;<br>        &lt;tr&gt;<br>          &lt;th&gt;编号&lt;/th&gt;<br>          &lt;th&gt;名称&lt;/th&gt;<br>          &lt;th&gt;图片&lt;/th&gt;<br>          &lt;th width=&quot;100px&quot;&gt;标签&lt;/th&gt;<br>        &lt;/tr&gt;<br>      &lt;/thead&gt;<br>      &lt;tbody&gt;<br>        &lt;tr&gt;<br>          &lt;td&gt;1&lt;/td&gt;<br>          &lt;td&gt;梨皮朱泥三绝清代小品壶经典款紫砂壶&lt;/td&gt;<br>          &lt;td&gt;<br>            &lt;img src=&quot;https://yanxuan-item.nosdn.127.net/f8c37ffa41ab1eb84bff499e1f6acfc7.jpg&quot; /&gt;<br>          &lt;/td&gt;<br>          &lt;td&gt;<br>            &lt;div class=&quot;my-tag&quot;&gt;<br>              &lt;!-- &lt;input <br>                class=&quot;input&quot;<br>                type=&quot;text&quot;<br>                placeholder=&quot;输入标签&quot;<br>              /&gt; --&gt;<br>              &lt;div class=&quot;text&quot;&gt;<br>                茶具<br>              &lt;/div&gt;<br>            &lt;/div&gt;<br>          &lt;/td&gt;<br>        &lt;/tr&gt;<br>        &lt;tr&gt;<br>          &lt;td&gt;1&lt;/td&gt;<br>          &lt;td&gt;梨皮朱泥三绝清代小品壶经典款紫砂壶&lt;/td&gt;<br>          &lt;td&gt;<br>            &lt;img src=&quot;https://yanxuan-item.nosdn.127.net/221317c85274a188174352474b859d7b.jpg&quot; /&gt;<br>          &lt;/td&gt;<br>          &lt;td&gt;<br>            &lt;div class=&quot;my-tag&quot;&gt;<br>              &lt;!-- &lt;input<br>                ref=&quot;inp&quot;<br>                class=&quot;input&quot;<br>                type=&quot;text&quot;<br>                placeholder=&quot;输入标签&quot;<br>              /&gt; --&gt;<br>              &lt;div class=&quot;text&quot;&gt;<br>                男靴<br>              &lt;/div&gt;<br>            &lt;/div&gt;<br>          &lt;/td&gt;<br>        &lt;/tr&gt;<br>      &lt;/tbody&gt;<br>    &lt;/table&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  name: &#x27;TableCase&#x27;,<br>  components: &#123;&#125;,<br>  data() &#123;<br>    return &#123;<br>      goods: [<br>        &#123;<br>          id: 101,<br>          picture:<br>            &#x27;https://yanxuan-item.nosdn.127.net/f8c37ffa41ab1eb84bff499e1f6acfc7.jpg&#x27;,<br>          name: &#x27;梨皮朱泥三绝清代小品壶经典款紫砂壶&#x27;,<br>          tag: &#x27;茶具&#x27;,<br>        &#125;,<br>        &#123;<br>          id: 102,<br>          picture:<br>            &#x27;https://yanxuan-item.nosdn.127.net/221317c85274a188174352474b859d7b.jpg&#x27;,<br>          name: &#x27;全防水HABU旋钮牛皮户外徒步鞋山宁泰抗菌&#x27;,<br>          tag: &#x27;男鞋&#x27;,<br>        &#125;,<br>        &#123;<br>          id: 103,<br>          picture:<br>            &#x27;https://yanxuan-item.nosdn.127.net/cd4b840751ef4f7505c85004f0bebcb5.png&#x27;,<br>          name: &#x27;毛茸茸小熊出没，儿童羊羔绒背心73-90cm&#x27;,<br>          tag: &#x27;儿童服饰&#x27;,<br>        &#125;,<br>        &#123;<br>          id: 104,<br>          picture:<br>            &#x27;https://yanxuan-item.nosdn.127.net/56eb25a38d7a630e76a608a9360eec6b.jpg&#x27;,<br>          name: &#x27;基础百搭，儿童套头针织毛衣1-9岁&#x27;,<br>          tag: &#x27;儿童服饰&#x27;,<br>        &#125;,<br>      ],<br>    &#125;<br>  &#125;,<br>&#125;<br>&lt;/script&gt;<br><br>&lt;style lang=&quot;less&quot; scoped&gt;<br>.table-case &#123;<br>  width: 1000px;<br>  margin: 50px auto;<br>  img &#123;<br>    width: 100px;<br>    height: 100px;<br>    object-fit: contain;<br>    vertical-align: middle;<br>  &#125;<br><br>  .my-table &#123;<br>    width: 100%;<br>    border-spacing: 0;<br>    img &#123;<br>      width: 100px;<br>      height: 100px;<br>      object-fit: contain;<br>      vertical-align: middle;<br>    &#125;<br>    th &#123;<br>      background: #f5f5f5;<br>      border-bottom: 2px solid #069;<br>    &#125;<br>    td &#123;<br>      border-bottom: 1px dashed #ccc;<br>    &#125;<br>    td,<br>    th &#123;<br>      text-align: center;<br>      padding: 10px;<br>      transition: all 0.5s;<br>      &amp;.red &#123;<br>        color: red;<br>      &#125;<br>    &#125;<br>    .none &#123;<br>      height: 100px;<br>      line-height: 100px;<br>      color: #999;<br>    &#125;<br>  &#125;<br>  .my-tag &#123;<br>    cursor: pointer;<br>    .input &#123;<br>      appearance: none;<br>      outline: none;<br>      border: 1px solid #ccc;<br>      width: 100px;<br>      height: 40px;<br>      box-sizing: border-box;<br>      padding: 10px;<br>      color: #666;<br>      &amp;::placeholder &#123;<br>        color: #666;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-my-tag组件封装-创建组件"><a href="#3-my-tag组件封装-创建组件" class="headerlink" title="3.my-tag组件封装-创建组件"></a>3.my-tag组件封装-创建组件</h3><p>MyTag.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div class=&quot;my-tag&quot;&gt;<br>  &lt;!--  &lt;input<br>      class=&quot;input&quot;<br>      type=&quot;text&quot;<br>      placeholder=&quot;输入标签&quot; <br>    /&gt; --&gt;<br>    &lt;div  <br>      class=&quot;text&quot;&gt;<br>       茶具<br>    &lt;/div&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br> <br>&#125;<br>&lt;/script&gt;<br><br>&lt;style lang=&quot;less&quot; scoped&gt;<br>.my-tag &#123;<br>  cursor: pointer;<br>  .input &#123;<br>    appearance: none;<br>    outline: none;<br>    border: 1px solid #ccc;<br>    width: 100px;<br>    height: 40px;<br>    box-sizing: border-box;<br>    padding: 10px;<br>    color: #666;<br>    &amp;::placeholder &#123;<br>      color: #666;<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+<p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  ...<br> &lt;tbody&gt;<br>       &lt;tr&gt;<br>          ....<br>          &lt;td&gt;<br>            &lt;MyTag&gt;&lt;/MyTag&gt;<br>          &lt;/td&gt;<br>       &lt;/tr&gt;<br> &lt;/tbody&gt;<br> ...<br>&lt;/template&gt;<br>&lt;script&gt;<br>import MyTag from &#x27;./components/MyTag.vue&#x27;<br>export default &#123;<br>  name: &#x27;TableCase&#x27;,<br>  components: &#123;<br>    MyTag,<br>  &#125;,<br> ....<br> &lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="十、综合案例-MyTag组件控制显示隐藏"><a href="#十、综合案例-MyTag组件控制显示隐藏" class="headerlink" title="十、综合案例-MyTag组件控制显示隐藏"></a>十、综合案例-MyTag组件控制显示隐藏</h2><p>MyTag.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div class=&quot;my-tag&quot;&gt;<br>    &lt;input<br>      v-if=&quot;isEdit&quot;<br>      v-focus<br>      ref=&quot;inp&quot;<br>      class=&quot;input&quot;<br>      type=&quot;text&quot;<br>      placeholder=&quot;输入标签&quot; <br>      @blur=&quot;isEdit = false&quot; <br>    /&gt;<br>    &lt;div <br>      v-else<br>      @dblclick=&quot;handleClick&quot;<br>      class=&quot;text&quot;&gt;<br>       茶具<br>    &lt;/div&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  data () &#123;<br>    return &#123;<br>      isEdit: false<br>    &#125;<br>  &#125;,<br>  methods: &#123;<br>    handleClick () &#123;<br>      this.isEdit = true<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt; <br></code></pre></td></tr></table></figure>
+
+<p>main.js</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 封装全局指令 focus</span><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">directive</span>(<span class="hljs-string">&#x27;focus&#x27;</span>, &#123;<br>  <span class="hljs-comment">// 指令所在的dom元素，被插入到页面中时触发</span><br>  inserted (el) &#123;<br>    el.<span class="hljs-title function_">focus</span>()<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="十一、综合案例-MyTag组件进行v-model绑定"><a href="#十一、综合案例-MyTag组件进行v-model绑定" class="headerlink" title="十一、综合案例-MyTag组件进行v-model绑定"></a>十一、综合案例-MyTag组件进行v-model绑定</h2><p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;MyTag v-model=&quot;tempText&quot;&gt;&lt;/MyTag&gt;<br>&lt;script&gt;<br>    export default &#123;<br>        data()&#123;<br>            tempText:&#x27;水杯&#x27;<br>        &#125;<br>    &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>MyTag.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;template&gt;<br>  &lt;div class=&quot;my-tag&quot;&gt;<br>    &lt;input<br>      v-if=&quot;isEdit&quot;<br>      v-focus<br>      ref=&quot;inp&quot;<br>      class=&quot;input&quot;<br>      type=&quot;text&quot;<br>      placeholder=&quot;输入标签&quot;<br>      :value=&quot;value&quot;<br>      @blur=&quot;isEdit = false&quot;<br>      @keyup.enter=&quot;handleEnter&quot;<br>    /&gt;<br>    &lt;div <br>      v-else<br>      @dblclick=&quot;handleClick&quot;<br>      class=&quot;text&quot;&gt;<br>      &#123;&#123; value &#125;&#125;<br>    &lt;/div&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  props: &#123;<br>    value: String<br>  &#125;,<br>  data () &#123;<br>    return &#123;<br>      isEdit: false<br>    &#125;<br>  &#125;,<br>  methods: &#123;<br>    handleClick () &#123;<br>      this.isEdit = true<br>    &#125;,<br>    handleEnter (e) &#123;<br>      // 非空处理<br>      if (e.target.value.trim() === &#x27;&#x27;) return alert(&#x27;标签内容不能为空&#x27;)<br>      this.$emit(&#x27;input&#x27;, e.target.value)<br>      // 提交完成，关闭输入状态<br>      this.isEdit = false<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt; <br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="十二、综合案例-封装MyTable组件-动态渲染数据"><a href="#十二、综合案例-封装MyTable组件-动态渲染数据" class="headerlink" title="十二、综合案例-封装MyTable组件-动态渲染数据"></a>十二、综合案例-封装MyTable组件-动态渲染数据</h2><p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div class=&quot;table-case&quot;&gt;<br>    &lt;MyTable :data=&quot;goods&quot;&gt;&lt;/MyTable&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>import MyTable from &#x27;./components/MyTable.vue&#x27;<br>export default &#123;<br>  name: &#x27;TableCase&#x27;,<br>  components: &#123; <br>    MyTable<br>  &#125;,<br>  data()&#123;<br>    return &#123;<br>        ....<br>    &#125;<br>  &#125;,<br>&#125;<br>&lt;/script&gt; <br></code></pre></td></tr></table></figure>
+
+<p>MyTable.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;table class=&quot;my-table&quot;&gt;<br>    &lt;thead&gt;<br>      &lt;tr&gt;<br>        &lt;th&gt;编号&lt;/th&gt;<br>        &lt;th&gt;名称&lt;/th&gt;<br>        &lt;th&gt;图片&lt;/th&gt;<br>        &lt;th width=&quot;100px&quot;&gt;标签&lt;/th&gt;<br>      &lt;/tr&gt;<br>    &lt;/thead&gt;<br>    &lt;tbody&gt;<br>      &lt;tr v-for=&quot;(item, index) in data&quot; :key=&quot;item.id&quot;&gt;<br>       &lt;td&gt;&#123;&#123; index + 1 &#125;&#125;&lt;/td&gt;<br>        &lt;td&gt;&#123;&#123; item.name &#125;&#125;&lt;/td&gt;<br>        &lt;td&gt;<br>          &lt;img<br>            :src=&quot;item.picture&quot;<br>          /&gt;<br>        &lt;/td&gt;<br>        &lt;td&gt;<br>          标签内容<br>         &lt;!-- &lt;MyTag v-model=&quot;item.tag&quot;&gt;&lt;/MyTag&gt; --&gt;<br>        &lt;/td&gt;<br>      &lt;/tr&gt;<br>    &lt;/tbody&gt;<br>  &lt;/table&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  props: &#123;<br>    data: &#123;<br>      type: Array,<br>      required: true<br>    &#125;<br>  &#125;<br>&#125;;<br>&lt;/script&gt;<br><br>&lt;style lang=&quot;less&quot; scoped&gt;<br><br>.my-table &#123;<br>  width: 100%;<br>  border-spacing: 0;<br>  img &#123;<br>    width: 100px;<br>    height: 100px;<br>    object-fit: contain;<br>    vertical-align: middle;<br>  &#125;<br>  th &#123;<br>    background: #f5f5f5;<br>    border-bottom: 2px solid #069;<br>  &#125;<br>  td &#123;<br>    border-bottom: 1px dashed #ccc;<br>  &#125;<br>  td,<br>  th &#123;<br>    text-align: center;<br>    padding: 10px;<br>    transition: all .5s;<br>    &amp;.red &#123;<br>      color: red;<br>    &#125;<br>  &#125;<br>  .none &#123;<br>    height: 100px;<br>    line-height: 100px;<br>    color: #999;<br>  &#125;<br>&#125;<br><br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="十三、综合案例-封装MyTable组件-自定义结构"><a href="#十三、综合案例-封装MyTable组件-自定义结构" class="headerlink" title="十三、综合案例-封装MyTable组件-自定义结构"></a>十三、综合案例-封装MyTable组件-自定义结构</h2><p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div class=&quot;table-case&quot;&gt;<br>    &lt;MyTable :data=&quot;goods&quot;&gt;<br>      &lt;template #head&gt;<br>        &lt;th&gt;编号&lt;/th&gt;<br>        &lt;th&gt;名称&lt;/th&gt;<br>        &lt;th&gt;图片&lt;/th&gt;<br>        &lt;th width=&quot;100px&quot;&gt;标签&lt;/th&gt;<br>      &lt;/template&gt;<br><br>      &lt;template #body=&quot;&#123; item, index &#125;&quot;&gt;<br>        &lt;td&gt;&#123;&#123; index + 1 &#125;&#125;&lt;/td&gt;<br>        &lt;td&gt;&#123;&#123; item.name &#125;&#125;&lt;/td&gt;<br>        &lt;td&gt;<br>          &lt;img<br>            :src=&quot;item.picture&quot;<br>          /&gt;<br>        &lt;/td&gt;<br>        &lt;td&gt;<br>          &lt;MyTag v-model=&quot;item.tag&quot;&gt;&lt;/MyTag&gt;<br>        &lt;/td&gt;<br>      &lt;/template&gt;<br>    &lt;/MyTable&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>import MyTag from &#x27;./components/MyTag.vue&#x27;<br>import MyTable from &#x27;./components/MyTable.vue&#x27;<br>export default &#123;<br>  name: &#x27;TableCase&#x27;,<br>  components: &#123;<br>    MyTag,<br>    MyTable<br>  &#125;,<br>  data () &#123;<br>    return &#123;<br>      ....<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br> <br></code></pre></td></tr></table></figure>
+
+<p>MyTable.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;table class=&quot;my-table&quot;&gt;<br>    &lt;thead&gt;<br>      &lt;tr&gt;<br>        &lt;slot name=&quot;head&quot;&gt;&lt;/slot&gt;<br>      &lt;/tr&gt;<br>    &lt;/thead&gt;<br>    &lt;tbody&gt;<br>      &lt;tr v-for=&quot;(item, index) in data&quot; :key=&quot;item.id&quot;&gt;<br>        &lt;slot name=&quot;body&quot; :item=&quot;item&quot; :index=&quot;index&quot; &gt;&lt;/slot&gt;<br>      &lt;/tr&gt;<br>    &lt;/tbody&gt;<br>  &lt;/table&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  props: &#123;<br>    data: &#123;<br>      type: Array,<br>      required: true<br>    &#125;<br>  &#125;<br>&#125;;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="十四、单页应用程序介绍"><a href="#十四、单页应用程序介绍" class="headerlink" title="十四、单页应用程序介绍"></a>十四、单页应用程序介绍</h2><h3 id="1-概念"><a href="#1-概念" class="headerlink" title="1.概念"></a>1.概念</h3><p>单页应用程序：SPA【Single Page Application】是指所有的功能都在<strong>一个html页面</strong>上实现</p>
+<h3 id="2-具体示例"><a href="#2-具体示例" class="headerlink" title="2.具体示例"></a>2.具体示例</h3><p>单页应用网站： 网易云音乐  <a href="https://music.163.com/">https://music.163.com/</a></p>
+<p>多页应用网站：京东  <a href="https://jd.com/">https://jd.com/</a></p>
+<h3 id="3-单页应用-VS-多页面应用"><a href="#3-单页应用-VS-多页面应用" class="headerlink" title="3.单页应用 VS 多页面应用"></a>3.单页应用 VS 多页面应用</h3><p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682441912977.png" alt="68244191297"></p>
+<p>单页应用类网站：系统类网站 &#x2F; 内部网站 &#x2F; 文档类网站 &#x2F; 移动端站点</p>
+<p>多页应用类网站：公司官网 &#x2F; 电商类网站 </p>
+<h3 id="4-总结-1"><a href="#4-总结-1" class="headerlink" title="4.总结"></a>4.总结</h3><p>1.什么是单页面应用程序?</p>
+<p>2.单页面应用优缺点?</p>
+<p>3.单页应用场景？</p>
+<h2 id="十五、路由介绍"><a href="#十五、路由介绍" class="headerlink" title="十五、路由介绍"></a>十五、路由介绍</h2><h3 id="1-思考"><a href="#1-思考" class="headerlink" title="1.思考"></a>1.思考</h3><p>单页面应用程序，之所以开发效率高，性能好，用户体验好</p>
+<p>最大的原因就是：<strong>页面按需更新</strong></p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682442699775.png" alt="68244269977"></p>
+<p>比如当点击【发现音乐】和【关注】时，<strong>只是更新下面部分内容</strong>，对于头部是不更新的</p>
+<p>要按需更新，首先就需要明确：<strong>访问路径</strong>和 <strong>组件</strong>的对应关系！</p>
+<p>访问路径 和 组件的对应关系如何确定呢？ <strong>路由</strong></p>
+<h3 id="2-路由的介绍"><a href="#2-路由的介绍" class="headerlink" title="2.路由的介绍"></a>2.路由的介绍</h3><p>生活中的路由：设备和ip的映射关系</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682442945057.png" alt="68244294505"></p>
+<p>Vue中的路由：<strong>路径和组件</strong>的<strong>映射</strong>关系</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682443040372.png" alt="68244304037"></p>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h3><ul>
+<li>什么是路由</li>
+<li>Vue中的路由是什么</li>
+</ul>
+<h2 id="十六、路由的基本使用"><a href="#十六、路由的基本使用" class="headerlink" title="十六、路由的基本使用"></a>十六、路由的基本使用</h2><h3 id="1-目标"><a href="#1-目标" class="headerlink" title="1.目标"></a>1.目标</h3><p>认识插件 VueRouter，掌握 VueRouter 的基本使用步骤</p>
+<h3 id="2-作用-1"><a href="#2-作用-1" class="headerlink" title="2.作用"></a>2.作用</h3><p><strong>修改</strong>地址栏路径时，<strong>切换显示</strong>匹配的<strong>组件</strong></p>
+<h3 id="3-说明"><a href="#3-说明" class="headerlink" title="3.说明"></a>3.说明</h3><p>Vue 官方的一个路由插件，是一个第三方包</p>
+<h3 id="4-官网"><a href="#4-官网" class="headerlink" title="4.官网"></a>4.官网</h3><p><a href="https://v3.router.vuejs.org/zh/">https://v3.router.vuejs.org/zh/</a></p>
+<h3 id="5-VueRouter的使用（5-2）"><a href="#5-VueRouter的使用（5-2）" class="headerlink" title="5.VueRouter的使用（5+2）"></a>5.VueRouter的使用（5+2）</h3><p>固定5个固定的步骤（不用死背，熟能生巧）</p>
+<ol>
+<li><p>下载 VueRouter 模块到当前工程，版本3.6.5</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">yarn add vue-router@3.6.5<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>main.js中引入VueRouter</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">import VueRouter from &#x27;vue-router&#x27;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>安装注册</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">Vue.use(VueRouter)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>创建路由对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">const router = new VueRouter()<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>注入，将路由对象注入到new Vue实例中，建立关联</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">new Vue(&#123;<br>  render: h =&gt; h(App),<br>  router:router<br>&#125;).$mount(&#x27;#app&#x27;)<br><br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>当我们配置完以上5步之后 就可以看到浏览器地址栏中的路由 变成了 &#x2F;#&#x2F;的形式。表示项目的路由已经被Vue-Router管理了</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682479207453.png" alt="68247920745"></p>
+<h3 id="6-代码示例"><a href="#6-代码示例" class="headerlink" title="6.代码示例"></a>6.代码示例</h3><p>main.js</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">// 路由的使用步骤 5 + 2<br>// 5个基础步骤<br>// 1. 下载 v3.6.5<br>// yarn add vue-router@3.6.5<br>// 2. 引入<br>// 3. 安装注册 Vue.use(Vue插件)<br>// 4. 创建路由对象<br>// 5. 注入到new Vue中，建立关联<br><br><br>import VueRouter from &#x27;vue-router&#x27;<br>Vue.use(VueRouter) // VueRouter插件初始化<br><br>const router = new VueRouter()<br><br>new Vue(&#123;<br>  render: h =&gt; h(App),<br>  router<br>&#125;).$mount(&#x27;#app&#x27;)<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="7-两个核心步骤"><a href="#7-两个核心步骤" class="headerlink" title="7.两个核心步骤"></a>7.两个核心步骤</h3><ol>
+<li><p>创建需要的组件 (views目录)，配置路由规则</p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682479639666.png" alt="68247963966"></p>
+</li>
+<li><p>配置导航，配置路由出口(路径匹配的组件显示的位置)</p>
+<p>App.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;div class=&quot;footer_wrap&quot;&gt;<br>  &lt;a href=&quot;#/find&quot;&gt;发现音乐&lt;/a&gt;<br>  &lt;a href=&quot;#/my&quot;&gt;我的音乐&lt;/a&gt;<br>  &lt;a href=&quot;#/friend&quot;&gt;朋友&lt;/a&gt;<br>&lt;/div&gt;<br>&lt;div class=&quot;top&quot;&gt;<br>  &lt;router-view&gt;&lt;/router-view&gt;<br>&lt;/div&gt;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="8-总结"><a href="#8-总结" class="headerlink" title="8.总结"></a>8.总结</h3><ol>
+<li>如何实现 路径改变，对应组件 切换,应该使用哪个插件?</li>
+<li>Vue-Router的使用步骤是什么(5+2)?</li>
+</ol>
+<h2 id="十七、组件的存放目录问题"><a href="#十七、组件的存放目录问题" class="headerlink" title="十七、组件的存放目录问题"></a>十七、组件的存放目录问题</h2><p>注意： <strong>.vue文件</strong> 本质无区别</p>
+<h3 id="1-组件分类"><a href="#1-组件分类" class="headerlink" title="1.组件分类"></a>1.组件分类</h3><p> .vue文件分为2类，都是 <strong>.vue文件（本质无区别）</strong></p>
+<ul>
+<li>页面组件 （配置路由规则时使用的组件）</li>
+<li>复用组件（多个组件中都使用到的组件）</li>
+</ul>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682445397959.png" alt="68244539795"></p>
+<h3 id="2-存放目录"><a href="#2-存放目录" class="headerlink" title="2.存放目录"></a>2.存放目录</h3><p>分类开来的目的就是为了 <strong>更易维护</strong></p>
+<ol>
+<li><p>src&#x2F;views文件夹</p>
+<p>页面组件 - 页面展示 - 配合路由用</p>
+</li>
+<li><p>src&#x2F;components文件夹</p>
+<p>复用组件 - 展示数据 - 常用于复用</p>
+</li>
+</ol>
+<h3 id="3-总结-1"><a href="#3-总结-1" class="headerlink" title="3.总结"></a>3.总结</h3><ul>
+<li>组件分类有哪两类？分类的目的？</li>
+<li>不同分类的组件应该放在什么文件夹？作用分别是什么？</li>
+</ul>
+<h2 id="十八、路由的封装抽离"><a href="#十八、路由的封装抽离" class="headerlink" title="十八、路由的封装抽离"></a>十八、路由的封装抽离</h2><p>问题：所有的路由配置都在main.js中合适吗？</p>
+<p>目标：将路由模块抽离出来。  好处：<strong>拆分模块，利于维护</strong></p>
+<p><img src="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/1682481410304.png" alt="68248141030"></p>
+<p>路径简写：</p>
+<p><strong>脚手架环境下</strong> @指代src目录，可以用于快速引入组件</p>
+<p>总结：</p>
+<ul>
+<li>路由模块的封装抽离的好处是什么？</li>
+<li>以后如何快速引入组件？</li>
+</ul>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
 </search>
