@@ -2837,4 +2837,186 @@
         <tag>vue</tag>
       </tags>
   </entry>
+  <entry>
+    <title>vue学习Day8</title>
+    <url>/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/</url>
+    <content><![CDATA[<h1 id="认识Vue3"><a href="#认识Vue3" class="headerlink" title="认识Vue3"></a>认识Vue3</h1><h2 id="1-Vue2-选项式-API-vs-Vue3-组合式API"><a href="#1-Vue2-选项式-API-vs-Vue3-组合式API" class="headerlink" title="1. Vue2 选项式 API vs Vue3 组合式API"></a>1. Vue2 选项式 API vs Vue3 组合式API</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>export default &#123;<br>  data()&#123;<br>    return &#123;<br>      count:0<br>    &#125;<br>  &#125;,<br>  methods:&#123;<br>    addCount()&#123;<br>      this.count++<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>import &#123; ref &#125; from &#x27;vue&#x27;<br>const count = ref(0)<br>const addCount = ()=&gt; count.value++<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>特点：</p>
+<ol>
+<li>代码量变少</li>
+<li>分散式维护变成集中式维护</li>
+</ol>
+<h2 id="2-Vue3的优势"><a href="#2-Vue3的优势" class="headerlink" title="2. Vue3的优势"></a>2. Vue3的优势</h2><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/01.png" alt="image.png"></p>
+<h1 id="使用create-vue搭建Vue3项目"><a href="#使用create-vue搭建Vue3项目" class="headerlink" title="使用create-vue搭建Vue3项目"></a>使用create-vue搭建Vue3项目</h1><h2 id="1-认识create-vue"><a href="#1-认识create-vue" class="headerlink" title="1. 认识create-vue"></a>1. 认识create-vue</h2><blockquote>
+<p>create-vue是Vue官方新的脚手架工具，底层切换到了 vite （下一代前端工具链），为开发提供极速响应</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/2.png" alt="image.png"></p>
+<h2 id="2-使用create-vue创建项目"><a href="#2-使用create-vue创建项目" class="headerlink" title="2. 使用create-vue创建项目"></a>2. 使用create-vue创建项目</h2><blockquote>
+<p>前置条件 - 已安装16.0或更高版本的Node.js</p>
+</blockquote>
+<p>执行如下命令，这一指令将会安装并执行 create-vue</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm init vue@latest<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/3.png" alt="image.png"></p>
+<h1 id="熟悉项目和关键文件"><a href="#熟悉项目和关键文件" class="headerlink" title="熟悉项目和关键文件"></a>熟悉项目和关键文件</h1><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/4.png" alt="image.png"></p>
+<h1 id="组合式API-setup选项"><a href="#组合式API-setup选项" class="headerlink" title="组合式API - setup选项"></a>组合式API - setup选项</h1><h2 id="1-setup选项的写法和执行时机"><a href="#1-setup选项的写法和执行时机" class="headerlink" title="1. setup选项的写法和执行时机"></a>1. setup选项的写法和执行时机</h2><p>写法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      <br>    &#125;,<br>    beforeCreate()&#123;<br>      <br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>执行时机</p>
+<blockquote>
+<p>在beforeCreate钩子之前执行</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/5.png" alt="image.png"></p>
+<h2 id="2-setup中写代码的特点"><a href="#2-setup中写代码的特点" class="headerlink" title="2. setup中写代码的特点"></a>2. setup中写代码的特点</h2><blockquote>
+<p>在setup函数中写的数据和方法需要在末尾以对象的方式return，才能给模版使用</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      const message = &#x27;this is message&#x27;<br>      const logMessage = ()=&gt;&#123;<br>        console.log(message)<br>      &#125;<br>      // 必须return才可以<br>      return &#123;<br>        message,<br>        logMessage<br>      &#125;<br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-语法糖"><a href="#3-语法糖" class="headerlink" title="3. 语法糖"></a>3. <script setup>语法糖</h2><blockquote>
+<p>script标签添加 setup标记，不需要再写导出语句，默认会添加导出语句</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  const message = &#x27;this is message&#x27;<br>  const logMessage = ()=&gt;&#123;<br>    console.log(message)<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-reactive和ref函数"><a href="#组合式API-reactive和ref函数" class="headerlink" title="组合式API - reactive和ref函数"></a>组合式API - reactive和ref函数</h1><h2 id="1-reactive"><a href="#1-reactive" class="headerlink" title="1. reactive"></a>1. reactive</h2><blockquote>
+<p>接受对象类型数据的参数传入并返回一个响应式的对象</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; reactive &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const state = reactive(&#123;<br>   msg:&#x27;this is msg&#x27;<br> &#125;)<br> const setSate = ()=&gt;&#123;<br>   // 修改数据更新视图<br>   state.msg = &#x27;this is new msg&#x27;<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &#123;&#123; state.msg &#125;&#125;<br>  &lt;button @click=&quot;setState&quot;&gt;change msg&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-ref"><a href="#2-ref" class="headerlink" title="2. ref"></a>2. ref</h2><blockquote>
+<p>接收简单类型或者对象类型的数据传入并返回一个响应式的对象</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; ref &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const count = ref(0)<br> const setCount = ()=&gt;&#123;<br>   // 修改数据更新视图必须加上.value<br>   count.value++<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;button @click=&quot;setCount&quot;&gt;&#123;&#123;count&#125;&#125;&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-reactive-对比-ref"><a href="#3-reactive-对比-ref" class="headerlink" title="3. reactive 对比 ref"></a>3. reactive 对比 ref</h2><ol>
+<li>都是用来生成响应式数据</li>
+<li>不同点<ol>
+<li>reactive不能处理简单类型的数据</li>
+<li>ref参数类型支持更好，但是必须通过.value做访问修改</li>
+<li>ref函数内部的实现依赖于reactive函数</li>
+</ol>
+</li>
+<li>在实际工作中的推荐<ol>
+<li>推荐使用ref函数，减少记忆负担，小兔鲜项目都使用ref</li>
+</ol>
+</li>
+</ol>
+<h1 id="组合式API-computed"><a href="#组合式API-computed" class="headerlink" title="组合式API - computed"></a>组合式API - computed</h1><blockquote>
+<p>计算属性基本思想和Vue2保持一致，组合式API下的计算属性只是修改了API写法</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>// 导入<br>import &#123;ref, computed &#125; from &#x27;vue&#x27;<br>// 原始数据<br>const count = ref(0)<br>// 计算属性<br>const doubleCount = computed(()=&gt;count.value * 2)<br><br>// 原始数据<br>const list = ref([1,2,3,4,5,6,7,8])<br>// 计算属性list<br>const filterList = computed(item=&gt;item &gt; 2)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-watch"><a href="#组合式API-watch" class="headerlink" title="组合式API - watch"></a>组合式API - watch</h1><blockquote>
+<p>侦听一个或者多个数据的变化，数据变化时执行回调函数，俩个额外参数 immediate控制立刻执行，deep开启深度侦听</p>
+</blockquote>
+<h2 id="1-侦听单个数据"><a href="#1-侦听单个数据" class="headerlink" title="1. 侦听单个数据"></a>1. 侦听单个数据</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-侦听多个数据"><a href="#2-侦听多个数据" class="headerlink" title="2. 侦听多个数据"></a>2. 侦听多个数据</h2><blockquote>
+<p>侦听多个数据，第一个参数可以改写成数组的写法</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  const name = ref(&#x27;cp&#x27;)<br>  // 2. 调用watch 侦听变化<br>  watch([count, name], ([newCount, newName],[oldCount,oldName])=&gt;&#123;<br>    console.log(`count或者name变化了，[newCount, newName],[oldCount,oldName])<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-immediate"><a href="#3-immediate" class="headerlink" title="3. immediate"></a>3. immediate</h2><blockquote>
+<p>在侦听器创建时立即出发回调，响应式数据变化之后继续执行回调</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;,&#123;<br>    immediate: true<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-deep"><a href="#4-deep" class="headerlink" title="4. deep"></a>4. deep</h2><blockquote>
+<p>通过watch监听的ref对象默认是浅层侦听的，直接修改嵌套的对象属性不会触发回调执行，需要开启deep</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 直接修改不会引发回调执行<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br>&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state 并开启deep<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;,&#123;deep:true&#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 此时修改可以触发回调<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-生命周期函数"><a href="#组合式API-生命周期函数" class="headerlink" title="组合式API - 生命周期函数"></a>组合式API - 生命周期函数</h1><h2 id="1-选项式对比组合式"><a href="#1-选项式对比组合式" class="headerlink" title="1. 选项式对比组合式"></a>1. 选项式对比组合式</h2><p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/6.png" alt="image.png"></p>
+<h2 id="2-生命周期函数基本使用"><a href="#2-生命周期函数基本使用" class="headerlink" title="2. 生命周期函数基本使用"></a>2. 生命周期函数基本使用</h2><blockquote>
+<ol>
+<li>导入生命周期函数</li>
+<li>执行生命周期函数，传入回调</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-执行多次"><a href="#3-执行多次" class="headerlink" title="3. 执行多次"></a>3. 执行多次</h2><blockquote>
+<p>生命周期函数执行多次的时候，会按照顺序依次执行</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br><br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-父子通信"><a href="#组合式API-父子通信" class="headerlink" title="组合式API - 父子通信"></a>组合式API - 父子通信</h1><h2 id="1-父传子"><a href="#1-父传子" class="headerlink" title="1. 父传子"></a>1. 父传子</h2><blockquote>
+<p>基本思想</p>
+<ol>
+<li>父组件中给子组件绑定属性</li>
+<li>子组件内部通过props选项接收数据</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/7.png" alt="image.png"></p>
+<h2 id="2-子传父"><a href="#2-子传父" class="headerlink" title="2. 子传父"></a>2. 子传父</h2><blockquote>
+<p>基本思想</p>
+<ol>
+<li>父组件中给子组件标签通过@绑定事件</li>
+<li>子组件内部通过 emit 方法触发事件</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/8.png" alt="image.png"></p>
+<h1 id="组合式API-模版引用"><a href="#组合式API-模版引用" class="headerlink" title="组合式API - 模版引用"></a>组合式API - 模版引用</h1><blockquote>
+<p>概念：通过 ref标识 获取真实的 dom对象或者组件实例对象</p>
+</blockquote>
+<h2 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h2><blockquote>
+<p>实现步骤：</p>
+<ol>
+<li>调用ref函数生成一个ref对象</li>
+<li>通过ref标识绑定ref对象到标签</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/9.png" alt="image.png"></p>
+<h2 id="2-defineExpose"><a href="#2-defineExpose" class="headerlink" title="2. defineExpose"></a>2. defineExpose</h2><blockquote>
+<p>默认情况下在 <script setup>语法糖下组件内部的属性和方法是不开放给父组件访问的，可以通过defineExpose编译宏指定哪些属性和方法容许访问<br>说明：指定testMessage属性可以被访问到</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/10.png" alt="image.png"></p>
+<h1 id="组合式API-provide和inject"><a href="#组合式API-provide和inject" class="headerlink" title="组合式API - provide和inject"></a>组合式API - provide和inject</h1><h2 id="1-作用和场景"><a href="#1-作用和场景" class="headerlink" title="1. 作用和场景"></a>1. 作用和场景</h2><blockquote>
+<p>顶层组件向任意的底层组件传递数据和方法，实现跨层组件通信</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/11.png" alt="image.png"></p>
+<h2 id="2-跨层传递普通数据"><a href="#2-跨层传递普通数据" class="headerlink" title="2. 跨层传递普通数据"></a>2. 跨层传递普通数据</h2><blockquote>
+<p>实现步骤</p>
+<ol>
+<li>顶层组件通过 <code>provide</code> 函数提供数据</li>
+<li>底层组件通过 <code>inject</code> 函数提供数据</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/12.png" alt="image.png"></p>
+<h2 id="3-跨层传递响应式数据"><a href="#3-跨层传递响应式数据" class="headerlink" title="3. 跨层传递响应式数据"></a>3. 跨层传递响应式数据</h2><blockquote>
+<p>在调用provide函数时，第二个参数设置为ref对象</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/13.png" alt="image.png"></p>
+<h2 id="4-跨层传递方法"><a href="#4-跨层传递方法" class="headerlink" title="4. 跨层传递方法"></a>4. 跨层传递方法</h2><blockquote>
+<p>顶层组件可以向底层组件传递方法，底层组件调用方法修改顶层组件的数据</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/14.png" alt="image.png"></p>
+<h1 id="Vue3-3-新特性-defineOptions"><a href="#Vue3-3-新特性-defineOptions" class="headerlink" title="Vue3.3 新特性-defineOptions"></a>Vue3.3 新特性-defineOptions</h1><p>背景说明：</p>
+<p>有 <script setup> 之前，如果要定义 props, emits 可以轻而易举地添加一个与 setup 平级的属性。 </p>
+<p>但是用了 <script setup> 后，就没法这么干了 setup 属性已经没有了，自然无法添加与其平级的属性。</p>
+<hr>
+<p>为了解决这一问题，引入了 defineProps 与 defineEmits 这两个宏。但这只解决了 props 与 emits 这两个属性。</p>
+<p>如果我们要定义组件的 name 或其他自定义的属性，还是得回到最原始的用法——再添加一个普通的 <script> 标签。</p>
+<p>这样就会存在两个 <script> 标签。让人无法接受。</p>
+<hr>
+<p>所以在 Vue 3.3 中新引入了 defineOptions 宏。顾名思义，主要是用来定义 Options API 的选项。可以用 defineOptions 定义任意的选项， props, emits, expose, slots 除外（因为这些可以使用 defineXXX 来做到）</p>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704082955748.png" alt="image-20230704082955748"></p>
+<h1 id="Vue3-3新特性-defineModel"><a href="#Vue3-3新特性-defineModel" class="headerlink" title="Vue3.3新特性-defineModel"></a>Vue3.3新特性-defineModel</h1><p>在Vue3中，自定义组件上使用v-model, 相当于传递一个modelValue属性，同时触发 update:modelValue 事件</p>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083027349.png" alt="image-20230704083027349"></p>
+<p>我们需要先定义 props，再定义 emits 。其中有许多重复的代码。如果需要修改此值，还需要手动调用 emit 函数。</p>
+<p>于是乎 defineModel 诞生了。</p>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083056549.png" alt="image-20230704083056549"></p>
+<p>生效需要配置 vite.config.js</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><code class="hljs jsx"><span class="hljs-keyword">import</span> &#123; fileURLToPath, <span class="hljs-variable constant_">URL</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:url&#x27;</span><br><br><span class="hljs-keyword">import</span> &#123; defineConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span><br><span class="hljs-keyword">import</span> vue <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-vue&#x27;</span><br><br><span class="hljs-comment">// https://vitejs.dev/config/</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>(&#123;<br>  <span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-title function_">vue</span>(&#123;<br>      <span class="hljs-attr">script</span>: &#123;<br>        <span class="hljs-attr">defineModel</span>: <span class="hljs-literal">true</span><br>      &#125;<br>    &#125;),<br>  ],<br>  <span class="hljs-attr">resolve</span>: &#123;<br>    <span class="hljs-attr">alias</span>: &#123;<br>      <span class="hljs-string">&#x27;@&#x27;</span>: <span class="hljs-title function_">fileURLToPath</span>(<span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">&#x27;./src&#x27;</span>, <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">url</span>))<br>    &#125;<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+</script></h2>]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
 </search>

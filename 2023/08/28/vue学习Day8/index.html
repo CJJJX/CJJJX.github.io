@@ -1,0 +1,539 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>vue学习Day8 | CJJJX's BLOG</title><meta name="author" content="CJJJX"><meta name="copyright" content="CJJJX"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="认识Vue31. Vue2 选项式 API vs Vue3 组合式API1234567891011121314&lt;script&gt;export default &amp;#123;  data()&amp;#123;    return &amp;#123;      count:0    &amp;#125;  &amp;#125;,  methods:&amp;#123;    addCount()&amp;#123;      this.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue学习Day8">
+<meta property="og:url" content="http://cjjjx.github.io/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/index.html">
+<meta property="og:site_name" content="CJJJX&#39;s BLOG">
+<meta property="og:description" content="认识Vue31. Vue2 选项式 API vs Vue3 组合式API1234567891011121314&lt;script&gt;export default &amp;#123;  data()&amp;#123;    return &amp;#123;      count:0    &amp;#125;  &amp;#125;,  methods:&amp;#123;    addCount()&amp;#123;      this.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg">
+<meta property="article:published_time" content="2023-08-28T05:12:20.000Z">
+<meta property="article:modified_time" content="2023-08-28T05:13:29.100Z">
+<meta property="article:author" content="CJJJX">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://cjjjx.github.io/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'vue学习Day8',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-28 13:13:29'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="CJJJX's BLOG"><span class="site-name">CJJJX's BLOG</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">vue学习Day8</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-28T05:12:20.000Z" title="发表于 2023-08-28 13:12:20">2023-08-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-28T05:13:29.100Z" title="更新于 2023-08-28 13:13:29">2023-08-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86/">前端知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="vue学习Day8"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="认识Vue3"><a href="#认识Vue3" class="headerlink" title="认识Vue3"></a>认识Vue3</h1><h2 id="1-Vue2-选项式-API-vs-Vue3-组合式API"><a href="#1-Vue2-选项式-API-vs-Vue3-组合式API" class="headerlink" title="1. Vue2 选项式 API vs Vue3 组合式API"></a>1. Vue2 选项式 API vs Vue3 组合式API</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>export default &#123;<br>  data()&#123;<br>    return &#123;<br>      count:0<br>    &#125;<br>  &#125;,<br>  methods:&#123;<br>    addCount()&#123;<br>      this.count++<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>import &#123; ref &#125; from &#x27;vue&#x27;<br>const count = ref(0)<br>const addCount = ()=&gt; count.value++<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>特点：</p>
+<ol>
+<li>代码量变少</li>
+<li>分散式维护变成集中式维护</li>
+</ol>
+<h2 id="2-Vue3的优势"><a href="#2-Vue3的优势" class="headerlink" title="2. Vue3的优势"></a>2. Vue3的优势</h2><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/01.png" alt="image.png"></p>
+<h1 id="使用create-vue搭建Vue3项目"><a href="#使用create-vue搭建Vue3项目" class="headerlink" title="使用create-vue搭建Vue3项目"></a>使用create-vue搭建Vue3项目</h1><h2 id="1-认识create-vue"><a href="#1-认识create-vue" class="headerlink" title="1. 认识create-vue"></a>1. 认识create-vue</h2><blockquote>
+<p>create-vue是Vue官方新的脚手架工具，底层切换到了 vite （下一代前端工具链），为开发提供极速响应</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/2.png" alt="image.png"></p>
+<h2 id="2-使用create-vue创建项目"><a href="#2-使用create-vue创建项目" class="headerlink" title="2. 使用create-vue创建项目"></a>2. 使用create-vue创建项目</h2><blockquote>
+<p>前置条件 - 已安装16.0或更高版本的Node.js</p>
+</blockquote>
+<p>执行如下命令，这一指令将会安装并执行 create-vue</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm init vue@latest<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/3.png" alt="image.png"></p>
+<h1 id="熟悉项目和关键文件"><a href="#熟悉项目和关键文件" class="headerlink" title="熟悉项目和关键文件"></a>熟悉项目和关键文件</h1><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/4.png" alt="image.png"></p>
+<h1 id="组合式API-setup选项"><a href="#组合式API-setup选项" class="headerlink" title="组合式API - setup选项"></a>组合式API - setup选项</h1><h2 id="1-setup选项的写法和执行时机"><a href="#1-setup选项的写法和执行时机" class="headerlink" title="1. setup选项的写法和执行时机"></a>1. setup选项的写法和执行时机</h2><p>写法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      <br>    &#125;,<br>    beforeCreate()&#123;<br>      <br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>执行时机</p>
+<blockquote>
+<p>在beforeCreate钩子之前执行</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/5.png" alt="image.png"></p>
+<h2 id="2-setup中写代码的特点"><a href="#2-setup中写代码的特点" class="headerlink" title="2. setup中写代码的特点"></a>2. setup中写代码的特点</h2><blockquote>
+<p>在setup函数中写的数据和方法需要在末尾以对象的方式return，才能给模版使用</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      const message = &#x27;this is message&#x27;<br>      const logMessage = ()=&gt;&#123;<br>        console.log(message)<br>      &#125;<br>      // 必须return才可以<br>      return &#123;<br>        message,<br>        logMessage<br>      &#125;<br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-语法糖"><a href="#3-语法糖" class="headerlink" title="3. 语法糖"></a>3. <script setup>语法糖</h2><blockquote>
+<p>script标签添加 setup标记，不需要再写导出语句，默认会添加导出语句</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  const message = &#x27;this is message&#x27;<br>  const logMessage = ()=&gt;&#123;<br>    console.log(message)<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-reactive和ref函数"><a href="#组合式API-reactive和ref函数" class="headerlink" title="组合式API - reactive和ref函数"></a>组合式API - reactive和ref函数</h1><h2 id="1-reactive"><a href="#1-reactive" class="headerlink" title="1. reactive"></a>1. reactive</h2><blockquote>
+<p>接受对象类型数据的参数传入并返回一个响应式的对象</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; reactive &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const state = reactive(&#123;<br>   msg:&#x27;this is msg&#x27;<br> &#125;)<br> const setSate = ()=&gt;&#123;<br>   // 修改数据更新视图<br>   state.msg = &#x27;this is new msg&#x27;<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &#123;&#123; state.msg &#125;&#125;<br>  &lt;button @click=&quot;setState&quot;&gt;change msg&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-ref"><a href="#2-ref" class="headerlink" title="2. ref"></a>2. ref</h2><blockquote>
+<p>接收简单类型或者对象类型的数据传入并返回一个响应式的对象</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; ref &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const count = ref(0)<br> const setCount = ()=&gt;&#123;<br>   // 修改数据更新视图必须加上.value<br>   count.value++<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;button @click=&quot;setCount&quot;&gt;&#123;&#123;count&#125;&#125;&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-reactive-对比-ref"><a href="#3-reactive-对比-ref" class="headerlink" title="3. reactive 对比 ref"></a>3. reactive 对比 ref</h2><ol>
+<li>都是用来生成响应式数据</li>
+<li>不同点<ol>
+<li>reactive不能处理简单类型的数据</li>
+<li>ref参数类型支持更好，但是必须通过.value做访问修改</li>
+<li>ref函数内部的实现依赖于reactive函数</li>
+</ol>
+</li>
+<li>在实际工作中的推荐<ol>
+<li>推荐使用ref函数，减少记忆负担，小兔鲜项目都使用ref</li>
+</ol>
+</li>
+</ol>
+<h1 id="组合式API-computed"><a href="#组合式API-computed" class="headerlink" title="组合式API - computed"></a>组合式API - computed</h1><blockquote>
+<p>计算属性基本思想和Vue2保持一致，组合式API下的计算属性只是修改了API写法</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>// 导入<br>import &#123;ref, computed &#125; from &#x27;vue&#x27;<br>// 原始数据<br>const count = ref(0)<br>// 计算属性<br>const doubleCount = computed(()=&gt;count.value * 2)<br><br>// 原始数据<br>const list = ref([1,2,3,4,5,6,7,8])<br>// 计算属性list<br>const filterList = computed(item=&gt;item &gt; 2)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-watch"><a href="#组合式API-watch" class="headerlink" title="组合式API - watch"></a>组合式API - watch</h1><blockquote>
+<p>侦听一个或者多个数据的变化，数据变化时执行回调函数，俩个额外参数 immediate控制立刻执行，deep开启深度侦听</p>
+</blockquote>
+<h2 id="1-侦听单个数据"><a href="#1-侦听单个数据" class="headerlink" title="1. 侦听单个数据"></a>1. 侦听单个数据</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-侦听多个数据"><a href="#2-侦听多个数据" class="headerlink" title="2. 侦听多个数据"></a>2. 侦听多个数据</h2><blockquote>
+<p>侦听多个数据，第一个参数可以改写成数组的写法</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  const name = ref(&#x27;cp&#x27;)<br>  // 2. 调用watch 侦听变化<br>  watch([count, name], ([newCount, newName],[oldCount,oldName])=&gt;&#123;<br>    console.log(`count或者name变化了，[newCount, newName],[oldCount,oldName])<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-immediate"><a href="#3-immediate" class="headerlink" title="3. immediate"></a>3. immediate</h2><blockquote>
+<p>在侦听器创建时立即出发回调，响应式数据变化之后继续执行回调</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;,&#123;<br>    immediate: true<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-deep"><a href="#4-deep" class="headerlink" title="4. deep"></a>4. deep</h2><blockquote>
+<p>通过watch监听的ref对象默认是浅层侦听的，直接修改嵌套的对象属性不会触发回调执行，需要开启deep</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 直接修改不会引发回调执行<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br>&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state 并开启deep<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;,&#123;deep:true&#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 此时修改可以触发回调<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-生命周期函数"><a href="#组合式API-生命周期函数" class="headerlink" title="组合式API - 生命周期函数"></a>组合式API - 生命周期函数</h1><h2 id="1-选项式对比组合式"><a href="#1-选项式对比组合式" class="headerlink" title="1. 选项式对比组合式"></a>1. 选项式对比组合式</h2><p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/6.png" alt="image.png"></p>
+<h2 id="2-生命周期函数基本使用"><a href="#2-生命周期函数基本使用" class="headerlink" title="2. 生命周期函数基本使用"></a>2. 生命周期函数基本使用</h2><blockquote>
+<ol>
+<li>导入生命周期函数</li>
+<li>执行生命周期函数，传入回调</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-执行多次"><a href="#3-执行多次" class="headerlink" title="3. 执行多次"></a>3. 执行多次</h2><blockquote>
+<p>生命周期函数执行多次的时候，会按照顺序依次执行</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br><br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-父子通信"><a href="#组合式API-父子通信" class="headerlink" title="组合式API - 父子通信"></a>组合式API - 父子通信</h1><h2 id="1-父传子"><a href="#1-父传子" class="headerlink" title="1. 父传子"></a>1. 父传子</h2><blockquote>
+<p>基本思想</p>
+<ol>
+<li>父组件中给子组件绑定属性</li>
+<li>子组件内部通过props选项接收数据</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/7.png" alt="image.png"></p>
+<h2 id="2-子传父"><a href="#2-子传父" class="headerlink" title="2. 子传父"></a>2. 子传父</h2><blockquote>
+<p>基本思想</p>
+<ol>
+<li>父组件中给子组件标签通过@绑定事件</li>
+<li>子组件内部通过 emit 方法触发事件</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/8.png" alt="image.png"></p>
+<h1 id="组合式API-模版引用"><a href="#组合式API-模版引用" class="headerlink" title="组合式API - 模版引用"></a>组合式API - 模版引用</h1><blockquote>
+<p>概念：通过 ref标识 获取真实的 dom对象或者组件实例对象</p>
+</blockquote>
+<h2 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h2><blockquote>
+<p>实现步骤：</p>
+<ol>
+<li>调用ref函数生成一个ref对象</li>
+<li>通过ref标识绑定ref对象到标签</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/9.png" alt="image.png"></p>
+<h2 id="2-defineExpose"><a href="#2-defineExpose" class="headerlink" title="2. defineExpose"></a>2. defineExpose</h2><blockquote>
+<p>默认情况下在 <script setup>语法糖下组件内部的属性和方法是不开放给父组件访问的，可以通过defineExpose编译宏指定哪些属性和方法容许访问<br>说明：指定testMessage属性可以被访问到</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/10.png" alt="image.png"></p>
+<h1 id="组合式API-provide和inject"><a href="#组合式API-provide和inject" class="headerlink" title="组合式API - provide和inject"></a>组合式API - provide和inject</h1><h2 id="1-作用和场景"><a href="#1-作用和场景" class="headerlink" title="1. 作用和场景"></a>1. 作用和场景</h2><blockquote>
+<p>顶层组件向任意的底层组件传递数据和方法，实现跨层组件通信</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/11.png" alt="image.png"></p>
+<h2 id="2-跨层传递普通数据"><a href="#2-跨层传递普通数据" class="headerlink" title="2. 跨层传递普通数据"></a>2. 跨层传递普通数据</h2><blockquote>
+<p>实现步骤</p>
+<ol>
+<li>顶层组件通过 <code>provide</code> 函数提供数据</li>
+<li>底层组件通过 <code>inject</code> 函数提供数据</li>
+</ol>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/12.png" alt="image.png"></p>
+<h2 id="3-跨层传递响应式数据"><a href="#3-跨层传递响应式数据" class="headerlink" title="3. 跨层传递响应式数据"></a>3. 跨层传递响应式数据</h2><blockquote>
+<p>在调用provide函数时，第二个参数设置为ref对象</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/13.png" alt="image.png"></p>
+<h2 id="4-跨层传递方法"><a href="#4-跨层传递方法" class="headerlink" title="4. 跨层传递方法"></a>4. 跨层传递方法</h2><blockquote>
+<p>顶层组件可以向底层组件传递方法，底层组件调用方法修改顶层组件的数据</p>
+</blockquote>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/14.png" alt="image.png"></p>
+<h1 id="Vue3-3-新特性-defineOptions"><a href="#Vue3-3-新特性-defineOptions" class="headerlink" title="Vue3.3 新特性-defineOptions"></a>Vue3.3 新特性-defineOptions</h1><p>背景说明：</p>
+<p>有 <script setup> 之前，如果要定义 props, emits 可以轻而易举地添加一个与 setup 平级的属性。 </p>
+<p>但是用了 <script setup> 后，就没法这么干了 setup 属性已经没有了，自然无法添加与其平级的属性。</p>
+<hr>
+<p>为了解决这一问题，引入了 defineProps 与 defineEmits 这两个宏。但这只解决了 props 与 emits 这两个属性。</p>
+<p>如果我们要定义组件的 name 或其他自定义的属性，还是得回到最原始的用法——再添加一个普通的 <script> 标签。</p>
+<p>这样就会存在两个 <script> 标签。让人无法接受。</p>
+<hr>
+<p>所以在 Vue 3.3 中新引入了 defineOptions 宏。顾名思义，主要是用来定义 Options API 的选项。可以用 defineOptions 定义任意的选项， props, emits, expose, slots 除外（因为这些可以使用 defineXXX 来做到）</p>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704082955748.png" alt="image-20230704082955748"></p>
+<h1 id="Vue3-3新特性-defineModel"><a href="#Vue3-3新特性-defineModel" class="headerlink" title="Vue3.3新特性-defineModel"></a>Vue3.3新特性-defineModel</h1><p>在Vue3中，自定义组件上使用v-model, 相当于传递一个modelValue属性，同时触发 update:modelValue 事件</p>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083027349.png" alt="image-20230704083027349"></p>
+<p>我们需要先定义 props，再定义 emits 。其中有许多重复的代码。如果需要修改此值，还需要手动调用 emit 函数。</p>
+<p>于是乎 defineModel 诞生了。</p>
+<p><img src="/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083056549.png" alt="image-20230704083056549"></p>
+<p>生效需要配置 vite.config.js</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs jsx"><span class="hljs-keyword">import</span> &#123; fileURLToPath, <span class="hljs-variable constant_">URL</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:url&#x27;</span><br><br><span class="hljs-keyword">import</span> &#123; defineConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span><br><span class="hljs-keyword">import</span> vue <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-vue&#x27;</span><br><br><span class="hljs-comment">// https://vitejs.dev/config/</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>(&#123;<br>  <span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-title function_">vue</span>(&#123;<br>      <span class="hljs-attr">script</span>: &#123;<br>        <span class="hljs-attr">defineModel</span>: <span class="hljs-literal">true</span><br>      &#125;<br>    &#125;),<br>  ],<br>  <span class="hljs-attr">resolve</span>: &#123;<br>    <span class="hljs-attr">alias</span>: &#123;<br>      <span class="hljs-string">&#x27;@&#x27;</span>: <span class="hljs-title function_">fileURLToPath</span>(<span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">&#x27;./src&#x27;</span>, <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">url</span>))<br>    &#125;<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+</script></h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://CJJJX.github.io">CJJJX</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://cjjjx.github.io/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/">http://cjjjx.github.io/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://CJJJX.github.io" target="_blank">CJJJX's BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/vue/">vue</a></div><div class="post_share"><div class="social-share" data-image="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/08/18/vue%E5%AD%A6%E4%B9%A0Day7/" title="vue学习Day7"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">vue学习Day7</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/08/06/vue%E5%AD%A6%E4%B9%A0Day1/" title="vue学习Day1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-06</div><div class="title">vue学习Day1</div></div></a></div><div><a href="/2023/08/04/%E5%9F%BA%E4%BA%8Eecharts%E7%9A%84%E5%AE%A2%E6%88%B7%E8%AE%B0%E8%B4%A6%E5%8D%95/" title="基于echarts的客户消费记账单"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-04</div><div class="title">基于echarts的客户消费记账单</div></div></a></div><div><a href="/2023/08/07/vue%E5%AD%A6%E4%B9%A0Day2/" title="vue学习Day2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-07</div><div class="title">vue学习Day2</div></div></a></div><div><a href="/2023/08/09/vue%E5%AD%A6%E4%B9%A0Day3/" title="vue学习Day3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-09</div><div class="title">vue学习Day3</div></div></a></div><div><a href="/2023/08/11/vue%E5%AD%A6%E4%B9%A0Day4/" title="vue学习Day4"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-11</div><div class="title">vue学习Day4</div></div></a></div><div><a href="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/" title="vue学习Day5"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-12</div><div class="title">vue学习Day5</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJJJX</div><div class="author-info__description">Front-end/NWU/SE/2021</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CJJJX" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:2873180579@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客一起学习共同进步~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86Vue3"><span class="toc-number">1.</span> <span class="toc-text">认识Vue3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Vue2-%E9%80%89%E9%A1%B9%E5%BC%8F-API-vs-Vue3-%E7%BB%84%E5%90%88%E5%BC%8FAPI"><span class="toc-number">1.1.</span> <span class="toc-text">1. Vue2 选项式 API vs Vue3 组合式API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Vue3%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">1.2.</span> <span class="toc-text">2. Vue3的优势</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8create-vue%E6%90%AD%E5%BB%BAVue3%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.</span> <span class="toc-text">使用create-vue搭建Vue3项目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AE%A4%E8%AF%86create-vue"><span class="toc-number">2.1.</span> <span class="toc-text">1. 认识create-vue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8create-vue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.2.</span> <span class="toc-text">2. 使用create-vue创建项目</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%86%9F%E6%82%89%E9%A1%B9%E7%9B%AE%E5%92%8C%E5%85%B3%E9%94%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">熟悉项目和关键文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E5%BC%8FAPI-setup%E9%80%89%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">组合式API - setup选项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-setup%E9%80%89%E9%A1%B9%E7%9A%84%E5%86%99%E6%B3%95%E5%92%8C%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA"><span class="toc-number">4.1.</span> <span class="toc-text">1. setup选项的写法和执行时机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-setup%E4%B8%AD%E5%86%99%E4%BB%A3%E7%A0%81%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">4.2.</span> <span class="toc-text">2. setup中写代码的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AF%AD%E6%B3%95%E7%B3%96"><span class="toc-number">4.3.</span> <span class="toc-text">3. 语法糖&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;script标签添加 setup标记，不需要再写导出语句，默认会添加导出语句&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt;  const message &#x3D; &amp;#x27;this is message&amp;#x27;&lt;br&gt;  const logMessage &#x3D; ()&#x3D;&gt;&amp;#123;&lt;br&gt;    console.log(message)&lt;br&gt;  &amp;#125;&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h1 id&#x3D;&quot;组合式API-reactive和ref函数&quot;&gt;&lt;a href&#x3D;&quot;#组合式API-reactive和ref函数&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;组合式API - reactive和ref函数&quot;&gt;&lt;&#x2F;a&gt;组合式API - reactive和ref函数&lt;&#x2F;h1&gt;&lt;h2 id&#x3D;&quot;1-reactive&quot;&gt;&lt;a href&#x3D;&quot;#1-reactive&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;1. reactive&quot;&gt;&lt;&#x2F;a&gt;1. reactive&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;接受对象类型数据的参数传入并返回一个响应式的对象&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;11&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;12&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;13&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;14&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;15&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;16&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;17&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt; &#x2F;&#x2F; 导入&lt;br&gt; import &amp;#123; reactive &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt; &#x2F;&#x2F; 执行函数 传入参数 变量接收&lt;br&gt; const state &#x3D; reactive(&amp;#123;&lt;br&gt;   msg:&amp;#x27;this is msg&amp;#x27;&lt;br&gt; &amp;#125;)&lt;br&gt; const setSate &#x3D; ()&#x3D;&gt;&amp;#123;&lt;br&gt;   &#x2F;&#x2F; 修改数据更新视图&lt;br&gt;   state.msg &#x3D; &amp;#x27;this is new msg&amp;#x27;&lt;br&gt; &amp;#125;&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;br&gt;&lt;template&gt;&lt;br&gt;  &amp;#123;&amp;#123; state.msg &amp;#125;&amp;#125;&lt;br&gt;  &lt;button @click&#x3D;&quot;setState&quot;&gt;change msg&lt;&#x2F;button&gt;&lt;br&gt;&lt;&#x2F;template&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h2 id&#x3D;&quot;2-ref&quot;&gt;&lt;a href&#x3D;&quot;#2-ref&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;2. ref&quot;&gt;&lt;&#x2F;a&gt;2. ref&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;接收简单类型或者对象类型的数据传入并返回一个响应式的对象&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;11&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;12&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;13&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;14&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt; &#x2F;&#x2F; 导入&lt;br&gt; import &amp;#123; ref &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt; &#x2F;&#x2F; 执行函数 传入参数 变量接收&lt;br&gt; const count &#x3D; ref(0)&lt;br&gt; const setCount &#x3D; ()&#x3D;&gt;&amp;#123;&lt;br&gt;   &#x2F;&#x2F; 修改数据更新视图必须加上.value&lt;br&gt;   count.value++&lt;br&gt; &amp;#125;&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;br&gt;&lt;template&gt;&lt;br&gt;  &lt;button @click&#x3D;&quot;setCount&quot;&gt;&amp;#123;&amp;#123;count&amp;#125;&amp;#125;&lt;&#x2F;button&gt;&lt;br&gt;&lt;&#x2F;template&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h2 id&#x3D;&quot;3-reactive-对比-ref&quot;&gt;&lt;a href&#x3D;&quot;#3-reactive-对比-ref&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;3. reactive 对比 ref&quot;&gt;&lt;&#x2F;a&gt;3. reactive 对比 ref&lt;&#x2F;h2&gt;&lt;ol&gt;
+&lt;li&gt;都是用来生成响应式数据&lt;&#x2F;li&gt;
+&lt;li&gt;不同点&lt;ol&gt;
+&lt;li&gt;reactive不能处理简单类型的数据&lt;&#x2F;li&gt;
+&lt;li&gt;ref参数类型支持更好，但是必须通过.value做访问修改&lt;&#x2F;li&gt;
+&lt;li&gt;ref函数内部的实现依赖于reactive函数&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;在实际工作中的推荐&lt;ol&gt;
+&lt;li&gt;推荐使用ref函数，减少记忆负担，小兔鲜项目都使用ref&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h1 id&#x3D;&quot;组合式API-computed&quot;&gt;&lt;a href&#x3D;&quot;#组合式API-computed&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;组合式API - computed&quot;&gt;&lt;&#x2F;a&gt;组合式API - computed&lt;&#x2F;h1&gt;&lt;blockquote&gt;
+&lt;p&gt;计算属性基本思想和Vue2保持一致，组合式API下的计算属性只是修改了API写法&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;11&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;12&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;13&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt;&#x2F;&#x2F; 导入&lt;br&gt;import &amp;#123;ref, computed &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;&#x2F;&#x2F; 原始数据&lt;br&gt;const count &#x3D; ref(0)&lt;br&gt;&#x2F;&#x2F; 计算属性&lt;br&gt;const doubleCount &#x3D; computed(()&#x3D;&gt;count.value * 2)&lt;br&gt;&lt;br&gt;&#x2F;&#x2F; 原始数据&lt;br&gt;const list &#x3D; ref([1,2,3,4,5,6,7,8])&lt;br&gt;&#x2F;&#x2F; 计算属性list&lt;br&gt;const filterList &#x3D; computed(item&#x3D;&gt;item &gt; 2)&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h1 id&#x3D;&quot;组合式API-watch&quot;&gt;&lt;a href&#x3D;&quot;#组合式API-watch&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;组合式API - watch&quot;&gt;&lt;&#x2F;a&gt;组合式API - watch&lt;&#x2F;h1&gt;&lt;blockquote&gt;
+&lt;p&gt;侦听一个或者多个数据的变化，数据变化时执行回调函数，俩个额外参数 immediate控制立刻执行，deep开启深度侦听&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h2 id&#x3D;&quot;1-侦听单个数据&quot;&gt;&lt;a href&#x3D;&quot;#1-侦听单个数据&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;1. 侦听单个数据&quot;&gt;&lt;&#x2F;a&gt;1. 侦听单个数据&lt;&#x2F;h2&gt;&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt;  &#x2F;&#x2F; 1. 导入watch&lt;br&gt;  import &amp;#123; ref, watch &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;  const count &#x3D; ref(0)&lt;br&gt;  &#x2F;&#x2F; 2. 调用watch 侦听变化&lt;br&gt;  watch(count, (newValue, oldValue)&#x3D;&gt;&amp;#123;&lt;br&gt;    console.log(&#96;count发生了变化，老值为$&amp;#123;oldValue&amp;#125;,新值为$&amp;#123;newValue&amp;#125;&#96;)&lt;br&gt;  &amp;#125;)&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h2 id&#x3D;&quot;2-侦听多个数据&quot;&gt;&lt;a href&#x3D;&quot;#2-侦听多个数据&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;2. 侦听多个数据&quot;&gt;&lt;&#x2F;a&gt;2. 侦听多个数据&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;侦听多个数据，第一个参数可以改写成数组的写法&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt;  &#x2F;&#x2F; 1. 导入watch&lt;br&gt;  import &amp;#123; ref, watch &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;  const count &#x3D; ref(0)&lt;br&gt;  const name &#x3D; ref(&amp;#x27;cp&amp;#x27;)&lt;br&gt;  &#x2F;&#x2F; 2. 调用watch 侦听变化&lt;br&gt;  watch([count, name], ([newCount, newName],[oldCount,oldName])&#x3D;&gt;&amp;#123;&lt;br&gt;    console.log(&#96;count或者name变化了，[newCount, newName],[oldCount,oldName])&lt;br&gt;  &amp;#125;)&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h2 id&#x3D;&quot;3-immediate&quot;&gt;&lt;a href&#x3D;&quot;#3-immediate&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;3. immediate&quot;&gt;&lt;&#x2F;a&gt;3. immediate&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在侦听器创建时立即出发回调，响应式数据变化之后继续执行回调&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;11&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt;  &#x2F;&#x2F; 1. 导入watch&lt;br&gt;  import &amp;#123; ref, watch &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;  const count &#x3D; ref(0)&lt;br&gt;  &#x2F;&#x2F; 2. 调用watch 侦听变化&lt;br&gt;  watch(count, (newValue, oldValue)&#x3D;&gt;&amp;#123;&lt;br&gt;    console.log(&#96;count发生了变化，老值为$&amp;#123;oldValue&amp;#125;,新值为$&amp;#123;newValue&amp;#125;&#96;)&lt;br&gt;  &amp;#125;,&amp;#123;&lt;br&gt;    immediate: true&lt;br&gt;  &amp;#125;)&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h2 id&#x3D;&quot;4-deep&quot;&gt;&lt;a href&#x3D;&quot;#4-deep&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;4. deep&quot;&gt;&lt;&#x2F;a&gt;4. deep&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;通过watch监听的ref对象默认是浅层侦听的，直接修改嵌套的对象属性不会触发回调执行，需要开启deep&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;11&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;12&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;13&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;14&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;15&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;16&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;17&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;18&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;19&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;20&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;21&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;22&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;23&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;24&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;25&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;26&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;27&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;28&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;script setup&gt;&lt;br&gt;  &#x2F;&#x2F; 1. 导入watch&lt;br&gt;  import &amp;#123; ref, watch &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;  const state &#x3D; ref(&amp;#123; count: 0 &amp;#125;)&lt;br&gt;  &#x2F;&#x2F; 2. 监听对象state&lt;br&gt;  watch(state, ()&#x3D;&gt;&amp;#123;&lt;br&gt;    console.log(&amp;#x27;数据变化了&amp;#x27;)&lt;br&gt;  &amp;#125;)&lt;br&gt;  const changeStateByCount &#x3D; ()&#x3D;&gt;&amp;#123;&lt;br&gt;    &#x2F;&#x2F; 直接修改不会引发回调执行&lt;br&gt;    state.value.count++&lt;br&gt;  &amp;#125;&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;br&gt;&lt;script setup&gt;&lt;br&gt;  &#x2F;&#x2F; 1. 导入watch&lt;br&gt;  import &amp;#123; ref, watch &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;  const state &#x3D; ref(&amp;#123; count: 0 &amp;#125;)&lt;br&gt;  &#x2F;&#x2F; 2. 监听对象state 并开启deep&lt;br&gt;  watch(state, ()&#x3D;&gt;&amp;#123;&lt;br&gt;    console.log(&amp;#x27;数据变化了&amp;#x27;)&lt;br&gt;  &amp;#125;,&amp;#123;deep:true&amp;#125;)&lt;br&gt;  const changeStateByCount &#x3D; ()&#x3D;&gt;&amp;#123;&lt;br&gt;    &#x2F;&#x2F; 此时修改可以触发回调&lt;br&gt;    state.value.count++&lt;br&gt;  &amp;#125;&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h1 id&#x3D;&quot;组合式API-生命周期函数&quot;&gt;&lt;a href&#x3D;&quot;#组合式API-生命周期函数&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;组合式API - 生命周期函数&quot;&gt;&lt;&#x2F;a&gt;组合式API - 生命周期函数&lt;&#x2F;h1&gt;&lt;h2 id&#x3D;&quot;1-选项式对比组合式&quot;&gt;&lt;a href&#x3D;&quot;#1-选项式对比组合式&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;1. 选项式对比组合式&quot;&gt;&lt;&#x2F;a&gt;1. 选项式对比组合式&lt;&#x2F;h2&gt;&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;6.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id&#x3D;&quot;2-生命周期函数基本使用&quot;&gt;&lt;a href&#x3D;&quot;#2-生命周期函数基本使用&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;2. 生命周期函数基本使用&quot;&gt;&lt;&#x2F;a&gt;2. 生命周期函数基本使用&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;导入生命周期函数&lt;&#x2F;li&gt;
+&lt;li&gt;执行生命周期函数，传入回调&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;scirpt setup&gt;&lt;br&gt;import &amp;#123; onMounted &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;onMounted(()&#x3D;&gt;&amp;#123;&lt;br&gt;  &#x2F;&#x2F; 自定义逻辑&lt;br&gt;&amp;#125;)&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h2 id&#x3D;&quot;3-执行多次&quot;&gt;&lt;a href&#x3D;&quot;#3-执行多次&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;3. 执行多次&quot;&gt;&lt;&#x2F;a&gt;3. 执行多次&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;生命周期函数执行多次的时候，会按照顺序依次执行&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;figure class&#x3D;&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs vue&quot;&gt;&lt;scirpt setup&gt;&lt;br&gt;import &amp;#123; onMounted &amp;#125; from &amp;#x27;vue&amp;#x27;&lt;br&gt;onMounted(()&#x3D;&gt;&amp;#123;&lt;br&gt;  &#x2F;&#x2F; 自定义逻辑&lt;br&gt;&amp;#125;)&lt;br&gt;&lt;br&gt;onMounted(()&#x3D;&gt;&amp;#123;&lt;br&gt;  &#x2F;&#x2F; 自定义逻辑&lt;br&gt;&amp;#125;)&lt;br&gt;&lt;&#x2F;script&gt;&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+&lt;h1 id&#x3D;&quot;组合式API-父子通信&quot;&gt;&lt;a href&#x3D;&quot;#组合式API-父子通信&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;组合式API - 父子通信&quot;&gt;&lt;&#x2F;a&gt;组合式API - 父子通信&lt;&#x2F;h1&gt;&lt;h2 id&#x3D;&quot;1-父传子&quot;&gt;&lt;a href&#x3D;&quot;#1-父传子&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;1. 父传子&quot;&gt;&lt;&#x2F;a&gt;1. 父传子&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;基本思想&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;父组件中给子组件绑定属性&lt;&#x2F;li&gt;
+&lt;li&gt;子组件内部通过props选项接收数据&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;7.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id&#x3D;&quot;2-子传父&quot;&gt;&lt;a href&#x3D;&quot;#2-子传父&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;2. 子传父&quot;&gt;&lt;&#x2F;a&gt;2. 子传父&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;基本思想&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;父组件中给子组件标签通过@绑定事件&lt;&#x2F;li&gt;
+&lt;li&gt;子组件内部通过 emit 方法触发事件&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;8.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h1 id&#x3D;&quot;组合式API-模版引用&quot;&gt;&lt;a href&#x3D;&quot;#组合式API-模版引用&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;组合式API - 模版引用&quot;&gt;&lt;&#x2F;a&gt;组合式API - 模版引用&lt;&#x2F;h1&gt;&lt;blockquote&gt;
+&lt;p&gt;概念：通过 ref标识 获取真实的 dom对象或者组件实例对象&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h2 id&#x3D;&quot;1-基本使用&quot;&gt;&lt;a href&#x3D;&quot;#1-基本使用&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;1. 基本使用&quot;&gt;&lt;&#x2F;a&gt;1. 基本使用&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;实现步骤：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;调用ref函数生成一个ref对象&lt;&#x2F;li&gt;
+&lt;li&gt;通过ref标识绑定ref对象到标签&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;9.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id&#x3D;&quot;2-defineExpose&quot;&gt;&lt;a href&#x3D;&quot;#2-defineExpose&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;2. defineExpose&quot;&gt;&lt;&#x2F;a&gt;2. defineExpose&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;默认情况下在 &lt;script setup&gt;语法糖下组件内部的属性和方法是不开放给父组件访问的，可以通过defineExpose编译宏指定哪些属性和方法容许访问&lt;br&gt;说明：指定testMessage属性可以被访问到&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;10.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h1 id&#x3D;&quot;组合式API-provide和inject&quot;&gt;&lt;a href&#x3D;&quot;#组合式API-provide和inject&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;组合式API - provide和inject&quot;&gt;&lt;&#x2F;a&gt;组合式API - provide和inject&lt;&#x2F;h1&gt;&lt;h2 id&#x3D;&quot;1-作用和场景&quot;&gt;&lt;a href&#x3D;&quot;#1-作用和场景&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;1. 作用和场景&quot;&gt;&lt;&#x2F;a&gt;1. 作用和场景&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;顶层组件向任意的底层组件传递数据和方法，实现跨层组件通信&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;11.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id&#x3D;&quot;2-跨层传递普通数据&quot;&gt;&lt;a href&#x3D;&quot;#2-跨层传递普通数据&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;2. 跨层传递普通数据&quot;&gt;&lt;&#x2F;a&gt;2. 跨层传递普通数据&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;实现步骤&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;顶层组件通过 &lt;code&gt;provide&lt;&#x2F;code&gt; 函数提供数据&lt;&#x2F;li&gt;
+&lt;li&gt;底层组件通过 &lt;code&gt;inject&lt;&#x2F;code&gt; 函数提供数据&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;12.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id&#x3D;&quot;3-跨层传递响应式数据&quot;&gt;&lt;a href&#x3D;&quot;#3-跨层传递响应式数据&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;3. 跨层传递响应式数据&quot;&gt;&lt;&#x2F;a&gt;3. 跨层传递响应式数据&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在调用provide函数时，第二个参数设置为ref对象&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;13.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id&#x3D;&quot;4-跨层传递方法&quot;&gt;&lt;a href&#x3D;&quot;#4-跨层传递方法&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;4. 跨层传递方法&quot;&gt;&lt;&#x2F;a&gt;4. 跨层传递方法&lt;&#x2F;h2&gt;&lt;blockquote&gt;
+&lt;p&gt;顶层组件可以向底层组件传递方法，底层组件调用方法修改顶层组件的数据&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;14.png&quot; alt&#x3D;&quot;image.png&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h1 id&#x3D;&quot;Vue3-3-新特性-defineOptions&quot;&gt;&lt;a href&#x3D;&quot;#Vue3-3-新特性-defineOptions&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;Vue3.3 新特性-defineOptions&quot;&gt;&lt;&#x2F;a&gt;Vue3.3 新特性-defineOptions&lt;&#x2F;h1&gt;&lt;p&gt;背景说明：&lt;&#x2F;p&gt;
+&lt;p&gt;有 &lt;script setup&gt; 之前，如果要定义 props, emits 可以轻而易举地添加一个与 setup 平级的属性。 &lt;&#x2F;p&gt;
+&lt;p&gt;但是用了 &lt;script setup&gt; 后，就没法这么干了 setup 属性已经没有了，自然无法添加与其平级的属性。&lt;&#x2F;p&gt;
+&lt;hr&gt;
+&lt;p&gt;为了解决这一问题，引入了 defineProps 与 defineEmits 这两个宏。但这只解决了 props 与 emits 这两个属性。&lt;&#x2F;p&gt;
+&lt;p&gt;如果我们要定义组件的 name 或其他自定义的属性，还是得回到最原始的用法——再添加一个普通的 &lt;script&gt; 标签。&lt;&#x2F;p&gt;
+&lt;p&gt;这样就会存在两个 &lt;script&gt; 标签。让人无法接受。&lt;&#x2F;p&gt;
+&lt;hr&gt;
+&lt;p&gt;所以在 Vue 3.3 中新引入了 defineOptions 宏。顾名思义，主要是用来定义 Options API 的选项。可以用 defineOptions 定义任意的选项， props, emits, expose, slots 除外（因为这些可以使用 defineXXX 来做到）&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;image-20230704082955748.png&quot; alt&#x3D;&quot;image-20230704082955748&quot;&gt;&lt;&#x2F;p&gt;
+&lt;h1 id&#x3D;&quot;Vue3-3新特性-defineModel&quot;&gt;&lt;a href&#x3D;&quot;#Vue3-3新特性-defineModel&quot; class&#x3D;&quot;headerlink&quot; title&#x3D;&quot;Vue3.3新特性-defineModel&quot;&gt;&lt;&#x2F;a&gt;Vue3.3新特性-defineModel&lt;&#x2F;h1&gt;&lt;p&gt;在Vue3中，自定义组件上使用v-model, 相当于传递一个modelValue属性，同时触发 update:modelValue 事件&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;image-20230704083027349.png&quot; alt&#x3D;&quot;image-20230704083027349&quot;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;我们需要先定义 props，再定义 emits 。其中有许多重复的代码。如果需要修改此值，还需要手动调用 emit 函数。&lt;&#x2F;p&gt;
+&lt;p&gt;于是乎 defineModel 诞生了。&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;&#x2F;vue%E5%AD%A6%E4%B9%A0Day8&#x2F;image-20230704083056549.png&quot; alt&#x3D;&quot;image-20230704083056549&quot;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;生效需要配置 vite.config.js&lt;&#x2F;p&gt;
+&lt;figure class&#x3D;&quot;highlight jsx&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class&#x3D;&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class&#x3D;&quot;line&quot;&gt;1&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;2&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;3&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;4&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;5&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;6&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;7&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;8&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;9&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;10&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;11&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;12&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;13&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;14&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;15&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;16&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;17&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;18&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;19&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;line&quot;&gt;20&lt;&#x2F;span&gt;&lt;br&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;td class&#x3D;&quot;code&quot;&gt;&lt;pre&gt;&lt;code class&#x3D;&quot;hljs jsx&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;import&lt;&#x2F;span&gt; &amp;#123; fileURLToPath, &lt;span class&#x3D;&quot;hljs-variable constant_&quot;&gt;URL&lt;&#x2F;span&gt; &amp;#125; &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;from&lt;&#x2F;span&gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&amp;#x27;node:url&amp;#x27;&lt;&#x2F;span&gt;&lt;br&gt;&lt;br&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;import&lt;&#x2F;span&gt; &amp;#123; defineConfig &amp;#125; &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;from&lt;&#x2F;span&gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&amp;#x27;vite&amp;#x27;&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;import&lt;&#x2F;span&gt; vue &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;from&lt;&#x2F;span&gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&amp;#x27;@vitejs&#x2F;plugin-vue&amp;#x27;&lt;&#x2F;span&gt;&lt;br&gt;&lt;br&gt;&lt;span class&#x3D;&quot;hljs-comment&quot;&gt;&#x2F;&#x2F; https:&#x2F;&#x2F;vitejs.dev&#x2F;config&#x2F;&lt;&#x2F;span&gt;&lt;br&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;export&lt;&#x2F;span&gt; &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;default&lt;&#x2F;span&gt; &lt;span class&#x3D;&quot;hljs-title function_&quot;&gt;defineConfig&lt;&#x2F;span&gt;(&amp;#123;&lt;br&gt;  &lt;span class&#x3D;&quot;hljs-attr&quot;&gt;plugins&lt;&#x2F;span&gt;: [&lt;br&gt;    &lt;span class&#x3D;&quot;hljs-title function_&quot;&gt;vue&lt;&#x2F;span&gt;(&amp;#123;&lt;br&gt;      &lt;span class&#x3D;&quot;hljs-attr&quot;&gt;script&lt;&#x2F;span&gt;: &amp;#123;&lt;br&gt;        &lt;span class&#x3D;&quot;hljs-attr&quot;&gt;defineModel&lt;&#x2F;span&gt;: &lt;span class&#x3D;&quot;hljs-literal&quot;&gt;true&lt;&#x2F;span&gt;&lt;br&gt;      &amp;#125;&lt;br&gt;    &amp;#125;),&lt;br&gt;  ],&lt;br&gt;  &lt;span class&#x3D;&quot;hljs-attr&quot;&gt;resolve&lt;&#x2F;span&gt;: &amp;#123;&lt;br&gt;    &lt;span class&#x3D;&quot;hljs-attr&quot;&gt;alias&lt;&#x2F;span&gt;: &amp;#123;&lt;br&gt;      &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&amp;#x27;@&amp;#x27;&lt;&#x2F;span&gt;: &lt;span class&#x3D;&quot;hljs-title function_&quot;&gt;fileURLToPath&lt;&#x2F;span&gt;(&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;new&lt;&#x2F;span&gt; &lt;span class&#x3D;&quot;hljs-title function_&quot;&gt;URL&lt;&#x2F;span&gt;(&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&amp;#x27;.&#x2F;src&amp;#x27;&lt;&#x2F;span&gt;, &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;import&lt;&#x2F;span&gt;.&lt;span class&#x3D;&quot;hljs-property&quot;&gt;meta&lt;&#x2F;span&gt;.&lt;span class&#x3D;&quot;hljs-property&quot;&gt;url&lt;&#x2F;span&gt;))&lt;br&gt;    &amp;#125;&lt;br&gt;  &amp;#125;&lt;br&gt;&amp;#125;)&lt;br&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&lt;&#x2F;figure&gt;
+
+</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/" title="vue学习Day8">vue学习Day8</a><time datetime="2023-08-28T05:12:20.000Z" title="发表于 2023-08-28 13:12:20">2023-08-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/18/vue%E5%AD%A6%E4%B9%A0Day7/" title="vue学习Day7">vue学习Day7</a><time datetime="2023-08-18T15:43:12.000Z" title="发表于 2023-08-18 23:43:12">2023-08-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/13/vue%E5%AD%A6%E4%B9%A0Day6/" title="vue学习Day6">vue学习Day6</a><time datetime="2023-08-13T00:27:57.000Z" title="发表于 2023-08-13 08:27:57">2023-08-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/12/vue%E5%AD%A6%E4%B9%A0Day5/" title="vue学习Day5">vue学习Day5</a><time datetime="2023-08-12T02:01:01.000Z" title="发表于 2023-08-12 10:01:01">2023-08-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/11/vue%E5%AD%A6%E4%B9%A0Day4/" title="vue学习Day4">vue学习Day4</a><time datetime="2023-08-11T06:08:24.000Z" title="发表于 2023-08-11 14:08:24">2023-08-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By CJJJX</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addModeChange('mermaid', runMermaid)
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var qweather_key = 'b16a1fa0e63c46a4b8f28abfb06ae3fe';
+  var gaud_map_key = 'e2b04289e870b005374ee030148d64fd&s=rsv3';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '113.34532,23.15624';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><!-- hexo injector body_end end --></body></html>
