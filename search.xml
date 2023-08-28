@@ -3019,4 +3019,64 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>vue3-pinia</title>
+    <url>/2023/08/29/vue3-pinia/</url>
+    <content><![CDATA[<h1 id="Vue3-状态管理-Pinia"><a href="#Vue3-状态管理-Pinia" class="headerlink" title="Vue3 状态管理 - Pinia"></a>Vue3 状态管理 - Pinia</h1><h2 id="1-什么是Pinia"><a href="#1-什么是Pinia" class="headerlink" title="1. 什么是Pinia"></a>1. 什么是Pinia</h2><p>Pinia 是 Vue 的专属的最新状态管理库 ，是 Vuex 状态管理工具的替代品<br><img src="/2023/08/29/vue3-pinia/31.png" alt="image.png"></p>
+<h2 id="2-手动添加Pinia到Vue项目"><a href="#2-手动添加Pinia到Vue项目" class="headerlink" title="2. 手动添加Pinia到Vue项目"></a>2. 手动添加Pinia到Vue项目</h2><p>后面在实际开发项目的时候，Pinia可以在项目创建时自动添加，现在我们初次学习，从零开始：</p>
+<ol>
+<li>使用 Vite 创建一个空的 Vue3项目</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm init vite@latest<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>按照官方文档安装 pinia 到项目中</li>
+</ol>
+<h2 id="3-Pinia基础使用"><a href="#3-Pinia基础使用" class="headerlink" title="3. Pinia基础使用"></a>3. Pinia基础使用</h2><ol>
+<li>定义store</li>
+<li>组件使用store</li>
+</ol>
+<p><img src="/2023/08/29/vue3-pinia/32.png" alt="image.png"></p>
+<h2 id="4-getters实现"><a href="#4-getters实现" class="headerlink" title="4. getters实现"></a>4. getters实现</h2><p>Pinia中的 getters 直接使用 computed函数 进行模拟, 组件中需要使用需要把 getters return出去</p>
+<p><img src="/2023/08/29/vue3-pinia/33.png" alt="image.png"></p>
+<h2 id="5-action异步实现"><a href="#5-action异步实现" class="headerlink" title="5. action异步实现"></a>5. action异步实现</h2><p>方式：异步action函数的写法和组件中获取异步数据的写法完全一致</p>
+<ul>
+<li><p>接口地址：<a href="http://geek.itheima.net/v1_0/channels">http://geek.itheima.net/v1_0/channels</a></p>
+</li>
+<li><p>请求方式：get</p>
+</li>
+<li><p>请求参数：无</p>
+</li>
+</ul>
+<p><img src="/2023/08/29/vue3-pinia/34.png" alt="image.png"></p>
+<p>需求：在Pinia中获取频道列表数据并把数据渲染App组件的模板中<br><img src="/2023/08/29/vue3-pinia/35.png" alt="image.png"></p>
+<h2 id="6-storeToRefs工具函数"><a href="#6-storeToRefs工具函数" class="headerlink" title="6. storeToRefs工具函数"></a>6. storeToRefs工具函数</h2><p>使用storeToRefs函数可以辅助保持数据（state + getter）的响应式解构<br><img src="/2023/08/29/vue3-pinia/36.png" alt="image.png"></p>
+<h2 id="7-Pinia的调试"><a href="#7-Pinia的调试" class="headerlink" title="7. Pinia的调试"></a>7. Pinia的调试</h2><p>Vue官方的 dev-tools 调试工具 对 Pinia直接支持，可以直接进行调试<br><img src="/2023/08/29/vue3-pinia/37.png" alt="image.png"></p>
+<h2 id="8-Pinia持久化插件"><a href="#8-Pinia持久化插件" class="headerlink" title="8. Pinia持久化插件"></a>8. Pinia持久化插件</h2><p>官方文档：<a href="https://prazdevs.github.io/pinia-plugin-persistedstate/zh/">https://prazdevs.github.io/pinia-plugin-persistedstate/zh/</a></p>
+<ol>
+<li>安装插件 pinia-plugin-persistedstate</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><code class="hljs jsx">npm i pinia-plugin-persistedstate<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用 main.js</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><code class="hljs jsx"><span class="hljs-keyword">import</span> persist <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;pinia-plugin-persistedstate&#x27;</span><br>...<br>app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">createPinia</span>().<span class="hljs-title function_">use</span>(persist))<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>配置 store&#x2F;counter.js</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><code class="hljs jsx"><span class="hljs-keyword">import</span> &#123; defineStore &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;pinia&#x27;</span><br><span class="hljs-keyword">import</span> &#123; computed, ref &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span><br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">defineStore</span>(<span class="hljs-string">&#x27;counter&#x27;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>  ...<br>  <span class="hljs-keyword">return</span> &#123;<br>    count,<br>    doubleCount,<br>    increment<br>  &#125;<br>&#125;, &#123;<br>  <span class="hljs-attr">persist</span>: <span class="hljs-literal">true</span><br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>其他配置，看官网文档即可</li>
+</ol>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
 </search>
