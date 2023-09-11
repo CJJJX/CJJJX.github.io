@@ -3107,4 +3107,134 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>vue八股文1</title>
+    <url>/2023/09/11/vue%E9%9D%A2%E8%AF%95%E9%A2%981/</url>
+    <content><![CDATA[<h1 id="2023前端面试题整理一-Vue篇"><a href="#2023前端面试题整理一-Vue篇" class="headerlink" title="2023前端面试题整理一(Vue篇)"></a>2023前端面试题整理一(Vue篇)</h1><h3 id="简述-MVVM-框架"><a href="#简述-MVVM-框架" class="headerlink" title="简述 MVVM 框架"></a>简述 MVVM 框架</h3><p>Model: 代表数据模型，也可以在 Model 中定义数据修改和操作的业务逻辑。</p>
+<p>View: 代表 UI 组件，它负责将数据模型转化成 UI 展现出来。</p>
+<p>ViewModel: 监听数据模型的改变和控制视图行为、处理用户交互，简单理解就是一个同步 View 和 Model 的对象，连接 Model 和 View。</p>
+<h3 id="vue2-和-vue3-区别"><a href="#vue2-和-vue3-区别" class="headerlink" title="vue2 和 vue3 区别"></a>vue2 和 vue3 区别</h3><p>1.写法上的区别:vue2 使用的是options(选项)Api,vue3 的是composition Api(当然 vue3 也兼容composition api)。options Api中methods，compute，data等 api 都是分散的。而composition api中的代码是根据逻辑功能来组织的,我们可以将一个功能所定义的methods，compute，data等 api 会放在一起,让我们可以更灵活地组合组件逻辑。</p>
+<p>2.vue2 将响应式数据放到 data 函数中,而 vue3 则是使用ref和reactive将数据声明为响应式</p>
+<p>3.响应式实现方式:vue2 中是通过Object.defineProperty对数据劫持实现的,vue3 中则是使用Proxy对数据代理实现的。</p>
+<p>4.生命周期区别:vue3 中将beforeCreate和created合并到了setup函数中</p>
+<p>5.根节点: vue3 组件允许多个根节点,而 vue2 只允许一个</p>
+<p>6.内置组件: vue3 新增了传送组件Teleport和异步依赖处理组件Suspense</p>
+<h3 id="v-if-和-v-show"><a href="#v-if-和-v-show" class="headerlink" title="v-if 和 v-show"></a>v-if 和 v-show</h3><p>1.v-if表示一个 dom 元素是否被创建，而v-show则是控制这个 dom 元素的display属性是否为none</p>
+<p>2.一般在频繁切换状态的地方使用v-show,v-if则更适合条件不经常改变的场景，因为它切换开销相对较大</p>
+<h3 id="v-for-和-v-if-优先级"><a href="#v-for-和-v-if-优先级" class="headerlink" title="v-for 和 v-if 优先级"></a>v-for 和 v-if 优先级</h3><p>1.开发过程中一般不建议同时将 v-for 和 v-if 放在一个标签中使用</p>
+<p>2.Vue2 中 v-for 的优先级会更高，所以会先执行循环，再进行 v-if 判断，所以这样就会导致无论需不需展示这个元素，都会先遍历整个列表</p>
+<p>3.在 Vue3 中 v-if 的优先级会更高，但是当我们遍历一个数组的时候，根据数组中的某个元素进行 v-if 判断的时候就会报错，因为 v-if 会先执行此时还没有拿到这个数组。所以 Vue3 中会报错</p>
+<h3 id="介绍-Vue-插槽用法"><a href="#介绍-Vue-插槽用法" class="headerlink" title="介绍 Vue 插槽用法"></a>介绍 Vue 插槽用法</h3><p>插槽slot可以理解为占坑，当使用一个组件的时候，在组件标签里的对应的内容就会替换掉这个组件中的slot标签。插槽分为默认插槽，具名插槽，作用域插槽。</p>
+<p><em>默认插槽</em></p>
+<p>子组件中用slot标签来确定渲染位置，父组件使用它时直接在子组件的标签内写入内容即可</p>
+<p>&#x2F;&#x2F;子组件</p>
+<p><template>   <slot></slot></template></p>
+<p>&#x2F;&#x2F;父组件</p>
+<p>&lt;Child&gt;&lt;div&gt;默认插槽&lt;&#x2F;div&gt;&lt;&#x2F;Child&gt;</p>
+<p><em>具名插槽</em></p>
+<p>顾名思义就是具有名字的插槽，子组件中可以用name熟悉对slot命名，父组件在使用的时候通过template中的v-slot:name或者#name来定义这个插槽中的内容</p>
+<p>&#x2F;&#x2F;子组件&lt;template&gt; &lt;slot name&#x3D;”content”&gt;&lt;&#x2F;slot&gt;&lt;&#x2F;template&gt;</p>
+<p>&#x2F;&#x2F;父组件&lt;Child&gt;   &lt;template v-slot:content&gt;具名插槽内容&lt;&#x2F;template&gt;&lt;&#x2F;Child&gt;</p>
+<p><em>作用域插槽</em></p>
+<p>子组件中的slot可以通过类似组件属性传递的方式将子组件的值传递给父组件中这个子组件的插槽内容中（子组件标签内），在父组件使用子组件的时候要用v-slot的值进行接收这些参数，默认插槽可以将其直接写在子组件标签上，具名插槽则写在template上。而传过来的值只能在子组件标签中或者template标签中使用。所以在父组件作用域中获取到了子组件作用域中的变量，可以认为作用域插槽延伸了子组件数据的作用范围，因此叫做作用域插槽</p>
+<h3 id="常见的事件修饰符及其作用"><a href="#常见的事件修饰符及其作用" class="headerlink" title="常见的事件修饰符及其作用"></a>常见的事件修饰符及其作用</h3><p>●.stop：等同于 JavaScript 中的 event.stopPropagation() ，防止事件冒泡；</p>
+<p>●.prevent ：等同于 JavaScript 中的 event.preventDefault() ，防止执行预设的行为（如果事件可取消，则取消该事件，而不停止事件的进一步传播）；</p>
+<p>●.capture ：将事件改成捕获模式,由外到内触发</p>
+<p>●.self ：只会触发自己范围内的事件，不包含子元素；</p>
+<p>●.once ：只会触发一次。</p>
+<h3 id="v-model-如何实现的"><a href="#v-model-如何实现的" class="headerlink" title="v-model 如何实现的"></a>v-model 如何实现的</h3><p>v-model 其实是一个语法糖,比如&lt;input v-model&#x3D;”message” &#x2F;&gt;等同于&lt;input  :value&#x3D;”message”  @input&#x3D;”message&#x3D;$event.target.value”&gt;</p>
+<p>Vue2 中给 data 中的对象属性添加一个新的属性时会发生什么？如何解决？</p>
+<p>Vue2 中对象添加新属性绑定的视图不会更新,因为 Vue2 中 Object.defineProperty 劫持不到 data 对象中新增的属性,可以使用this.$set(this.obj, ‘b’, ‘obj.b’)解决$set()方法相当于手动的去把 obj.b 处理成一个响应式的属性，此时视图也会跟着改变了。</p>
+<h3 id="Vue-插件用法"><a href="#Vue-插件用法" class="headerlink" title="Vue 插件用法"></a>Vue 插件用法</h3><p>面试一般会问你如何写一个 vue 插件,所以没写过 vue 插件的最好去亲自体验一下回答:vue实例会有一个use函数,它接受的是一个带有install函数的对象和一个可选的选项对象,当我们使用 vue.use(plugin)或者app.use(plugin)会调用我们插件的install属性的函数,并且将当前组件的实例传进来.所以在插件中就可以对这个实例进行一些操作来实现我们插件的功能</p>
+<h3 id="Vue-自定义指令"><a href="#Vue-自定义指令" class="headerlink" title="Vue 自定义指令"></a>Vue 自定义指令</h3><p>vue 官方提供了 v-text、v-for、v-model、v-if 等常用的指令。除此之外 vue 还允许开发者自定义指令。面试经常会问什么是自定义指令?你用自定义指令做过哪些功能?</p>
+<p><em>Q1:什么是自定义指令?</em></p>
+<p>1.自定义指令包含局部指令和全局指令,在模板中使用指令前必须先使用directives选项注册。局部指令指在某个组件中注册,而全局则是将指令注册到全局,通常在 main.js 中注册。</p>
+<p>2.自定义指令由一个包含类似组件生命周期钩子的对象来定义。它的生命周期钩子包含created,beforeMount,mounted,beforeUpdate,updated,beforeUnmount,unmounted,</p>
+<p>3.常用的钩子为mounted 和  updated,它接受el,binding等参数.binding参数的值一般包含绑定到这个元素上的信息,比如下面这个指令&lt;div v-example:foo.bar&#x3D;”baz”&gt;它的 binding 会是这个对象{   arg: ‘foo’,   modifiers: { bar: true },   value: &#x2F;* <code>baz</code> 的值 <em>&#x2F;,   oldValue: &#x2F;</em> 上一次更新时 <code>baz</code> 的值 *&#x2F;}</p>
+<p><em>Q2:你用自定义指令做过哪些功能?</em></p>
+<p>1.数据埋点,通过绑定自定义事件传入点击当前元素需要埋点的事件名,在指令中监听当前元素的点击事件后调用后台接口将事件名传入</p>
+<p>2.权限控制,通过绑定自定义事件传入控制当前元素的权限字段,在指令中获取到当前元素根据权限字段来控制该元素的状态(显示,隐藏等)</p>
+<h3 id="computed-和-watch"><a href="#computed-和-watch" class="headerlink" title="computed 和 watch"></a>computed 和 watch</h3><p>1.computed是计算属性,依赖其它属性值,用于解决模板中放入过多的逻辑会让模板过重且难以维护的问题.watch是侦听器,当我们需要根据一个属性的变化而做出一些处理的时候,可以使用watch来对这个属性进行监听</p>
+<p>2.computed具有缓存的特点,即当它所依赖的属性发生改变的时候它才会重新执行内部逻辑.如下代码</p>
+<template>
+    <div></div>
+    <div></div>
+    <div></div>
+</template>
+
+<script setup>
+    import { computed, ref, watch } from "vue";
+    const a = ref(1)
+    const b = ref(2)
+    let addSum = computed(() => {
+        console.log('内部逻辑执行')   return a.value + b.value})
+</script>
+
+
+
+<p>页面多次使用addSum,但是只会打印一次”内部逻辑执行”</p>
+<p>1.watch在页面首次加载的时候默认不会执行,需要设置immediate:true首次才会执行监听</p>
+<p>2.watch默认只监听一层数据,不监听多层数据里属性的变化,需要设置deep:true才会进行深度监听</p>
+<h3 id="vue-生命周期"><a href="#vue-生命周期" class="headerlink" title="vue 生命周期"></a>vue 生命周期</h3><p>Vue2(选项式 API)Vue3(setup)描述beforeCreate-实例创建前created-实例创建后beforeMountonBeforeMountDOM 挂载前调用mountedonMountedDOM 挂载完成调用beforeUpdateonBeforeUpdate数据更新之前被调用updatedonUpdated数据更新之后被调用beforeDestroyonBeforeUnmount组件销毁前调用destroyedonUnmounted组件销毁完成调用</p>
+<p>vue 父子组件生命周期执行顺序</p>
+<p>这个相对于上一个问题稍微复杂一点,可以试着理解记忆或者直接记住吧</p>
+<p><em>渲染过程</em></p>
+<p>父beforeCreate –&gt; 父created –&gt; 父beforeMount –&gt; 子beforeCreate –&gt; 子created –&gt; 子beforeMount –&gt; 子mounted  –&gt; 父mounted</p>
+<p><em>更新过程</em></p>
+<p>父beforeUpdate –&gt; 子beforeUpdate –&gt; 子updated –&gt; 父updated</p>
+<p><em>销毁过程</em></p>
+<p>父beforeDestroy –&gt; 子beforeDestroy –&gt; 子destroyed –&gt; 父destroyed注意如果子组件是异步组件的话它们的执行顺序会发生改变，会先执行完父组件的生命周期然后再执行子组件的生命周期</p>
+<h3 id="vue-导航-路由守卫"><a href="#vue-导航-路由守卫" class="headerlink" title="vue 导航(路由守卫)"></a>vue 导航(路由守卫)</h3><p>路由守卫分为全局路由守卫，路由独享守卫，组件路由守卫</p>
+<p>●<em>全局路由守卫</em></p>
+<p>1.beforeEach,接收to、from、next三个参数，每个路由跳转前都会触发，登录验证时用的比较多2.beforeResolve，和beforeEach类似，区别是在导航被确认之前，同时在所有组件内守卫和异步路由组件被解析之后调用</p>
+<p>3.afterEach，在路由跳转完成后调用，接收 to、from 两个参数</p>
+<p>●<em>路由独享守卫</em></p>
+<p>beforeEnter,一般配置在路由配置文件中（router&#x2F;index.js），对进入某个路由之前进行相关操作</p>
+<p>●<em>组件路由守卫</em></p>
+<p>接收to、from、next三个参数</p>
+<p>1.beforeRouteEnter,进入该组件之前调用，无法获取到 vue 实例</p>
+<p>2.beforeRouteUpdate，在当前路由改变，但是该组件被复用时调用</p>
+<p>3.beforeRouteLeave, 在离开当前组件时调用</p>
+<p><strong>Vue-Router 的懒加载如何实现</strong></p>
+<p>使用箭头函数+import 动态加载</p>
+<p>const router &#x3D; new VueRouter({</p>
+<p> routes: [{ path: “&#x2F;list”, component: () &#x3D;&gt; import(“@&#x2F;components&#x2F;list.vue”) }],</p>
+<p>});</p>
+<h3 id="路由的-hash-和-history-模式的区别"><a href="#路由的-hash-和-history-模式的区别" class="headerlink" title="路由的 hash 和 history 模式的区别"></a>路由的 hash 和 history 模式的区别</h3><p>Vue-Router 有两种模式：hash 模式和 history 模式。默认的路由模式是 hash 模式。</p>
+<p><em>1.hash</em> 模式</p>
+<p>简介： hash 模式是开发中默认的模式，它的 URL 带着一个#，例如：<a href="http://www.abc.com/#/vue%EF%BC%8C%E5%AE%83%E7%9A%84hash%E5%80%BC%E5%B0%B1%E6%98%AF#/vue%E3%80%82%E7%89%B9%E7%82%B9%EF%BC%9Ahash">www.abc.com/#/vue，它的hash值就是#/vue。特点：hash</a> 值会出现在 URL 里面，但是不会出现在 HTTP 请求中，对后端完全没有影响。所以改变 hash 值，不会重新加载页面。这种模式的浏览器支持度很好，低版本的 IE 浏览器也支持这种模式。hash 路由被称为是前端路由，已经成为 SPA（单页面应用）的标配。原理： hash 模式的主要原理就是 onhashchange()事件：window.onhashchange &#x3D; function (event)</p>
+<p> { console.log(event.oldURL, event.newURL); </p>
+<p>let hash &#x3D; location.hash.slice(1);};</p>
+<p><em>2.history</em> 模式</p>
+<p>简介： history 模式的 URL 中没有#，它使用的是传统的路由分发模式，即用户在输入一个 URL 时，服务器会接收这个请求，并解析这个 URL，然后做出相应的逻辑处理。 特点： 当使用 history 模式时，URL 就像这样：abc.com&#x2F;user&#x2F;id。相比 hash 模式更加好看。但是，history 模式需要后台配置支持。如果后台没有正确配置，访问时会返回 404。 API： history api 可以分为两大部分，切换历史状态和修改历史状态：</p>
+<p>修改历史状态：包括了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法，这两个方法应用于浏览器的历史记录栈，提供了对历史记录进行修改的功能。只是当他们进行修改时，虽然修改了 url，但浏览器不会立即向后端发送请求。如果要做到改变 url 但又不刷新页面的效果，就需要前端用上这两个 API。</p>
+<p>切换历史状态： 包括 forward()、back()、go()三个方法，对应浏览器的前进，后退，跳转操作。虽然 history 模式丢弃了丑陋的#。但是，它也有自己的缺点，就是在刷新页面的时候，如果没有相应的路由或资源，就会刷出 404 来。</p>
+<h3 id="nexttick-原理"><a href="#nexttick-原理" class="headerlink" title="nexttick 原理"></a>nexttick 原理</h3><p>关于 nextTick 会问到它的用法,然后是它的原理,然后还可能问到 JS 的事件循环机制。</p>
+<p><em>Q1:vue 中的 nextTick 是干什么用的?</em></p>
+<p>这个其实比较简单,用过都知道它是干嘛的,vue 官方的解释是:在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。这是什么意思呢,其实 vue 中修改 data 不会立刻触发 dom 更新;而是把需要更新的 Watcher 加入到 queueWatcher 队列中,然后在合适的时机在 nextTick 中调用这些 Watcher 的更新函数进行 dom 更新,所以在 data 刚被修改的时候,我们是获取不到更新后的 dom 的,这时候便需要调用 nextTick 函数在它的回调函数中获取到变化后的 dom</p>
+<p><em>Q2:nextTick 原理</em></p>
+<p>1.nextTick 原理是借助浏览器事件循环来完成的,因为每次事件循环之间都有一次视图渲染,nextTick 尽量在视图渲染之前完成 dom 更新,所以 nextTick 优先使用的是 promise(微任务)实现</p>
+<p>2.每次执行 nextTick 时会将传入的回调函数放入一个队列中(callbacks 数组),然后当在本次事件循环的同步代码执行完毕后开启一个微任务(promise 或者 MutationObserver)去依次执行这个 callbacks 中的回调函数。</p>
+<p>3.但是当浏览器不支持 promise 的时候在 vue2 中会进行进行降级处理,依次使用setImmediate、setTimeout开启一个宏任务执行 callbacks</p>
+<p>4.当一个 data 数据更新时对应的 watcher 便会调用一次 nextTick,将它对应的 dom 更新操作作为回调函数放入 callbacks 中,所以当我们想获取这个 data 更新后的 dom 需要在其值变化后也调用 nextTick 将回调函数传入排在上个更新 dom 的回调函数后面,所以我们可以在这个 nextTick 的回调函数中获取到更新后的 data</p>
+<h3 id="Vue-组件传参"><a href="#Vue-组件传参" class="headerlink" title="Vue 组件传参"></a>Vue 组件传参</h3><p>这里大概归纳了一下 vue2 和 vue3 的传参方式</p>
+<p>Vue2Vue3父传子propsprops子传父$emitemits父传子$attrsattrs子传父$listeners无(合并到 attrs 方式)父传子provide&#x2F;injectprovide&#x2F;inject子组件访问父组件$parent无父组件访问子组件$children无父组件访问子组件$refexpose&amp;ref兄弟组件传值EventBusmitt</p>
+<h3 id="Vuex"><a href="#Vuex" class="headerlink" title="Vuex"></a>Vuex</h3><p>1.Vuex 是 Vue 中的全局状态管理框架，它可以管理应用的所有组件的状态。并不是每个项目都需要引入 Vuex 的，当我们的项目有很多个页面，并且这些页面共享着多个数据状态，此时我们可以引入 Vuex。</p>
+<p>2.Vuex 有三个核心的概念，state,mutations,actions,其中state为存放数据的地方，mutations中的函数作用则是用来修改state，actions中一般是用了处理一些异步操作的函数。</p>
+<p>3.Vuex 除了上面三个概念还有getters,moudles，getters就像 Vue 中的计算属性computed一样用来描述依赖响应式状态 state 中的复杂逻辑。moudles则是可以将 store 分割成模块（module），每个模块都拥有自己的state,mutations,actions等，在大型应用中经常用到</p>
+<p>4.场景：当我们异步获取结果并赋值给 state 的时候，比如数据请求，我们可以在actions中进行数据请求，拿到结果通过它的dispatch方法调用mutations中修改state的函数，从而将结果赋值给了state</p>
+<h3 id="Pinia"><a href="#Pinia" class="headerlink" title="Pinia"></a>Pinia</h3><p>pinia其实就是 Vuex5，它和 Vuex 的主要区别有以下几点</p>
+<p>1.Pinia 使用更简单，更符合开发者的开发习惯</p>
+<p>2.pinia中没有了mutations,状态state的修改可以直接进行修改，或者在actions中修改，或者使用它的$patch方法进行修改</p>
+<p>3.pinia中没有了modules,如果想使用多个 store，直接使用defineStore定义多个 store 传入不同的 id 即可</p>
+<p>4.更好的 TS 支持，不需要创建自定义的复杂包装器来支持 TS篇幅有限</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
