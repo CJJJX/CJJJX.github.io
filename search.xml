@@ -3289,4 +3289,35 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>面试如何回答JSON.stringify的使用场景</title>
+    <url>/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/</url>
+    <content><![CDATA[<p>当面试被问到JSON.stringify 的作用意义该如何回答呢。网上查到的八股文答案基本都这样回答：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">JSON.stringify(value,replacer,space)<br></code></pre></td></tr></table></figure>
+
+<p><em><strong>它是一个用于序列化对象的方法，接受三个参数，第一个参数是要被序列化的对象，接受对象或数组类型。第二个参数用于标记需要序列化的属性，接受数组和函数类型。第三个参数用于描述序列化后的缩进字符数，用于美化格式</strong></em>。当然这样的回答也没有错，不过面试考察的更多是我们的实际应用能力以及实战场景，如果只回答八股文的内容，更多的只能体现背诵能力，所以今天整理了 JSON.stringify 的实际应用场景。</p>
+<h3 id="场景一：localStorage-的存储"><a href="#场景一：localStorage-的存储" class="headerlink" title="场景一：localStorage 的存储"></a><strong>场景一：localStorage 的存储</strong></h3><p>前端 localStorage 中只能接受字符串的存储类型，而且它是一个 KV 的结构，我们尝试模拟<em><strong>存储一个对象</strong></em>这种场景：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640.png" alt="图片"></p>
+<p>我们会发现是存储失败的，我们没有办法把整个 obj 存储到 localStorage 中，所以在这种场景下，我们就需要用到 JSON.stringify，把对象先序列化再进行存储：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020901.png" alt="图片"></p>
+<p>我们发现这样是可以存储成功的，我们只需要把存进去的对象再进行一次 JSON.parse：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020902.png" alt="图片"></p>
+<p>整个过程我们就可以把对象给存储进去，同时能提取出来，这样就ok了。</p>
+<h3 id="场景二：对象的深拷贝"><a href="#场景二：对象的深拷贝" class="headerlink" title="场景二：对象的深拷贝"></a><strong>场景二：对象的深拷贝</strong></h3><p>JS 中的对象它都是一个引用的类型。</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020903.png" alt="图片"></p>
+<p>如上图把obj赋予给objA，当改动objA里面的a属性，本质上其实在obj里面的a属性它也被改动了，那怎么样解决这个问题呢？这里可以利用 JSON.stringify 以及 JSON.parse 给做一次对象的深复制，具体应用是这样的：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020904.png" alt="图片"></p>
+<p>我们用 JSON.stringify 序列化一次这个obj，再把它解析出来，最后的结果赋予给objB，这时候我改动objB里面的a属性，但obj里面的属性并没有进行变化，这样的话我们就成功的做了一次深度复制，这也是 JSON.parse 一个巧妙的应用。</p>
+<h3 id="场景三：删除对象属性"><a href="#场景三：删除对象属性" class="headerlink" title="场景三：删除对象属性"></a><strong>场景三：删除对象属性</strong></h3><p>如果我们需要删除对象中某个属性，也可以利用 JSON.stringify 去实现，比如说下面这个对象我们要把b属性删掉，可以利用 JSON.stringify 的第二个参数去巧妙应用：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020905.png" alt="图片"></p>
+<p>第二个参数接受一个方法，方法接受两个参数，一个是key，一个是value，我们可以在里面写逻辑，如果key&#x3D;&#x3D;&#x3D;’b’，这时候我们返回undefine，否则的话我们把 value 返回，这时候我们就可以得到一个没有b属性的一个序列化的字符串，我们再把这个字符串给 JSON.parse 回来，就可以得到消除 b 之后的一个对象，这也是 JSON.stringify 的一个巧妙应用。</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
