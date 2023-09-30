@@ -3457,4 +3457,52 @@
         <tag>八股文</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Vue之nextTick原理与作用</title>
+    <url>/2023/10/01/Vue%E4%B9%8BnextTick%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%9C%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="Vue之nextTick原理与作用"><a href="#Vue之nextTick原理与作用" class="headerlink" title="Vue之nextTick原理与作用"></a>Vue之nextTick原理与作用</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>在 Vue.js 中，<code>$nextTick</code> 方法的底层原理涉及 Vue 的更新队列以及浏览器的异步任务队列（微任务和宏任务）。它的主要目标是在下次 DOM 更新循环结束后执行回调函数，确保能够访问到更新后的 DOM。</p>
+<p>下面是 <code>$nextTick</code> 方法的大致执行过程：</p>
+<ol>
+<li>当调用 <code>this.$nextTick(callback)</code> 时，Vue 会将 <code>callback</code> 函数添加到一个称为“更新队列”（Update Queue）的数组中。</li>
+<li>Vue 会检查是否已经有一个异步任务正在进行中。如果没有，它会创建一个微任务，该微任务将在当前代码执行完成后执行。</li>
+<li>当前代码执行完成并进入微任务队列时，Vue 将开始处理更新队列中的回调函数。</li>
+<li>在处理更新队列时，Vue 会执行所有在该更新循环中触发的数据变更操作，并将这些变更应用到虚拟 DOM。</li>
+<li>完成虚拟 DOM 的更新后，Vue 会触发一个“flush”阶段，此时更新队列中的回调函数会被依次执行。</li>
+<li>回调函数在执行时，DOM 已经更新完成，可以在回调函数中获取到更新后的 DOM。</li>
+</ol>
+<p>通过这样的异步处理方式，Vue 在下次 DOM 更新循环结束后执行 <code>$nextTick</code> 的回调函数，确保在回调函数内部能够获取到最新的 DOM 数据。</p>
+<p>需要注意的是，Vue 中的更新队列和异步任务队列的处理可能会因运行环境而异。在现代浏览器中，Vue 通常会使用微任务（如 <code>Promise</code> 或 <code>MutationObserver</code>）来处理更新队列中的回调函数。在一些较旧的浏览器中，Vue 可能会使用宏任务（如 <code>setTimeout</code>）来模拟实现 <code>$nextTick</code>。这种方式确保在各种环境下都能正确地处理异步更新和回调函数的执行顺序。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>使用 <code>$nextTick</code> 的常见场景是在更新数据后，立即获取更新后的 DOM 元素的状态，例如计算 DOM 元素的尺寸或位置。另一个常见用例是在修改数据后，执行某些依赖于更新后的数据的操作，确保在 DOM 更新完成后执行这些操作。</p>
+<p>以下是使用 <code>$nextTick</code> 的示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;template&gt;<br>  &lt;div&gt;<br>    &lt;p&gt;计数：&#123;&#123; count &#125;&#125;&lt;/p&gt;<br>    &lt;button @click=&quot;increment&quot;&gt;增加计数&lt;/button&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  data() &#123;<br>    return &#123;<br>      count: 0,<br>    &#125;;<br>  &#125;,<br>  methods: &#123;<br>    increment() &#123;<br>      this.count++;<br>      // 在下次 DOM 更新循环结束后执行回调函数<br>      this.$nextTick(() =&gt; &#123;<br>        // DOM 已更新，可以执行额外操作<br>        this.logElementSize();<br>      &#125;);<br>    &#125;,<br>    logElementSize() &#123;<br>      // 获取元素尺寸<br>      const element = this.$el.querySelector(&#x27;p&#x27;);<br>      const &#123; width, height &#125; = element.getBoundingClientRect();<br>      console.log(&#x27;元素宽度：&#x27;, width, &#x27;元素高度：&#x27;, height);<br>    &#125;,<br>  &#125;,<br>&#125;;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>在上面的示例定义了一个简单的 Vue 组件，包含一个计数变量 <code>count</code> 和一个按钮，点击按钮会增加计数。在 <code>increment</code> 方法中，通过 <code>this.$nextTick</code> 在下次 DOM 更新循环结束后执行 <code>logElementSize</code> 方法来获取更新后的 DOM 元素的尺寸。这样做的好处是确保在更新 DOM 后再去执行操作，以便能够正确获取到最新的 DOM 数据。在某些情况下，如果不使用 <code>$nextTick</code>，可能会在数据更新后立即执行操作，但此时 DOM 尚未更新，因此无法正确获取到最新的 DOM 数据。</p>
+<h1 id="vue3与vue2中的nextTick用法区别"><a href="#vue3与vue2中的nextTick用法区别" class="headerlink" title="vue3与vue2中的nextTick用法区别"></a>vue3与vue2中的nextTick用法区别</h1><p>在 Vue 2 和 Vue 3 中，<code>$nextTick</code> 方法都用于在下次 DOM 更新循环结束后执行回调函数。它们的作用是让我们在修改数据后，等待 Vue 完成数据更新和 DOM 重新渲染后再执行一些操作。</p>
+<p>尽管功能相似，Vue 3 中的 <code>$nextTick</code> 和 Vue 2 中的 <code>$nextTick</code> 有一些不同之处：</p>
+<p>Vue 2 中的 <code>$nextTick</code>：</p>
+<ol>
+<li><code>$nextTick</code> 是在 Vue 2 的全局实例上调用的，例如：<code>this.$nextTick(callback)</code>。</li>
+<li>在同一时间内，多次调用 <code>$nextTick</code>，Vue 2 会将回调函数加入到一个队列中，确保在下次 DOM 更新循环结束后一次性执行所有回调函数。</li>
+<li>Vue 2 中的 <code>$nextTick</code> 返回的是一个 Promise 对象，可以使用 <code>.then()</code> 来处理回调，也可以使用传入的回调函数。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// Vue 2 中的 $nextTick<br>this.$nextTick(() =&gt; &#123;  <br>// 在 DOM 更新后执行的回调函数<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>Vue 3 中的 <code>$nextTick</code>：</p>
+<ol>
+<li><p><code>$nextTick</code> 不再作为 Vue 实例的方法，而是作为一个独立的函数导入，例如：<code>import &#123; nextTick &#125; from &#39;vue&#39;;</code>。</p>
+</li>
+<li><p>Vue 3 中的 <code>$nextTick</code> 返回的是一个 Promise 对象，不再接受回调函数作为参数。要执行回调，可以使用 <code>.then()</code> 处理 Promise，或者使用异步函数和 <code>await</code> 来等待 Promise 的完成。</p>
+</li>
+<li><p>在同一时间内，多次调用 <code>nextTick</code>，Vue 3 会将回调函数加入到一个微任务队列中，确保在下次 DOM 更新循环结束后一次性执行所有回调函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// Vue 3 中的 nextTick<br>import &#123; nextTick &#125; from &#x27;vue&#x27;;<br><br>nextTick().then(() =&gt; &#123;<br>  // 在 DOM 更新后执行的回调函数<br>&#125;);<br><br>// 或使用异步函数和 await<br>async function someFunction() &#123;<br>  // ...修改数据<br>  await nextTick();<br>  // 在 DOM 更新后执行的回调函数<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>总结： Vue 3 中的 <code>$nextTick</code> 与 Vue 2 中的 <code>$nextTick</code> 在功能上基本一致，都用于在下次 DOM 更新循环结束后执行回调函数。然而，Vue 3 中的 <code>$nextTick</code> 被作为一个独立的函数导入，并返回一个 Promise 对象，而不再作为 Vue 实例的方法。这样的改变使得代码更加清晰，并且能够更好地与现代 JavaScript 中的 Promise 和异步函数结合使用。</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
 </search>
