@@ -3775,4 +3775,59 @@
         <tag>八股文</tag>
       </tags>
   </entry>
+  <entry>
+    <title>前端实现水印的几种方案</title>
+    <url>/2023/10/08/%E5%89%8D%E7%AB%AF%E5%AE%9E%E7%8E%B0%E6%B0%B4%E5%8D%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/</url>
+    <content><![CDATA[<p>水印可以用于保护内容的版权，提供额外信息，或者美化页面。本文将探讨几种常见的前端水印方案，更好地理解如何实现水印效果。</p>
+<h2 id="1-使用CSS伪元素添加水印"><a href="#1-使用CSS伪元素添加水印" class="headerlink" title="1. 使用CSS伪元素添加水印"></a>1. 使用CSS伪元素添加水印</h2><p>使用CSS伪元素是一种简单而灵活的方式来添加水印，以下是一个示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">/* 示例代码 */<br>&lt;div class=&quot;watermark&quot;&gt;&lt;/div&gt;<br>.watermark::before &#123;<br>  content: &quot;我是水印&quot;;<br>  position: fixed;<br>  top: 50%;<br>  left: 50%;<br>  transform: translate(-50%, -50%);<br>  opacity: 0.5;<br>  font-size: 48px;<br>  color: #ccc;<br>  pointer-events: none;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>效果如下图所示：</strong></p>
+<p><img src="/2023/10/08/%E5%89%8D%E7%AB%AF%E5%AE%9E%E7%8E%B0%E6%B0%B4%E5%8D%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/640.png" alt="图片">CSS伪元素水印效果</p>
+<p>在这个示例中，我们使用了CSS伪元素 <code>::before</code> 来创建水印。以下是各个CSS属性的解释：</p>
+<ul>
+<li><code>content</code>：定义了水印的文本内容。</li>
+<li><code>position: fixed</code>：将水印固定在屏幕上，不随页面滚动而移动。</li>
+<li><code>top</code> 和 <code>left</code>：将水印放置在页面的中央。</li>
+<li><code>transform</code>：通过 <code>translate</code> 函数来调整水印的位置。</li>
+<li><code>opacity</code>：设置水印的透明度。</li>
+<li><code>font-size</code> 和 <code>color</code>：定义水印的字体大小和颜色。</li>
+<li><code>pointer-events: none</code>：防止水印干扰用户的交互操作。</li>
+</ul>
+<h2 id="2-使用Canvas绘制水印"><a href="#2-使用Canvas绘制水印" class="headerlink" title="2. 使用Canvas绘制水印"></a>2. 使用Canvas绘制水印</h2><p>使用Canvas绘制水印是一种高度可定制的方式，以下是一个示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;!-- 示例代码 --&gt;<br>&lt;canvas id=&quot;watermarkCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;<br><br>&lt;script&gt;<br>  const canvas = document.getElementById(&quot;watermarkCanvas&quot;);<br>  const context = canvas.getContext(&quot;2d&quot;);<br><br>  const image = new Image();<br>  image.src = &quot;your-image.jpg&quot;; // 你的图片URL<br><br>  image.onload = function() &#123;<br>    context.drawImage(image, 0, 0, canvas.width, canvas.height);<br><br>    context.font = &quot;48px Arial&quot;;<br>    context.fillStyle = &quot;rgba(255, 0, 0, 0.5)&quot;;<br>    context.fillText(&quot;Watermark Text&quot;, 50, 50);<br>  &#125;;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们创建了一个Canvas元素，并使用JavaScript来绘制水印。以下是示例中的关键点：</p>
+<ul>
+<li><code>&lt;canvas&gt;</code> 元素用于创建一个画布，其中指定了宽度和高度。</li>
+<li>通过JavaScript加载了一个图片，并使用 <code>drawImage</code> 方法将图片绘制到Canvas上。</li>
+<li>使用 <code>font</code> 和 <code>fillStyle</code> 属性定义了水印的字体和颜色。</li>
+<li>使用 <code>fillText</code> 方法在Canvas上绘制水印文本。</li>
+</ul>
+<h2 id="3-使用CSS重复背景图片"><a href="#3-使用CSS重复背景图片" class="headerlink" title="3. 使用CSS重复背景图片"></a>3. 使用CSS重复背景图片</h2><p>使用CSS来添加重复水印的方法是将水印图片作为背景图片，并使用 <code>background-repeat</code> 属性来实现重复效果，以下是一个示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;!-- 示例代码 --&gt;<br>&lt;style&gt;<br>  .watermarked-element &#123;<br>    width: 100%;<br>    height: 100%;<br>    background-image: url(&#x27;watermark.png&#x27;); /* 水印图片的URL */<br>    background-repeat: repeat; /* 重复水印图片 */<br>    opacity: 0.5; /* 设置水印透明度 */<br>    pointer-events: none; /* 防止水印干扰用户交互 */<br>  &#125;<br>&lt;/style&gt;<br><br>&lt;div class=&quot;watermarked-element&quot;&gt;<br>  &lt;!-- 页面内容 --&gt;<br>&lt;/div&gt;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们创建了一个包含水印的容器元素 <code>.watermarked-element</code>，并将水印图片设置为背景图片。通过设置 <code>background-repeat: repeat;</code>，水印图片会在容器内重复显示。通过调整 <code>opacity</code> 属性，可以控制水印的透明度。最后，使用 <code>pointer-events: none;</code> 可以防止水印干扰用户的交互操作。</p>
+<p>这种方法适用于需要在整个页面或特定元素上添加水印的情况，且不需要通过Canvas来绘制水印。</p>
+<h2 id="4-使用SVG图像"><a href="#4-使用SVG图像" class="headerlink" title="4. 使用SVG图像"></a>4. 使用SVG图像</h2><p>使用SVG图像创建矢量图形水印，嵌入到网页中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;!-- 示例代码 --&gt;<br>&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;100&quot;&gt;<br>  &lt;text x=&quot;10&quot; y=&quot;40&quot; font-family=&quot;Arial&quot; font-size=&quot;24&quot; fill=&quot;rgba(255, 0, 0, 0.5)&quot;&gt;<br>    Watermark Text<br>  &lt;/text&gt;<br>&lt;/svg&gt;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们使用SVG（可缩放矢量图形）来创建水印。以下是关于SVG的解释：</p>
+<ul>
+<li><code>&lt;svg&gt;</code> 元素用于创建SVG图像。</li>
+<li><code>&lt;text&gt;</code> 元素用于在SVG中添加文本。</li>
+<li><code>x</code> 和 <code>y</code> 属性用于定位文本的位置。</li>
+<li><code>font-family</code> 和 <code>font-size</code> 属性定义了水印的字体和大小。</li>
+<li><code>fill</code> 属性定义了文本的颜色和透明度。</li>
+</ul>
+<h2 id="5-使用第三方库"><a href="#5-使用第三方库" class="headerlink" title="5. 使用第三方库"></a>5. 使用第三方库</h2><p>第三方库如 watermark.js 提供了便捷的水印添加方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;!-- 示例代码 --&gt;<br>&lt;script src=&quot;watermark.js&quot;&gt;&lt;/script&gt;<br>&lt;script&gt;<br>  const watermarkConfig = &#123;<br>    watermarkText: &quot;<br><br>Watermark Text&quot;,<br>    watermarkTextFont: &quot;24px Arial&quot;,<br>    watermarkTextColor: &quot;rgba(255, 0, 0, 0.5)&quot;,<br>  &#125;;<br>  <br>  watermark.init(watermarkConfig);<br>  watermark.load(&#123;<br>    watermark_x: 20,<br>    watermark_y: 20,<br>  &#125;);<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们使用第三方库 <code>watermark.js</code> 来添加水印。你可以根据需要配置水印的文本、字体、颜色等属性，并使用库提供的方法进行初始化和加载。</p>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>本文介绍了几种前端实现水印的方案，可以根据具体项目选择适合的方法来实现水印效果。不管选择哪种方式，都要注意水印不会影响用户体验。</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+  </entry>
 </search>
