@@ -3830,4 +3830,147 @@
         <category>前端知识</category>
       </categories>
   </entry>
+  <entry>
+    <title>websoket</title>
+    <url>/2023/10/11/websoket/</url>
+    <content><![CDATA[<h2 id="什么是WebSocket？"><a href="#什么是WebSocket？" class="headerlink" title="什么是WebSocket？"></a>什么是WebSocket？</h2><p>WebSocket 是一种在单个 TCP 连接上进行全双工通信的协议，它的出现是为了解决 Web 应用中实时通信的需求。传统的 HTTP 协议是基于请求-响应模式的，即客户端发送请求，服务器响应请求，然后连接关闭。然而，有些场景需要保持长时间的连接，以实现实时性较高的数据交换，这就是 WebSocket 出现的背景。</p>
+<p>WebSocket 具有以下特点：</p>
+<ol>
+<li><strong>全双工通信</strong>：WebSocket 允许客户端和服务器在连接建立后双向传输数据，不像传统的 HTTP 请求-响应模式那样需要等待服务器的响应。</li>
+<li><strong>持久连接</strong>：一旦建立 WebSocket 连接，它将保持打开状态，允许在连接的生命周期内随时传输数据，避免了频繁地建立和关闭连接的开销。</li>
+<li><strong>低延迟</strong>：WebSocket 的连接一旦建立，数据可以实时传输，无需等待额外的握手和请求。</li>
+<li><strong>双方通知</strong>：服务器可以主动向客户端发送数据，而不需要客户端首先请求。这对于实时更新和通知非常有用。</li>
+<li><strong>减少网络流量</strong>：WebSocket 通过在连接保持打开的情况下传输数据，可以减少 HTTP 请求的开销，从而减少网络流量。</li>
+</ol>
+<h2 id="什么场景可以用WebSocket"><a href="#什么场景可以用WebSocket" class="headerlink" title="什么场景可以用WebSocket"></a>什么场景可以用WebSocket</h2><p>WebSocket 适用于需要实时、高效、双向通信的场景，特别是在 Web 应用中。以下是一些适合使用 WebSocket 的场景：</p>
+<ol>
+<li><strong>实时聊天应用</strong>：WebSocket 可以使聊天应用实现实时消息传递，从而用户可以即时收到新消息，无需手动刷新页面。</li>
+<li><strong>实时协作工具</strong>：协作工具可以使用 WebSocket 实现多用户同时编辑文档，实时更新内容。</li>
+<li><strong>在线游戏</strong>：多人在线游戏通常需要实时的玩家间通信，WebSocket 可以提供低延迟的双向通信，使游戏状态和动作可以及时传递。</li>
+<li><strong>实时更新</strong>：当应用需要实时更新数据，如股票市场价格、新闻、天气等，WebSocket 可以将更新直接推送给客户端，而不需要客户端不断地轮询服务器。</li>
+<li><strong>通知和提醒</strong>：应用可以使用 WebSocket 发送实时通知和提醒，如社交媒体的新消息提醒。</li>
+<li><strong>在线交互式应用</strong>：需要实时反馈和即时用户输入响应的应用，如实时投票应用、即时问答平台等。</li>
+<li><strong>数据监控和控制</strong>：监控系统和远程控制系统需要实时更新数据和状态，WebSocket 可以满足这些需求。</li>
+</ol>
+<h2 id="WebSocket工作原理"><a href="#WebSocket工作原理" class="headerlink" title="WebSocket工作原理"></a>WebSocket工作原理</h2><ol>
+<li><p><strong>握手阶段</strong>：</p>
+</li>
+<li><ul>
+<li>客户端通过发送一个 HTTP 请求到服务器，包含了一些特殊的头部，如 <code>Upgrade: websocket</code> 和 <code>Connection: Upgrade</code>。</li>
+<li>如果服务器支持 WebSocket，它会响应一个 HTTP 101 切换协议的状态码，并同样包含 <code>Upgrade</code> 和 <code>Connection</code> 头部。</li>
+</ul>
+</li>
+<li><p><strong>建立连接</strong>：</p>
+</li>
+<li><ul>
+<li>一旦握手成功，HTTP 连接就会升级为 WebSocket 连接。</li>
+<li>这意味着客户端和服务器之间的连接将保持开放状态，双方可以随时传输数据，而无需频繁地建立和关闭连接。</li>
+</ul>
+</li>
+<li><p><strong>数据传输</strong>：</p>
+</li>
+<li><ul>
+<li>一旦连接建立，客户端和服务器可以在任何时候发送数据。</li>
+<li>数据被分成一个个消息（message）进行传输。消息可以是文本或二进制数据。</li>
+<li>由于是全双工通信，客户端和服务器可以同时发送和接收消息。</li>
+</ul>
+</li>
+<li><p><strong>关闭连接</strong>：</p>
+</li>
+<li><ul>
+<li>任何一方都可以随时发起关闭连接的请求。</li>
+<li>关闭连接的请求是通过发送一个特殊的关闭帧（frame）来实现的。</li>
+<li>另一方接收到关闭帧后，也会发送一个关闭帧进行确认，并最终关闭连接。</li>
+</ul>
+</li>
+</ol>
+<p>WebSocket 的优势在于它相对于传统的轮询或长轮询技术来说更加高效。在传统的 HTTP 请求中，每次请求都会带有一定的开销，而 WebSocket 的连接是长期保持的，避免了不必要的开销，从而在实时通信场景下更具优势。</p>
+<h2 id="前端如何使用WebSocket"><a href="#前端如何使用WebSocket" class="headerlink" title="前端如何使用WebSocket"></a>前端如何使用WebSocket</h2><p>在前端使用 WebSocket 可以通过 JavaScript 中的 <code>WebSocket</code> 对象来建立和管理 WebSocket 连接。以下是一个基本的步骤示例：</p>
+<ol>
+<li><p><strong>创建 WebSocket 连接</strong>： 使用 <code>new WebSocket(url)</code> 来创建一个 WebSocket 连接。<code>url</code> 参数是 WebSocket 服务器的地址。</p>
+<p>- </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const socket = new WebSocket(&#x27;ws://your-websocket-server.com&#x27;);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>监听事件</strong>： 一旦连接建立，WebSocket 对象会触发一系列事件，你可以监听这些事件来处理连接状态和数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">socket.addEventListener(&#x27;open&#x27;, (event) =&gt; &#123;  <br>console.log(&#x27;WebSocket connection opened.&#x27;);<br>&#125;);<br>socket.addEventListener(&#x27;message&#x27;, (event) =&gt; &#123;  <br>console.log(&#x27;Received message:&#x27;, event.data);<br>&#125;);<br>socket.addEventListener(&#x27;error&#x27;, (event) =&gt; &#123;  <br>console.error(&#x27;WebSocket error:&#x27;, event);<br>&#125;);<br>socket.addEventListener(&#x27;close&#x27;, (event) =&gt; &#123;<br>console.log(&#x27;WebSocket connection closed:&#x27;, event);<br>&#125;);<br></code></pre></td></tr></table></figure>
+</li>
+<li><ul>
+<li><code>open</code> 事件：连接成功建立时触发。</li>
+<li><code>message</code> 事件：当从服务器接收到消息时触发。</li>
+<li><code>error</code> 事件：在连接错误时触发。</li>
+<li><code>close</code> 事件：在连接关闭时触发。</li>
+</ul>
+</li>
+<li><p><strong>发送和接收数据</strong>： 使用 <code>send(data)</code> 方法将数据发送到服务器，并在接收到消息时可以在 <code>message</code> 事件的回调中处理数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 发送数据socket.send(&#x27;Hello, server!&#x27;);<br>// 接收数据在 message 事件中处理socket.addEventListener(&#x27;message&#x27;, (event) =&gt; &#123;  <br>const receivedData = event.data;<br>console.log(&#x27;Received data:&#x27;, receivedData);&#125;);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关闭连接</strong>： 使用 <code>close(code, reason)</code> 方法来关闭连接，其中 <code>code</code> 是可选的状态码，<code>reason</code> 是可选的关闭原因描述。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 关闭连接socket.close();<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>以上就是在前端使用 WebSocket 的基本步骤。要使用 WebSocket，只需在适当的时机创建连接并监听事件，然后可以通过 <code>send</code> 方法发送数据。注意，WebSocket 连接通常在安全的 HTTPS 环境下工作，但也可以在开发环境中使用不安全的 HTTP。同时，WebSocket 服务器端也需要支持 WebSocket 协议。</p>
+<h2 id="常用的请求头与响应头"><a href="#常用的请求头与响应头" class="headerlink" title="常用的请求头与响应头"></a>常用的请求头与响应头</h2><p><strong>WebSocket 握手请求头字段</strong>：</p>
+<ol>
+<li><code>Upgrade</code>：标识请求将升级为 WebSocket 连接。</li>
+<li><code>Connection</code>：标识请求将保持连接，值为 <code>Upgrade</code>。</li>
+<li><code>Sec-WebSocket-Key</code>：包含一个基于随机数的密钥，用于计算握手响应的 <code>Sec-WebSocket-Accept</code> 值。</li>
+<li><code>Sec-WebSocket-Version</code>：指定支持的 WebSocket 协议版本，如 <code>13</code>。</li>
+<li><code>Sec-WebSocket-Extensions</code>：指定支持的扩展，如压缩等。</li>
+<li><code>Sec-WebSocket-Protocol</code>：指定客户端请求的子协议，用于多个子协议的支持。</li>
+</ol>
+<p><strong>WebSocket 握手响应头字段</strong>：</p>
+<ol>
+<li><code>Upgrade</code>：标识响应将升级为 WebSocket 连接。</li>
+<li><code>Connection</code>：标识响应将保持连接，值为 <code>Upgrade</code>。</li>
+<li><code>Sec-WebSocket-Accept</code>：包含基于客户端的 <code>Sec-WebSocket-Key</code> 计算的响应密钥。</li>
+<li><code>Sec-WebSocket-Extensions</code>：指定服务器支持的扩展。</li>
+<li><code>Sec-WebSocket-Protocol</code>：指定实际使用的子协议。</li>
+</ol>
+<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>在 WebSocket 协议中，有一组标准的状态码用于表示连接和关闭的状态。这些状态码通过数字表示，每个状态码都有特定的含义。以下是一些常见的 WebSocket 状态码：</p>
+<ol>
+<li><p><strong>连接状态码</strong>：</p>
+</li>
+<li><ul>
+<li><code>1000</code>：正常关闭。表示连接已经完成关闭。</li>
+<li><code>1001</code>：终端关闭。表示终端或用户主动关闭连接。</li>
+<li><code>1006</code>：无法连接。表示连接由于某种原因无法建立。</li>
+</ul>
+</li>
+<li><p><strong>保留状态码</strong>：</p>
+</li>
+<li><ul>
+<li><code>1002</code>：协议错误。表示服务器收到了一个无效的帧或违反了协议规定。</li>
+<li><code>1003</code>：数据类型错误。表示服务器无法接受客户端发送的数据类型。</li>
+<li><code>1004</code>：保留。此状态码当前未使用。</li>
+<li><code>1005</code>：保留。此状态码当前未使用。</li>
+</ul>
+</li>
+<li><p><strong>错误状态码</strong>：</p>
+</li>
+<li><ul>
+<li><code>1007</code>：数据错误。表示服务器在接收到数据时遇到数据格式错误或不一致。</li>
+<li><code>1008</code>：消息过大。表示接收到的消息太大，服务器无法处理。</li>
+<li><code>1009</code>：数据过大。表示服务器在处理消息时接收到过大的数据。</li>
+<li><code>1010</code>：扩展错误。表示客户端在扩展握手中出现错误。</li>
+<li><code>1011</code>：服务错误。表示服务器由于遇到不可恢复的错误而关闭连接。</li>
+</ul>
+</li>
+<li><p><strong>保留状态码</strong>：</p>
+</li>
+<li><ul>
+<li><code>1012</code>：保留。此状态码当前未使用。</li>
+<li><code>1013</code>：保留。此状态码当前未使用。</li>
+</ul>
+</li>
+<li><p><strong>应用程序状态码</strong>：</p>
+</li>
+<li><ul>
+<li><code>3000-3999</code>：这个范围的状态码是供应用程序自定义使用的，用于特定的应用需求。</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+  </entry>
 </search>
