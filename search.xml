@@ -3973,4 +3973,60 @@
         <category>前端充电宝</category>
       </categories>
   </entry>
+  <entry>
+    <title>Ts泛型的使用</title>
+    <url>/2023/10/14/Ts%E6%B3%9B%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p>泛型是可以在<strong>保证类型安全</strong>的前提下，让函数等与多种类型一起工作，从而实现复用，常用于：函数、接口、class中。日常我们创建的函数，传入什么数据就返回什么数据本身，即参数与返回值的类型相同，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">function add(value: number): number&#123;<br>return value<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>而为了能够让函数接收任何类型，我们以前可以将参数类型修改为any。但这样就失去了TS的类型保护，类型不安全，泛型在保证类型安全的同时（不丢失类型信息），可以让函数与多种不同的类型一起工作，灵活可复用。</p>
+<h3 id="泛型函数使用"><a href="#泛型函数使用" class="headerlink" title="泛型函数使用"></a>泛型函数使用</h3><p><strong>创建泛型函数</strong>：我们在创建函数的同时在函数名称后面添加 &lt;&gt; (尖括号)，尖括号中添加类型变量，如下：</p>
+<p>当然创建泛型函数的类型变量可以是任意合法变量名称，不仅仅是下面例子中的type。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 类型变量 type 是一种特殊类型的变量，它只处理类型不处理值。<br>// 该类型变量相当于一个类型容器，能够捕获用户提供的类型(具体类型由用户调用函数时指定)<br>function add&lt;type&gt;(value: type): type&#123;<br>return value<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>调用泛型函数</strong>：</p>
+<p>在调用函数的同时在函数后面声明自己要传入参数的类型，用 &lt;&gt; 进行包裹。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 创建泛型函数<br>function add&lt;type&gt;(value: type): type&#123;<br>return value<br>&#125;<br>// 调用泛型函数<br>const num = add&lt;number&gt;(10) // 以 number 类型调用函数<br>const str = add&lt;string&gt;(&#x27;s&#x27;) // 以 string 类型调用函数<br>const ret = add&lt;boolean&gt;(true) // 以 boolean 类型调用函数<br></code></pre></td></tr></table></figure>
+
+<p>当然在调用泛型函数时，可以省略&lt;类型&gt;来<strong>简化泛型函数的调用</strong>。因为TS内部会采用一种叫做<strong>类型参数推断的机制</strong>，来根据传入的参数自动推断出类型变量的类型。使用这种简化的方式调用泛型函数，使代码更短更便于阅读。</p>
+<p><strong>注意</strong>：当编译器无法推断类型或者推断的类型不准确时，就需要显式地传入类型参数。</p>
+<h3 id="泛型约束"><a href="#泛型约束" class="headerlink" title="泛型约束"></a>泛型约束</h3><p>默认情况下，泛型函数的类型变量<strong>可以代表多个类型</strong>，这就导致<strong>无法访问任何属性</strong>。比如当我们需要获取字符串长度时使用泛型就会报错，因为泛型代表任意类型无法保证一定存在某个属性，此时就需要为泛型 <strong>添加约束</strong> 来<strong>缩窄类型取值范围</strong>。</p>
+<p>添加泛型约束收缩类型主要有以下两种方式：</p>
+<p><strong>指定更具体的类型</strong>：可以根据自身需要将泛型函数的类型修改来获取属性，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 创建泛型函数<br>function add&lt;type&gt;(value: type[]): type&#123;<br>console.log(value.length)<br>return value<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>添加约束</strong>：可以创建描述约束的接口来提供自己的属性，通过 extends 关键字为类型变量添加约束</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">interface MyLength &#123;<br>length:number<br>&#125;// 创建泛型函数<br>function add&lt;type extends MyLength&gt;(value: type): type&#123;<br>console.log(value.length)<br>return value<br>&#125;<br>add([1,2])<br>add(&#x27;123&#x27;)<br>add(&#123;name:&#x27;张三&#x27;,length:12,age:13&#125;)<br></code></pre></td></tr></table></figure>
+
+<h3 id="多泛型使用"><a href="#多泛型使用" class="headerlink" title="多泛型使用"></a>多泛型使用</h3><p>泛型的类型变量可以有多个，并且类型变量之间还可以约束(比如：第二个类型变量受第一个类型变量约束)。案例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 创建泛型函数<br>// keyof关键字接收一个对象类型，生成其键名称（或字符串或者数字）的联合类型<br>function add&lt;type,key extends keyof type&gt;(obj: type,value: key) &#123;<br>return obj[value]<br>&#125;<br>add(18,&quot;toString&quot;)<br>add(&#123;name:&#x27;张三&#x27;,age:18&#125;,&quot;name&quot;)<br></code></pre></td></tr></table></figure>
+
+<h3 id="泛型接口"><a href="#泛型接口" class="headerlink" title="泛型接口"></a>泛型接口</h3><p>在<strong>接口的名称后面添加 &lt;类型变量&gt;</strong> ，那么这个接口就变成了泛型接口。接口也可以搭配泛型来使用，以增加其灵活性，增强其复用性。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">interface person&lt;type&gt; &#123;<br>id: (value:type) =&gt; type<br>ids: ()=&gt; type[]<br>&#125;<br>// 使用泛型接口时一定要显式指定具体类型，否则报错<br>let p: person&lt;number&gt; =&#123;<br>id(value)&#123;<br>return value<br>&#125;,<br>ids() &#123;<br>return [1,2,3]<br>&#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h3><p>class也可以配合泛型来使用。</p>
+<p><strong>创建泛型类</strong>：</p>
+<p>类似于泛型接口，在class名称后面添加&lt;类型变量&gt;，这个类就变成了泛型类。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">class Animals&lt;type&gt; &#123;<br>defaultValue: type<br>say: (x: number,y :number) =&gt; type<br>constructor(value: type)&#123;<br>this.defaultValue = value<br>&#125;<br>&#125;<br>// 当我们提供 constructor 并且里面已经提供类型了，这个时候我们new实例的时候，类型可以省略。// const num = new Animals&lt;number&gt;(10)<br>const num = new Animals(10)<br></code></pre></td></tr></table></figure>
+
+<h3 id="泛型工具类型"><a href="#泛型工具类型" class="headerlink" title="泛型工具类型"></a>泛型工具类型</h3><p>TS内置了一些常用的工具类型，来简化TS中的一些常见操作。它们都是基于泛型实现的，并且都是内置的，可以直接在代码中使用。这些工具类很多，主要学习以下几个：</p>
+<p>**Partial<type>**：用来构造一个类型，将type的所有属性设置为可选。</type></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">interface People &#123;<br>name: string<br>age: number<br>hobby: number[]<br>&#125;<br>// 使的接口属性变为可选属性<br>type commenPeople = Partial&lt;People&gt;<br>// 调用接口，属性一定必须<br>let p1: People = &#123;<br>name:&#x27;张三&#x27;,<br>age:18,<br>hobby:[1,2]<br>&#125;<br>// 使用 Partial 使的接口属性变为可选<br>let p2: commenPeople = &#123;<br>name:&#x27;&#x27;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>**Readonly<type>**：用来构造一个类型，将type的所有属性都设置为 readonly (只读)。</type></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">interface People &#123;<br>name: string<br>age: number<br>hobby: number[]<br>&#125;<br>// 使的接口属性变为可选属性<br>type ReadonlyPeople = Readonly&lt;People&gt;<br>// 调用接口，属性一定必须<br>let p1: ReadonlyPeople = &#123;<br>name:&#x27;张三&#x27;,<br>age:18,<br>hobby:[1,2]<br>&#125;<br>// 无法分配到 &quot;name&quot; ，因为它是只读属性。<br>// p1.name = &#x27;李四&#x27;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Pick&lt;type,keys&gt;<strong>：从type中选择一组属性来构造新类型。Pick工具类型有两个类型变量：第一个表示选择谁的属性；第二个表示选择哪几个属性。</strong>注意</strong>：第二个类型变量传入的属性只能是第一个类型变量中存在的属性。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">interface People &#123;<br>name: string<br>age: number<br>hobby: number[]&#125;<br>// 使的接口属性变为可选择属性<br>type RickPeople = Pick&lt;People,&#x27;name&#x27;|&#x27;hobby&#x27;&gt;<br>// 调用接口，属性一定必须<br>let p1: RickPeople = &#123;name:&#x27;张三&#x27;,<br>// 对象文字可以只指定已知属性，并且“age”不在类型“RickPeople”中。<br>// age:18,<br>hobby:[1,2]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>**Record&lt;keys,type&gt;**：构造一个对象类型，属性键位keys，属性值为type。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">type RecordObj = Record&lt;&#x27;a&#x27;|&#x27;b&#x27;|&#x27;c&#x27;,string[]&gt;<br>let obj: RecordObj = &#123;<br>a:[&#x27;1&#x27;],<br>b:[&#x27;1&#x27;],<br>c:[&#x27;1&#x27;]<br>&#125;<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ts</category>
+      </categories>
+      <tags>
+        <tag>前端知识</tag>
+      </tags>
+  </entry>
 </search>
