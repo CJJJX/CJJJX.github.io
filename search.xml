@@ -4029,4 +4029,31 @@
         <tag>前端知识</tag>
       </tags>
   </entry>
+  <entry>
+    <title>js的Object.keys方法</title>
+    <url>/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h5 id="今天看到项目中有使用到Object-keys方法，又去查阅MDN文档学习了一下。"><a href="#今天看到项目中有使用到Object-keys方法，又去查阅MDN文档学习了一下。" class="headerlink" title="今天看到项目中有使用到Object.keys方法，又去查阅MDN文档学习了一下。"></a>今天看到项目中有使用到Object.keys方法，又去查阅MDN文档学习了一下。</h5><h3 id="一、语法"><a href="#一、语法" class="headerlink" title="一、语法"></a>一、语法</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">Object.keys(obj)<br><br>参数：要返回其枚举自身属性的对象<br><br>返回值：一个表示给定对象的所有可枚举属性的字符串数组<br></code></pre></td></tr></table></figure>
+
+<h3 id="二、处理对象，返回可枚举的属性数组"><a href="#二、处理对象，返回可枚举的属性数组" class="headerlink" title="二、处理对象，返回可枚举的属性数组"></a>二、处理对象，返回可<a href="https://so.csdn.net/so/search?q=%E6%9E%9A%E4%B8%BE&spm=1001.2101.3001.7020">枚举</a>的属性数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let person = &#123;name:&quot;张三&quot;,age:25,address:&quot;深圳&quot;,getName:function()&#123;&#125;&#125;<br><br>Object.keys(person) // [&quot;name&quot;, &quot;age&quot;, &quot;address&quot;,&quot;getName&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/971b10a06fa0476caa5fc54c8667a0a6.png" alt="在这里插入图片描述"></p>
+<h3 id="三、处理数组，返回索引值数组"><a href="#三、处理数组，返回索引值数组" class="headerlink" title="三、处理数组，返回索引值数组"></a>三、处理数组，返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let arr = [1,2,3,4,5,6]<br><br>Object.keys(arr) // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/d006dc3d4d5d4195948b02881745794b.png" alt="在这里插入图片描述"></p>
+<h3 id="四、处理字符串，返回索引值数组"><a href="#四、处理字符串，返回索引值数组" class="headerlink" title="四、处理字符串，返回索引值数组"></a>四、处理<a href="https://so.csdn.net/so/search?q=%E5%AD%97%E7%AC%A6%E4%B8%B2&spm=1001.2101.3001.7020">字符串</a>，返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let str = &quot;saasd字符串&quot;<br><br>Object.keys(str) // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/015ea84c833e44eca08ac38867cabe84.png" alt="在这里插入图片描述"></p>
+<h3 id="五、常用技巧"><a href="#五、常用技巧" class="headerlink" title="五、常用技巧"></a>五、常用技巧</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let person = &#123;name:&quot;张三&quot;,age:25,address:&quot;深圳&quot;,getName:function()&#123;&#125;&#125;<br><br>Object.keys(person).map((key)=&gt;&#123;<br><br>　　person[key] // 获取到属性对应的值，做一些处理<br><br>&#125;) <br></code></pre></td></tr></table></figure>
+
+<h3 id="六、Object-values-和Object-keys-是相反的操作，把一个对象的值转换为数组"><a href="#六、Object-values-和Object-keys-是相反的操作，把一个对象的值转换为数组" class="headerlink" title="六、Object.values()和Object.keys()是相反的操作，把一个对象的值转换为数组"></a>六、Object.values()和Object.keys()是相反的操作，把一个对象的值转换为数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let str = &quot;abc字符串&quot;;<br>let str2 = &#123;<br>  a: &#x27;123&#x27;,<br>  b: 12<br>&#125;<br><br>console.log(Object.keys(str));<br>console.log(Object.values(str));<br>console.log(Object.values(str2));<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/image-20231022122644494.png" alt="image-20231022122644494"></p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
 </search>
