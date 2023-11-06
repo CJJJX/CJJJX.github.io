@@ -4113,4 +4113,26 @@
         <tag>八股文</tag>
       </tags>
   </entry>
+  <entry>
+    <title>vite和webpack的区别</title>
+    <url>/2023/11/06/vite%E5%92%8Cwebpack%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="Vite和webpack的区别"><a href="#Vite和webpack的区别" class="headerlink" title="** Vite和webpack的区别**"></a>** Vite和webpack的区别**</h2><p>Vite和webpack是两个常用的前端构建工具，它们在功能和使用方式上有一些区别。接下来我将详细介绍Vite和webpack的区别</p>
+<h3 id="构建方式"><a href="#构建方式" class="headerlink" title="构建方式"></a>构建方式</h3><p>Vite使用了一种新的构建方式，称为「原生ESM」构建。它利用浏览器原生支持ES模块的能力，通过将每个模块作为一个单独的文件进行构建，而不是像webpack那样将所有模块打包成一个文件。这种方式可以提供更快的冷启动和热更新速度。</p>
+<p>webpack则是使用传统的「Bundler」构建方式，它将所有模块打包成一个或多个bundle文件，并使用代码分割和懒加载等技术来优化加载性能。</p>
+<h3 id="开发服务器"><a href="#开发服务器" class="headerlink" title="开发服务器"></a>开发服务器</h3><p>Vite使用了一个基于ES模块的开发服务器，它利用浏览器原生支持ES模块的特性，可以在开发过程中实现快速的冷启动和热更新。Vite在启动开发服务器时，会根据需要动态地生成和提供每个模块的依赖关系，而不是像webpack那样提前构建好整个应用的依赖关系。</p>
+<p>webpack也提供了一个开发服务器，但它是基于传统的构建方式，需要提前将所有模块打包成bundle文件，然后在浏览器中通过HTTP请求获取这些文件。</p>
+<h3 id="构建速度"><a href="#构建速度" class="headerlink" title="构建速度"></a>构建速度</h3><p>由于Vite利用了浏览器原生支持ES模块的能力，并采用了「原生ESM」构建方式，所以它在冷启动和热更新时的速度比webpack更快。Vite可以在浏览器中动态地解析和编译模块，而不需要像webpack那样在每次修改代码后重新构建整个应用。</p>
+<p>webpack在构建大型应用时可能会比较慢，因为它需要分析和处理大量的模块依赖关系，并生成相应的bundle文件。</p>
+<h3 id="生态系统"><a href="#生态系统" class="headerlink" title="生态系统"></a>生态系统</h3><p>webpack是一个成熟的构建工具，拥有庞大的生态系统和丰富的插件支持。它可以处理各种类型的资源文件，并提供了许多功能强大的插件来优化和扩展构建过程。</p>
+<p>Vite相对较新，生态系统相对较小，但它可以与现有的构建工具和库（如Rollup和webpack）进行集成，可以使用现有的webpack插件来扩展Vite的功能。</p>
+<h3 id="服务启动方式和使用复杂度"><a href="#服务启动方式和使用复杂度" class="headerlink" title="服务启动方式和使用复杂度"></a>服务启动方式和使用复杂度</h3><p>webpack是先打包再启动开发服务器，vite是直接启动开发服务器，然后按需编译依赖文件。</p>
+<p>vite使用复杂度介于Parcel和Webpack的中间，只是暴露了极少数的配置项和pluging接口，既不会像Parcel一样配置不灵活，又不会像Webpack一样需要了解庞大的loader、plugin生态，灵活适中、复杂度适中。</p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
