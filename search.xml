@@ -4458,4 +4458,57 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>CSR,SSR及同构渲染的区别</title>
+    <url>/2023/11/16/CSR-SSR%E5%8F%8A%E5%90%8C%E6%9E%84%E6%B8%B2%E6%9F%93%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="SSR（传统服务端渲染）"><a href="#SSR（传统服务端渲染）" class="headerlink" title="SSR（传统服务端渲染）"></a>SSR（传统服务端渲染）</h2><p>如：爱彼迎</p>
+<p>传统的服务端渲染有：<strong>asp</strong>、<strong>jsp</strong>、<strong>ejs</strong>等，服务端语言往往通过这些模板引擎将数据和 <strong>DOM</strong>在服务端渲染完成，返回一个完整的静态 <strong>HTML</strong>页面给客户端，由客户端直接显示。</p>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><ol>
+<li>客户端发送 <strong>HTTP</strong>请求</li>
+<li>服务端响应 <strong>HTTP</strong>请求，返回拼接好的 <strong>HTML</strong>字符串给客户端</li>
+<li>客户端渲染 <strong>HTML</strong></li>
+</ol>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>前后端不分离，不好维护</li>
+<li>用户体验不佳，需要重新加载页面</li>
+<li>服务端压力大</li>
+</ul>
+<h2 id="CSR（客户端渲染）"><a href="#CSR（客户端渲染）" class="headerlink" title="CSR（客户端渲染）"></a>CSR（客户端渲染）</h2><p>如：飞书</p>
+<p>在现代化的前端项目中，客户端渲染的代表性技术栈是 <strong>Vue</strong>、<strong>React</strong>、<strong>Angular</strong>，我们常常使用它们来构建客户端单页或者多页应用程序。以 <strong>SPA</strong>构建程序为例，在浏览器端首先渲染的是一套空的 <strong>HTML</strong>，通过 <strong>JS</strong>直接进行页面的渲染和路由跳转等操作，所有的数据通过 <strong>Ajax</strong>请求从服务器获取后，在进行客户端的拼装和展示。</p>
+<h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><ol>
+<li>客户端发起 <strong>HTTP</strong>请求</li>
+<li>服务端响应 <strong>HTTP</strong>请求，返回一个空的 <strong>HTML</strong>文件</li>
+<li>客户端初始化时加载必须的 <strong>JS</strong>文件，请求接口</li>
+<li>将生成的 <strong>DOM</strong>插入到 <strong>HTML</strong>中</li>
+</ol>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>首屏加载慢</li>
+<li>不利于<strong>SEO</strong>，需要等待所有的JS文件完成加载解析</li>
+</ul>
+<h2 id="同构（现代服务端渲染）"><a href="#同构（现代服务端渲染）" class="headerlink" title="同构（现代服务端渲染）"></a>同构（现代服务端渲染）</h2><p>如：美团</p>
+<p><strong>Vue</strong>、<strong>React</strong>的 <strong>SSR</strong>方案实际上就是同构渲染，我们现在讲的服务端渲染概念，是指在前端范畴或者说在 <strong>Vue</strong>、<strong>React</strong>等单页面技术栈范畴内，基于 <strong>Node Server</strong> 运行环境的服务端渲染方案，通过在 <strong>Node.js</strong> 中运行相同应用程序的前端框架（例如 <strong>React</strong>、<strong>Vue</strong>等 ），将其预渲染成 <strong>HTML</strong>，最后在客户端进行注水化处理。简单来讲，就是应用程序的大部分代码在服务器（<strong>Node</strong>服务端）和客户端上运行，这就是所谓的现代服务端渲染：同构。<br>我们以 <strong>Vue</strong>的 <strong>SSR</strong>实现方案为例做分析：</p>
+<h4 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h4><ol>
+<li>客户端发起 <strong>HTTP</strong>请求</li>
+<li>服务端渲染把 <strong>Vue</strong>实例转换成了静态的 <strong>HTML</strong>发送给客户端</li>
+<li>客户端渲染是需要把事件、响应式特性等 <strong>Vue</strong>的特性都绑回去</li>
+</ol>
+<h4 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>服务器压力大</li>
+<li>涉及构建设置和部署的更多要求</li>
+<li>一些三方库可能需要特殊处理</li>
+</ul>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>首屏速度快</li>
+<li>前后端分离</li>
+<li>利于<strong>SEO</strong>，搜索能爬取到页面关键字</li>
+<li>有一些现成框架： <strong>Nuxt.js</strong>、<strong>Next.js</strong></li>
+</ul>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
