@@ -4511,4 +4511,35 @@
         <tag>八股文</tag>
       </tags>
   </entry>
+  <entry>
+    <title>js实现数组去重方法总结</title>
+    <url>/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a><strong>方法一：</strong></h3><p>双层循环，外层循环元素，内层循环时比较值</p>
+<p>如果有相同的值则跳过，不相同则push进数组</p>
+<p><img src="/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/image-20231117235328398.png" alt="image-20231117235328398"></p>
+<h3 id="方法二：利用splice直接在原数组进行操作"><a href="#方法二：利用splice直接在原数组进行操作" class="headerlink" title="方法二：利用splice直接在原数组进行操作"></a><strong>方法二：利用splice直接在原数组进行操作</strong></h3><p>双层循环，外层循环元素，内层循环时比较值</p>
+<p>值相同时，则删去这个值</p>
+<p>注意点:删除元素之后，需要将数组的长度也减1.</p>
+<p><img src="/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/image-20231117235405825.png" alt="image-20231117235405825"></p>
+<p>优点：简单易懂</p>
+<p>缺点：占用内存高，速度慢</p>
+<h3 id="方法三：利用对象的属性不能相同的特点进行去重"><a href="#方法三：利用对象的属性不能相同的特点进行去重" class="headerlink" title="方法三：利用对象的属性不能相同的特点进行去重"></a><strong>方法三：利用对象的属性不能相同的特点进行去重</strong></h3><p><img src="/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/image-20231117235438278.png" alt="image-20231117235438278"></p>
+<h3 id="方法四：数组递归去重"><a href="#方法四：数组递归去重" class="headerlink" title="方法四：数组递归去重"></a><strong>方法四：数组递归去重</strong></h3><p>运用递归的思想</p>
+<p>先排序，然后从最后开始比较，遇到相同，则删除</p>
+<p><img src="/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/image-20231117235505242.png" alt="image-20231117235505242"></p>
+<h3 id="方法五：利用indexOf以及forEach"><a href="#方法五：利用indexOf以及forEach" class="headerlink" title="方法五：利用indexOf以及forEach"></a><strong>方法五：利用indexOf以及forEach</strong></h3><p><img src="/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/image-20231117235537194.png" alt="image-20231117235537194"></p>
+<h3 id="方法六：利用ES6的set"><a href="#方法六：利用ES6的set" class="headerlink" title="方法六：利用ES6的set"></a><strong>方法六：利用ES6的set</strong></h3><p>Set数据结构，它类似于数组，其成员的值都是唯一的。</p>
+<p>利用Array.from将Set结构转换成数组</p>
+<p><img src="/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/image-20231117235602926.png" alt="image-20231117235602926"></p>
+<p>拓展运算符(…)内部使用for…of循环</p>
+<p><img src="/2023/11/17/js%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/image-20231117235622743.png" alt="image-20231117235622743"></p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
