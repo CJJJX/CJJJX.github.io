@@ -4542,4 +4542,59 @@
         <tag>八股文</tag>
       </tags>
   </entry>
+  <entry>
+    <title>防抖和节流</title>
+    <url>/2023/11/18/%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/</url>
+    <content><![CDATA[<p>防抖<code>（Debounce）</code>和节流<code>（Throttle）</code>是前端开发中最常用的优化处理方式，本文介绍防抖和节流的区别，应用场景，手撕代码，介绍相关可以直接在项目中使用的库。</p>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>简单的定义区分：</p>
+<ul>
+<li>防抖是一段时间内，多次执行变为只执行<code>最后一次</code>。</li>
+<li>节流是一段时间内，多次执行变为只执行<code>第一次</code>。</li>
+</ul>
+<p>详细的定义区分：</p>
+<ul>
+<li><p>防抖<code>（debounce）</code>是指在一段时间内多次触发相同事件时，只执行最后一次触发的事件。</p>
+<p>这意味着，在一系列触发事件中，如果在指定的时间间隔内，发生了新的触发事件，那么前面的触发事件将被忽略，只有最后一次触发事件会被执行。</p>
+</li>
+<li><p>节流<code>（throttle）</code>是指在一段时间内多次触发相同事件时，只执行一次事件。</p>
+<p>这意味着，无论触发事件发生多少次，在指定的时间间隔内只会执行第一次事件。</p>
+</li>
+</ul>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>真实的项目中，在不同的场景下灵活切换使用防抖或节流，才会更加减少不必要的资源消耗，更加提高前端应用的性能和响应性。</p>
+<p>防抖<code>（Debounce）</code>的应用场景：</p>
+<ul>
+<li><p>搜索框输入：当用户在搜索框中输入内容时，可以使用防抖来延迟触发搜索请求。只有在用户停止输入一段时间后才会发送请求，避免频繁的请求发送。</p>
+</li>
+<li><p>窗口调整：当窗口大小调整时，可以使用防抖来优化执行某些操作的频率，例如重新计算布局或重新渲染页面。</p>
+</li>
+<li><p>按钮点击：当用户点击一个按钮时，可以使用防抖来确保只有在用户停止点击一段时间后才会执行相应的操作，避免误操作或重复执行。</p>
+</li>
+</ul>
+<p>1. </p>
+<p>节流<code>（Throttle）</code>的应用场景：</p>
+<ul>
+<li><p>页面滚动：当用户滚动页面时，可以使用节流来限制触发滚动事件的频率。例如，在滚动过程中只执行某些操作的固定时间间隔，以减少事件处理的次数。</p>
+</li>
+<li><p>鼠标移动：当用户移动鼠标时，可以使用节流来控制触发鼠标移动事件的频率。例如，在一定时间内只执行一次鼠标移动的处理逻辑，避免过多的计算和渲染操作。</p>
+</li>
+<li><p>实时通信：在实时通信应用中，如聊天应用或在线协作工具，可以使用节流来限制发送消息的频率，以避免发送过多的请求或数据。</p>
+</li>
+</ul>
+<h3 id="手撕代码"><a href="#手撕代码" class="headerlink" title="手撕代码"></a>手撕代码</h3><p>下面是利用国产AI工具codegeex在项目中生成的防抖节流的ts代码</p>
+<p><img src="/2023/11/18/%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/21E557D31DA1098C4B5F1CA272CF7CF8.png" alt="img"></p>
+<h3 id="相关函数库"><a href="#相关函数库" class="headerlink" title="相关函数库"></a>相关函数库</h3><p>上面手撕的代码作为面试的准备，实际项目中肯定不会这么使用，不然会被喷的。Vue等真实项目中，往往都会调用第三方库的函数。下面介绍一个我使用的函数库</p>
+<ul>
+<li>VueUse <code>(https://vueuse.org/)</code>：VueUse 是一个提供常用 Vue.js 自定义函数的库，其中包括了防抖和节流函数的实现。在 VueUse 中，您可以使用 useDebounce 和 useThrottle 这两个自定义函数来实现防抖和节流功能。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">import &#123; useDebounce, useThrottle &#125; from &#x27;@vueuse/core&#x27;;<br><br>// 防抖<br>// 在值变化后延迟500毫秒触发<br>const debouncedValue = useDebounce(value, 500); <br><br>// 节流<br>// 将函数封装为节流函数，每300毫秒触发一次<br>const throttledFunction = useThrottle(myFunction, 300); <br><br>// 在 Vue 组件中使用防抖和节流<br>export default &#123;<br>  setup() &#123;<br>    const debouncedValue = useDebounce(value, 500);<br>    const throttledFunction = useThrottle(myFunction, 300);<br>  &#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>防抖和节流都是为了限制函数的执行频率，以优化函数触发频率过高导致的响应速度跟不上触发频率，出现延迟，假死或卡顿。</p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
