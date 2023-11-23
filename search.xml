@@ -4597,4 +4597,65 @@
         <tag>八股文</tag>
       </tags>
   </entry>
+  <entry>
+    <title>type和interface的区别</title>
+    <url>/2023/11/23/type%E5%92%8Cinterface%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>在 TypeScript 中，type 和 interface 这两个概念比较容易混淆，它们都可以用来表示 接口，但是在实际使用上会存在一些差异。</p>
+<h3 id="一、基本概念"><a href="#一、基本概念" class="headerlink" title="一、基本概念"></a>一、基本概念</h3><p>1、type（类型别名）</p>
+<p>用来给一个类型起新名字，使用 type 创建类型别名。类型别名不仅可以用来表示基本类型，还可以用来表示对象类型、联合类型、元组和交集。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">type userName = string;   // 基本类型<br>type userMsg = string | number;   // 联合类型<br><br>// 对象类型<br>type Person = &#123;<br>    name: userName;<br>    age: number;<br>&#125;;<br><br>// 使用Person类型<br>let user: Person = &#123;<br>    name: &quot;leo&quot;,<br>    age: 18<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+<p>2、interface（接口）<br>接口是命名数据结构（例如对象）的另一种方式；与 type 不同，interface 仅限于描述对象类型。接口的声明语法也不同于类型别名的声明语法。如将上面的类型别名 Person 重写为接口声明如下所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">interface Person &#123;<br>    name: userName;<br>    age: number;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="二、相同点"><a href="#二、相同点" class="headerlink" title="二、相同点"></a>二、相同点</h3><p>1、都可以用来定义对象和函数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">type Position = &#123;<br>  x: number;<br>  y: number;<br>&#125;;<br><br>type SetPosition = (x: number, y: number) =&gt; void;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext"><br>interface Position &#123;<br>  x: number;<br>  y: number;<br>&#125;<br><br>interface SetPosition &#123;<br>  (x: number, y: number): void;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>interface SetPosition {<br>  (x: number, y: number): void;<br>}<br>2、都可以实现继承<br>type 和 interface 并不互斥。type 可以继承 interface，反之亦然。只是在实现形式上，稍微有些区别。</p>
+<p>type</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// type 继承 type<br>type Person &#123;<br>    name: string<br>&#125;<br><br>type Student = Person &amp; &#123; stuId: number &#125;<br><br>// type 继承 interface<br>interface Person &#123;<br>    name: string<br>&#125;<br><br>type Student = Person &amp; &#123; stuId: number &#125;<br></code></pre></td></tr></table></figure>
+
+<p>interface</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// interface 继承 interface<br>interface Person &#123;<br>    name: string<br>&#125;<br><br>interface Student extends Person &#123; stuId: number &#125;<br><br>// interface 继承 type<br>type Person &#123;<br>    name: string<br>&#125;<br><br>interface Student extends Person &#123; stuId: number &#125;<br></code></pre></td></tr></table></figure>
+
+
+<p>小结：对于 interface 来说，继承是通过 extends 实现的；而 type 是通过 &amp; 来实现的，也可以叫做交叉类型。 </p>
+<h3 id="三、不同点"><a href="#三、不同点" class="headerlink" title="三、不同点"></a>三、不同点</h3><p>1、type 可以做到而 interface 不能做到</p>
+<p>type 可以声明基本类型。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">type userName = string;<br></code></pre></td></tr></table></figure>
+
+
+<p>type 可以声明联合类型。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">type userMsg = string | number; <br></code></pre></td></tr></table></figure>
+
+
+<p>type 可以声明元组类型。、</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">type Data = [number, string];<br></code></pre></td></tr></table></figure>
+
+
+<p>type 可以通过 typeof 操作符来声明</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">type myType = typeof someObj;<br></code></pre></td></tr></table></figure>
+
+<p>2、interface 可以做到而 type 不能做到</p>
+<p>interface 可以声明合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">interface test &#123;<br>    name: string<br>&#125;<br>interface test &#123;<br>    age: number<br>&#125;<br>    <br>/*<br>    test实际为 &#123;<br>        name: string<br>        age: number<br>    &#125;<br>*/<br></code></pre></td></tr></table></figure>
+
+
+<p>如果是 type 的话，就会报重复定义的警告，因此是无法实现声明合并的。</p>
+<h3 id="四、使用建议"><a href="#四、使用建议" class="headerlink" title="四、使用建议"></a>四、使用建议</h3><p>1、官方推荐使用 interface，其他无法满足需求的情况下用 type。但是因为联合类型和交叉类型是比较常用的，所以避免不了大量使用 type 的场景，一些复杂类型也需要通过组装后形成类型别名来使用。</p>
+<p>2、如果想保持代码统一，还是可选择使用 type。通过上面的对比，type 其实可涵盖 interface 的大部分场景。</p>
+<p>3、编写三方库时使推荐使用 interface，其更加灵活自动的类型合并可应对未知的复杂使用场景。</p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>ts</tag>
+      </tags>
+  </entry>
 </search>
