@@ -4658,4 +4658,50 @@
         <tag>ts</tag>
       </tags>
   </entry>
+  <entry>
+    <title>osi和tcp模型</title>
+    <url>/2023/11/24/osi%E5%92%8Ctcp%E6%A8%A1%E5%9E%8B%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h6 id="iso-osi参考模型有七层，tcp-ip模型有四层，结构图如下"><a href="#iso-osi参考模型有七层，tcp-ip模型有四层，结构图如下" class="headerlink" title="iso&#x2F;osi参考模型有七层，tcp&#x2F;ip模型有四层，结构图如下"></a>iso&#x2F;osi参考模型有七层，tcp&#x2F;ip模型有四层，结构图如下</h6><p><img src="/2023/11/24/osi%E5%92%8Ctcp%E6%A8%A1%E5%9E%8B%E5%8C%BA%E5%88%AB/image-20231124125132185.png" alt="image-20231124125132185"></p>
+<h3 id="OSI参考模型"><a href="#OSI参考模型" class="headerlink" title="OSI参考模型"></a>OSI参考模型</h3><h4 id="1-物理层"><a href="#1-物理层" class="headerlink" title="1.物理层:"></a>1.物理层:</h4><p>负责传输比特流</p>
+<p>使用的协议有:RS-232、V.35、Ethernet、Wi-Fi等, </p>
+<p>RS-232 是一种串行通信协议用于在计算机和外部设备之间传输数据.</p>
+<p>V.35是一种高速串行接口协议，用于连接计算机和网络设备。</p>
+<p>Ethernet 是一种局域网协议，用于在计算机之间传输数据。</p>
+<p>Wi-Fi 是一种无线局域网协议，用于在无线网络中传输数据</p>
+<h4 id="2-数据链路层"><a href="#2-数据链路层" class="headerlink" title="2.数据链路层:"></a>2.数据链路层:</h4><p>负责将比特流转换为帧</p>
+<p>使用的协议有: PPP、HDLC、Ethernet、Wi-Fi等，</p>
+<p>PPP 是一种点对点协议用于在两个计算机之间建立连接。</p>
+<p>HDLC 是-种高级数据链路控制协议，用于在计算机和网络设备之间传输数据。</p>
+<p>Ethernet 和 Wi-Fi 也可以用于数据链路层通信</p>
+<h4 id="3-网络层"><a href="#3-网络层" class="headerlink" title="3.网络层:"></a>3.网络层:</h4><p>负责将顿转换为数据包，</p>
+<p>使用的协议有: IP、ICMP、ARP、RIP、OSPF等</p>
+<p>IP 是一种互联网协议，用于在不同的计算机之间传输数据。</p>
+<p>ICMP 是一种互联网控制消息协议，用于在网络中传输控制信息。</p>
+<p>ARP 是一种地址解析协议，用于将 IP 地址转换为物理地址。</p>
+<p>RIP 和 OSPF 是路由协议，用于在网络中选择最佳路径</p>
+<h4 id="4-传输层"><a href="#4-传输层" class="headerlink" title="4.传输层:"></a>4.传输层:</h4><p>负责提供端到端的可靠传输，</p>
+<p>使用的协议有: TCP、UDP等。</p>
+<p> TCP 是一种面向连接的协议提供可靠的数据传输。</p>
+<p>UDP 是一种无连接的协议，提供不可靠但更快的数据传输。</p>
+<h4 id="5-会话层"><a href="#5-会话层" class="headerlink" title="5.会话层:"></a>5.会话层:</h4><p>负责建立、管理和终止会话，</p>
+<p>使用的协议有: RPC、NetBIOS 等。</p>
+<h4 id="6-表示层"><a href="#6-表示层" class="headerlink" title="6.表示层:"></a>6.表示层:</h4><p>负责数据的格式化和加密解密，</p>
+<p>使用的协议有: JPEG、MPEG、ASCII等</p>
+<p>JPEG和MPEG 是图像和视频压缩协议，用于在网络中传输图像和视频<br>ASCII 是一种字符编码协议，用于在计算机之间传输文本数据</p>
+<h4 id="7-应用层"><a href="#7-应用层" class="headerlink" title="7.应用层:"></a>7.应用层:</h4><p>负责提供各种网络应用服务，</p>
+<p>使用的协议有: HTTP、FTP、SMTP、DNS等。</p>
+<p>HTTP 是一种超文本传输协议，用于在 Web 浏览器和 Web 服务器之间传输数据。</p>
+<p>FTP 是一种文件传输协议，用于在计算机之间传输文件。</p>
+<p>SMTP 是一种简单邮件传输协议，用于在邮件服务器之间传输邮件。</p>
+<p>DNS是一种域名系统协议，用于将域名转换为 IP 地址。</p>
+<h3 id="tcp参考模型"><a href="#tcp参考模型" class="headerlink" title="tcp参考模型"></a>tcp参考模型</h3><p>TCP&#x2F;IP 模型将 OSI 模型由七层简化为四层，传输层和网络层被完整保留，因此网络中最核心的技术就是传输层和网络层技术。</p>
+<p>TCP&#x2F;IP 协议中每层技术举例：<br>网络访问层：ARP、RARP<br>互联网层：ICMP、IP<br>传输层：TCP、UDP<br>应用层：DNS、FTP、HTTP、SMTP、TELNET、IRC、WHOIS</p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
