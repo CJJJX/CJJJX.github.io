@@ -5361,4 +5361,58 @@
         <category>前端知识</category>
       </categories>
   </entry>
+  <entry>
+    <title>typeof和instanceof的区别</title>
+    <url>/2023/11/30/typeof%E5%92%8Cinstanceof%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="一、typeof"><a href="#一、typeof" class="headerlink" title="一、typeof"></a>一、typeof</h2><p><code>typeof</code> 操作符返回一个字符串，表示未经计算的操作数的类型</p>
+<p>使用方法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">typeof operand<br>typeof(operand)<br></code></pre></td></tr></table></figure>
+
+<p><code>operand</code>表示对象或原始值的表达式，其类型将被返回</p>
+<p>举例</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">typeof 1 // &#x27;number&#x27;<br>typeof &#x27;1&#x27; // &#x27;string&#x27;<br>typeof undefined // &#x27;undefined&#x27;<br>typeof true // &#x27;boolean&#x27;<br>typeof Symbol() // &#x27;symbol&#x27;<br>typeof null // &#x27;object&#x27;<br>typeof [] // &#x27;object&#x27;<br>typeof &#123;&#125; // &#x27;object&#x27;<br>typeof console // &#x27;object&#x27;<br>typeof console.log // &#x27;function&#x27;<br></code></pre></td></tr></table></figure>
+
+<p>从上面例子，前6个都是基础数据类型。虽然<code>typeof null</code>为<code>object</code>，但这只是<code>JavaScript</code> 存在的一个悠久 <code>Bug</code>，不代表<code>null</code>就是引用数据类型，并且<code>null</code>本身也不是对象</p>
+<p>所以，<code>null</code>在 <code>typeof</code>之后返回的是有问题的结果，不能作为判断<code>null</code>的方法。如果你需要在 <code>if</code> 语句中判断是否为 <code>null</code>，直接通过<code>===null</code>来判断就好</p>
+<p>同时，可以发现引用类型数据，用<code>typeof</code>来判断的话，除了<code>function</code>会被识别出来之外，其余的都输出<code>object</code></p>
+<p>如果我们想要判断一个变量是否存在，可以使用<code>typeof</code>：(不能使用<code>if(a)</code>， 若<code>a</code>未声明，则报错)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">if(typeof a != &#x27;undefined&#x27;)&#123;<br>    //变量存在<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="二、instanceof"><a href="#二、instanceof" class="headerlink" title="二、instanceof"></a>二、instanceof</h2><p><code>instanceof</code> 运算符用于检测构造函数的 <code>prototype</code> 属性是否出现在某个实例对象的原型链上</p>
+<p>使用如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">object instanceof constructor<br></code></pre></td></tr></table></figure>
+
+<p><code>object</code>为实例对象，<code>constructor</code>为构造函数</p>
+<p>构造函数通过<code>new</code>可以实例对象，<code>instanceof</code>能判断这个对象是否是之前那个构造函数生成的对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 定义构建函数<br>let Car = function() &#123;&#125;<br>let benz = new Car()<br>benz instanceof Car // true<br>let car = new String(&#x27;xxx&#x27;)<br>car instanceof String // true<br>let str = &#x27;xxx&#x27;<br>str instanceof String // false<br></code></pre></td></tr></table></figure>
+
+<p>关于<code>instanceof</code>的实现原理，可以参考下面：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">function myInstanceof(left, right) &#123;<br>    // 这里先用typeof来判断基础数据类型，如果是，直接返回false<br>    if(typeof left !== &#x27;object&#x27; || left === null) return false;<br>    // getProtypeOf是Object对象自带的API，能够拿到参数的原型对象<br>    let proto = Object.getPrototypeOf(left);<br>    while(true) &#123;                  <br>        if(proto === null) return false;<br>        if(proto === right.prototype) return true;//找到相同原型对象，返回true<br>        proto = Object.getPrototypeof(proto);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>也就是顺着原型链去找，直到找到相同的原型对象，返回<code>true</code>，否则为<code>false</code></p>
+<h2 id="三、区别"><a href="#三、区别" class="headerlink" title="三、区别"></a>三、区别</h2><p><code>typeof</code>与<code>instanceof</code>都是判断数据类型的方法，区别如下：</p>
+<ul>
+<li><code>typeof</code>会返回一个变量的基本类型，<code>instanceof</code>返回的是一个布尔值</li>
+<li><code>instanceof</code> 可以准确地判断复杂引用数据类型，但是不能正确判断基础数据类型</li>
+<li>而<code>typeof</code> 也存在弊端，它虽然可以判断基础数据类型（<code>null</code> 除外），但是引用数据类型中，除了<code>function</code> 类型以外，其他的也无法判断</li>
+</ul>
+<p>可以看到，上述两种方法都有弊端，并不能满足所有场景的需求</p>
+<p>如果需要通用检测数据类型，可以采用<code>Object.prototype.toString</code>，调用该方法，统一返回格式<code>“[object Xxx]”</code>的字符串</p>
+<p>如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">Object.prototype.toString(&#123;&#125;)       // &quot;[object Object]&quot;<br>Object.prototype.toString.call(&#123;&#125;)  // 同上结果，加上call也ok<br>Object.prototype.toString.call(1)    // &quot;[object Number]&quot;<br>Object.prototype.toString.call(&#x27;1&#x27;)  // &quot;[object String]&quot;<br>Object.prototype.toString.call(true)  // &quot;[object Boolean]&quot;<br>Object.prototype.toString.call(function()&#123;&#125;)  // &quot;[object Function]&quot;<br>Object.prototype.toString.call(null)   //&quot;[object Null]&quot;<br>Object.prototype.toString.call(undefined) //&quot;[object Undefined]&quot;<br>Object.prototype.toString.call(/123/g)    //&quot;[object RegExp]&quot;<br>Object.prototype.toString.call(new Date()) //&quot;[object Date]&quot;<br>Object.prototype.toString.call([])       //&quot;[object Array]&quot;<br>Object.prototype.toString.call(document)  //&quot;[object HTMLDocument]&quot;<br>Object.prototype.toString.call(window)   //&quot;[object Window]&quot;<br></code></pre></td></tr></table></figure>
+
+<p>了解了<code>toString</code>的基本用法，下面就实现一个全局通用的数据类型判断方法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">function getType(obj)&#123;<br>  let type  = typeof obj;<br>  if (type !== &quot;object&quot;) &#123;    // 先进行typeof判断，如果是基础数据类型，直接返回<br>    return type;<br>  &#125;<br>  // 对于typeof返回结果是object的，再进行如下的判断，正则返回结果<br>  return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, &#x27;$1&#x27;); <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>使用如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">getType([])     // &quot;Array&quot; typeof []是object，因此toString返回<br>getType(&#x27;123&#x27;)  // &quot;string&quot; typeof 直接返回<br>getType(window) // &quot;Window&quot; toString返回<br>getType(null)   // &quot;Null&quot;首字母大写，typeof null是object，需toString来判断<br>getType(undefined)   // &quot;undefined&quot; typeof 直接返回<br>getType()            // &quot;undefined&quot; typeof 直接返回<br>getType(function()&#123;&#125;) // &quot;function&quot; typeof能判断，因此首字母小写<br>getType(/123/g)      //&quot;RegExp&quot; toString返回<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
