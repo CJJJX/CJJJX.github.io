@@ -872,194 +872,6 @@
       </tags>
   </entry>
   <entry>
-    <title>http协议及其特点,状态码</title>
-    <url>/2023/10/05/http%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E7%89%B9%E7%82%B9-%E7%8A%B6%E6%80%81%E7%A0%81/</url>
-    <content><![CDATA[<h1 id="什么是http协议？有什么特点？有哪些状态码？"><a href="#什么是http协议？有什么特点？有哪些状态码？" class="headerlink" title="什么是http协议？有什么特点？有哪些状态码？"></a>什么是http协议？有什么特点？有哪些状态码？</h1><h1 id="什么是HTTP协议"><a href="#什么是HTTP协议" class="headerlink" title="什么是HTTP协议"></a><strong>什么是HTTP协议</strong></h1><p>HTTP（Hypertext Transfer Protocol）是一种用于传输超文本的应用层协议，用于在客户端和服务器之间进行通信。HTTP 协议定义了 Web 客户端和服务器之间互相通信的格式和规则，是互联网信息交换的基础</p>
-<ul>
-<li>HTTP是基于请求-响应模型的协议，客户端发送HTTP请求到服务器，服务器处理请求并返回相应的HTTP响应。</li>
-<li>HTTP使用URL（Uniform Resource Locator）来标识要获取的资源的位置。客户端通过URL指定要请求的资源，例如网页、图像、视频等。</li>
-<li>HTTP协议通常使用TCP&#x2F;IP作为传输协议，通过端口号80进行通信。</li>
-<li>HTTP协议是无状态的，服务器不会保存之前请求的任何状态信息。为了维护会话状态，可以使用Cookie和Session等机制。</li>
-<li>HTTP 使用统一资源标识符(Uniform Resource Identifier)来定位要访问的资源。 最常见的 URI 即 URL,比如 <a href="https://www.example.com/index.html%E3%80%82">https://www.example.com/index.html。</a></li>
-</ul>
-<h1 id="HTTP协议的特点"><a href="#HTTP协议的特点" class="headerlink" title="HTTP协议的特点"></a>HTTP协议的特点</h1><ul>
-<li>简单：HTTP的请求和响应都是由文本构成，易于阅读和理解。它使用简单的命令集来完成通信。</li>
-<li>可扩展：HTTP的头部允许添加自定义的字段，可以根据需求扩展协议。</li>
-<li>无连接：每个HTTP请求都是独立的，服务器在处理完请求后会断开与客户端的连接。这种无连接的特性可以减轻服务器的负载，但也会增加连接的建立和关闭的开销。</li>
-<li>无状态：服务器不会保存之前请求的状态信息，每个请求都是相互独立的。这意味着每个请求都需要包含所有必要的信息，例如身份验证凭据等。</li>
-<li>支持缓存：HTTP支持客户端和服务器之间的缓存机制，可以减少数据传输量和提高性能。</li>
-</ul>
-<h1 id="HTTP协议常用方法"><a href="#HTTP协议常用方法" class="headerlink" title="HTTP协议常用方法"></a>HTTP协议常用方法</h1><ol>
-<li>GET</li>
-</ol>
-<ul>
-<li>用于获取资源</li>
-<li>只请求资源,不修改资源</li>
-<li>可以缓存</li>
-<li>幂等操作</li>
-<li>有长度限制</li>
-<li>参数通过查询字符串传递</li>
-</ul>
-<ol>
-<li>POST</li>
-</ol>
-<ul>
-<li>用于创建资源</li>
-<li>可以创建新的资源,也可以修改资源</li>
-<li>不安全,不可缓存</li>
-<li>不幂等</li>
-<li>没有长度限制</li>
-<li>参数通过请求体传递</li>
-</ul>
-<ol>
-<li>PUT</li>
-</ol>
-<ul>
-<li>用于替换资源</li>
-<li>整个替换资源,或创建指定URI的资源</li>
-<li>不安全,可缓存</li>
-<li>幂等操作</li>
-<li>没有长度限制</li>
-<li>参数通过请求体传递</li>
-</ul>
-<ol>
-<li>PATCH</li>
-</ol>
-<ul>
-<li>用于部分更新资源</li>
-<li>只更新资源的一部分</li>
-<li>不安全,不可缓存</li>
-<li>不幂等</li>
-<li>没有长度限制</li>
-<li>参数通过请求体传递</li>
-</ul>
-<ol>
-<li>DELETE</li>
-</ol>
-<ul>
-<li>用于删除资源</li>
-<li>删除指定的资源</li>
-<li>不安全,不可缓存</li>
-<li>幂等操作</li>
-<li>没有请求体</li>
-</ul>
-<ol>
-<li>HEAD</li>
-</ol>
-<ul>
-<li>与GET方法相同,但只返回报文头</li>
-<li>获取报文首部以确定资源状态及元数据</li>
-<li>对性能和资源消耗最小</li>
-</ul>
-<ol>
-<li>OPTIONS</li>
-</ol>
-<ul>
-<li>用于查询支持的方法</li>
-<li>可以查询服务器对特定资源支持的HTTP方法</li>
-<li>幂等操作</li>
-</ul>
-<h1 id="HTTP常见错误码："><a href="#HTTP常见错误码：" class="headerlink" title="HTTP常见错误码："></a>HTTP常见错误码：</h1><p>当客户端与服务器进行HTTP通信时，可能会遇到各种错误码。以下是HTTP错误码的更多详细列举，按照不同的错误类别划分：</p>
-<p>1XX 信息性状态码（Informational）</p>
-<ul>
-<li>100 Continue：请求已成功收到，客户端应继续发送请求的其余部分。</li>
-<li>101 Switching Protocols：服务器已理解客户端的协议升级请求，并将其切换到新协议。</li>
-</ul>
-<p>2XX 成功状态码（Success）</p>
-<ul>
-<li>200 OK：请求成功，服务器成功处理了请求。</li>
-<li>201 Created：请求成功，服务器成功创建了新的资源。</li>
-<li>202 Accepted：请求已接受，但尚未处理完成。</li>
-<li>204 No Content：请求成功，但响应报文中没有实体的主体部分。</li>
-</ul>
-<p>3XX 重定向状态码（Redirection）</p>
-<ul>
-<li>300 Multiple Choices：请求的资源有多个位置可供选择。</li>
-<li>301 Moved Permanently：请求的资源已永久移动到新位置。</li>
-<li>302 Found：请求的资源暂时移动到其他位置。</li>
-<li>304 Not Modified：客户端缓存的资源未修改，可以使用缓存的版本。</li>
-</ul>
-<p>4XX 客户端错误状态码（Client Errors）</p>
-<ul>
-<li>400 Bad Request：服务器无法理解客户端发送的请求。</li>
-<li>401 Unauthorized：请求需要身份验证，但客户端未提供有效的身份验证信息。</li>
-<li>403 Forbidden：服务器拒绝了请求，客户端没有访问所请求资源的权限。</li>
-<li>404 Not Found：请求的资源不存在于服务器上。</li>
-<li>405 Method Not Allowed：请求方法不被允许。</li>
-</ul>
-<p>5XX 服务器错误状态码（Server Errors）</p>
-<ul>
-<li>500 Internal Server Error：服务器在处理请求时遇到了错误。</li>
-<li>501 Not Implemented：服务器不支持客户端请求的功能或方法。</li>
-<li>502 Bad Gateway：作为代理或网关的服务器从上游服务器接收到无效的响应。</li>
-<li>503 Service Unavailable：服务器暂时无法处理请求，通常由于过载或维护。</li>
-<li>504 Gateway Timeout：作为代理或网关的服务器在等待上游服务器的响应时超时。</li>
-</ul>
-<h2 id="301和302的区别"><a href="#301和302的区别" class="headerlink" title="301和302的区别"></a>301和302的区别</h2><p>301和302是HTTP协议中的重定向状态码，用于指示请求的资源已经被移动到新的位置。它们之间的区别如下：</p>
-<ol>
-<li><p>301 Moved Permanently（永久重定向）：</p>
-</li>
-<li><ul>
-<li>当服务器返回301状态码时，它表示请求的资源已经永久移动到了一个新的位置。</li>
-<li>客户端在收到301响应后，应该更新其链接指向新的URL，并将以后的请求发送到新的URL。</li>
-<li>搜索引擎会更新它们的索引，将旧的URL替换为新的URL。</li>
-<li>使用301重定向时，浏览器会自动将用户重定向到新的URL，用户可能会察觉到网页地址的变化。</li>
-</ul>
-</li>
-<li><p>302 Found（临时重定向）：</p>
-</li>
-<li><ul>
-<li>当服务器返回302状态码时，它表示请求的资源暂时移动到了一个新的位置。</li>
-<li>客户端在收到302响应后，应该继续使用原始的URL发送请求。</li>
-<li>搜索引擎会继续将索引指向原始的URL，而不是新的URL。</li>
-<li>使用302重定向时，浏览器会自动将用户重定向到新的URL，用户可能不会察觉到网页地址的变化。</li>
-</ul>
-</li>
-</ol>
-<p>总结：</p>
-<ul>
-<li>301表示永久重定向，要求客户端更新书签和链接，搜索引擎将索引指向新的URL。</li>
-<li>302表示临时重定向，客户端应该继续使用原始URL发送请求，搜索引擎继续索引原始URL。</li>
-<li>在实际使用中，301常用于网站结构调整或更改域名等情况，而302常用于临时重定向，例如网站维护或临时转移资源。</li>
-<li>若不确定应该使用301还是302时，可以考虑使用302，因为它不会对搜索引擎的索引产生永久性影响。</li>
-</ul>
-<h2 id="401与403的区别"><a href="#401与403的区别" class="headerlink" title="401与403的区别"></a>401与403的区别</h2><p>401 Unauthorized（未授权）和403 Forbidden（禁止访问）是HTTP协议中的客户端错误状态码，用于指示客户端请求的资源的访问权限问题。它们之间的区别如下：</p>
-<ol>
-<li><p>401 Unauthorized（未授权）：</p>
-</li>
-<li><ul>
-<li>当服务器返回401状态码时，表示客户端请求需要进行身份验证才能访问资源。</li>
-<li>这个状态码要求客户端提供有效的身份验证凭据（例如用户名和密码）以便服务器验证其身份。</li>
-<li>通常，在收到401响应后，客户端会弹出身份验证对话框，要求用户提供凭据以重新发送请求。</li>
-</ul>
-</li>
-<li><p>403 Forbidden（禁止访问）：</p>
-</li>
-<li><ul>
-<li>客户端提供的身份验证凭据无效或缺失。</li>
-<li>客户端的身份验证凭据有效，但没有足够的权限来访问特定资源。</li>
-<li>服务器设置了访问控制列表（ACL）或其他访问限制规则，拒绝客户端访问资源。</li>
-<li>当服务器返回403状态码时，表示客户端被服务器禁止访问请求的资源。</li>
-<li>这个状态码表明客户端没有足够的权限或认证来访问资源。</li>
-<li>403状态码可以在以下情况下出现：</li>
-</ul>
-</li>
-</ol>
-<p>总结：</p>
-<ul>
-<li>401表示未授权，要求客户端进行身份验证，用于需要身份验证的资源。</li>
-<li>403表示禁止访问，客户端被服务器拒绝访问请求的资源，通常是由于缺乏权限、身份验证问题或服务器的访问限制。</li>
-</ul>
-<p>在实际应用中，服务器可以根据具体的需求和场景来返回适当的状态码，以便客户端能够理解并采取相应的操作。401状态码通常用于需要身份验证的资源，而403状态码用于明确拒绝访问的情况。</p>
-]]></content>
-      <categories>
-        <category>前端充电宝</category>
-      </categories>
-      <tags>
-        <tag>八股文</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>js中的this指向</title>
     <url>/2023/11/10/js%E4%B8%AD%E7%9A%84this%E6%8C%87%E5%90%91/</url>
     <content><![CDATA[<h2 id="JavaScript中的this"><a href="#JavaScript中的this" class="headerlink" title="JavaScript中的this"></a>JavaScript中的this</h2><p>this是JavaScript中一个特殊关键字，用于指代当前执行上下文中的对象。它的难以理解之处就是值不是固定的，是再函数被调用时根据调用场景动态确定的，主要根据函数的调用方式来决定this指向的对象。<code>this</code> 的值在函数被调用时动态确定，以下是几种常见的情况：</p>
@@ -5426,6 +5238,225 @@
 <p>6.接收响应数据: 浏览器接收到服务器返回的响应数据，开始解析和处理响应。</p>
 <p>7.渲染页面: 如果响应是一个 HTML 页面，浏览器会根据 HTML、CSS 和JavaScript 等资源进行页面的渲染和展示。</p>
 <p>8.断开tcp连接：当所有响应数据都接受完成后，浏览器和服务器直接会断开tcp连接，释放资源。</p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪类和伪元素</title>
+    <url>/2023/12/05/%E4%BC%AA%E7%B1%BB%E5%92%8C%E4%BC%AA%E5%85%83%E7%B4%A0/</url>
+    <content><![CDATA[<p>CSS 伪类和伪元素是用于选择和样式化文档中的特定元素或元素的一部分的方法，它们在使用方式和效果上有一些重要的区别</p>
+<h3 id="伪类"><a href="#伪类" class="headerlink" title="伪类"></a>伪类</h3><h6 id="概念"><a href="#概念" class="headerlink" title="概念:"></a>概念:</h6><p>CSS中的一种选择器，用于选择HTML元素的特定状态，而不是选择元素本身。伪类可以根据用户交互、元素的位置、链接状态等条件来选择元素，从而允许你应用不同的样式或行为，通常以冒号 : 开头。</p>
+<h6 id="常见的伪类及其主要作用"><a href="#常见的伪类及其主要作用" class="headerlink" title="常见的伪类及其主要作用:"></a>常见的伪类及其主要作用:</h6><ol>
+<li><code>:hover</code>：用于选择用户<strong>鼠标悬停</strong>在元素上时的状态。通常用于创建悬停效果，如改变链接的颜色或显示工具提示。</li>
+<li><code>:active</code>：用于选择用户点击元素时的状态。通常用于创建点击效果，如按钮按下时的变化。</li>
+<li><code>:focus</code>：用于选择元素获得焦点时的状态，通常用于表单元素，如文本框或按钮，以突出显示当前激活的元素。</li>
+<li><code>:first-child</code>：选择父元素的第一个子元素。这可用于设置第一个子元素的特定样式。</li>
+<li><code>:nth-child(n)</code>：选择父元素的第n个子元素。你可以使用这个伪类来选择元素列表中的某个特定元素。</li>
+<li><code>:not(selector)</code>：选择不匹配给定选择器的元素。这允许你排除某些元素以应用样式。</li>
+<li><code>:visited</code>：选择已访问的链接元素，通常用于改变已访问链接的样式。</li>
+<li><code>:link</code>：选择未访问的链接元素，通常用于改变未访问链接的样式。</li>
+</ol>
+<h3 id="伪元素"><a href="#伪元素" class="headerlink" title="伪元素"></a>伪元素</h3><h6 id="概念-1"><a href="#概念-1" class="headerlink" title="概念:"></a>概念:</h6><p>CSS中的一种选择器，用于选择元素的特定部分，而不是整个元素本身。伪元素允许你在已选择的元素内部创建或修改内容，而无需在文档结构中添加额外的HTML元素，通常以双冒号 :: 开头。</p>
+<h6 id="常见的伪元素及其主要作用："><a href="#常见的伪元素及其主要作用：" class="headerlink" title="常见的伪元素及其主要作用："></a>常见的伪元素及其主要作用：</h6><ol>
+<li><code>::before</code>：用于在所选元素的内容之前插入生成的内容。这通常用于在元素前面添加一些装饰性的内容，比如图标或文本。</li>
+<li><code>::after</code>：用于在所选元素的内容之后插入生成的内容。类似于<code>::before</code>，它也经常用于添加额外的装饰性元素。</li>
+<li><code>::first-line</code>：用于选择所选元素的第一行文本。你可以使用它来为文本的第一行应用特定的样式。</li>
+<li><code>::first-letter</code>：用于选择所选元素的第一个字母或字符。通常用于创建首字母大写或特殊的样式。</li>
+<li><code>::selection</code>：用于选择用户选择的文本部分（鼠标拖选时）。你可以使用它来自定义选中文本的样式。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>http协议及其特点,状态码</title>
+    <url>/2023/10/05/http%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC%E5%8F%8A%E5%85%B6%E7%89%B9%E7%82%B9-%E7%8A%B6%E6%80%81%E7%A0%81/</url>
+    <content><![CDATA[<h1 id="什么是http协议？有什么特点？有哪些状态码？"><a href="#什么是http协议？有什么特点？有哪些状态码？" class="headerlink" title="什么是http协议？有什么特点？有哪些状态码？"></a>什么是http协议？有什么特点？有哪些状态码？</h1><h1 id="什么是HTTP协议"><a href="#什么是HTTP协议" class="headerlink" title="什么是HTTP协议"></a><strong>什么是HTTP协议</strong></h1><p>HTTP（Hypertext Transfer Protocol）是一种用于传输超文本的应用层协议，用于在客户端和服务器之间进行通信。HTTP 协议定义了 Web 客户端和服务器之间互相通信的格式和规则，是互联网信息交换的基础</p>
+<ul>
+<li>HTTP是基于请求-响应模型的协议，客户端发送HTTP请求到服务器，服务器处理请求并返回相应的HTTP响应。</li>
+<li>HTTP使用URL（Uniform Resource Locator）来标识要获取的资源的位置。客户端通过URL指定要请求的资源，例如网页、图像、视频等。</li>
+<li>HTTP协议通常使用TCP&#x2F;IP作为传输协议，通过端口号80进行通信。</li>
+<li>HTTP协议是无状态的，服务器不会保存之前请求的任何状态信息。为了维护会话状态，可以使用Cookie和Session等机制。</li>
+<li>HTTP 使用统一资源标识符(Uniform Resource Identifier)来定位要访问的资源。 最常见的 URI 即 URL,比如 <a href="https://www.example.com/index.html%E3%80%82">https://www.example.com/index.html。</a></li>
+</ul>
+<h1 id="HTTP协议的特点"><a href="#HTTP协议的特点" class="headerlink" title="HTTP协议的特点"></a>HTTP协议的特点</h1><ul>
+<li>简单：HTTP的请求和响应都是由文本构成，易于阅读和理解。它使用简单的命令集来完成通信。</li>
+<li>可扩展：HTTP的头部允许添加自定义的字段，可以根据需求扩展协议。</li>
+<li>无连接：每个HTTP请求都是独立的，服务器在处理完请求后会断开与客户端的连接。这种无连接的特性可以减轻服务器的负载，但也会增加连接的建立和关闭的开销。</li>
+<li>无状态：服务器不会保存之前请求的状态信息，每个请求都是相互独立的。这意味着每个请求都需要包含所有必要的信息，例如身份验证凭据等。</li>
+<li>支持缓存：HTTP支持客户端和服务器之间的缓存机制，可以减少数据传输量和提高性能。</li>
+</ul>
+<h1 id="HTTP协议常用方法"><a href="#HTTP协议常用方法" class="headerlink" title="HTTP协议常用方法"></a>HTTP协议常用方法</h1><ol>
+<li>GET</li>
+</ol>
+<ul>
+<li>用于获取资源</li>
+<li>只请求资源,不修改资源</li>
+<li>可以缓存</li>
+<li>幂等操作</li>
+<li>有长度限制</li>
+<li>参数通过查询字符串传递</li>
+</ul>
+<ol>
+<li>POST</li>
+</ol>
+<ul>
+<li>用于创建资源</li>
+<li>可以创建新的资源,也可以修改资源</li>
+<li>不安全,不可缓存</li>
+<li>不幂等</li>
+<li>没有长度限制</li>
+<li>参数通过请求体传递</li>
+</ul>
+<ol>
+<li>PUT</li>
+</ol>
+<ul>
+<li>用于替换资源</li>
+<li>整个替换资源,或创建指定URI的资源</li>
+<li>不安全,可缓存</li>
+<li>幂等操作</li>
+<li>没有长度限制</li>
+<li>参数通过请求体传递</li>
+</ul>
+<ol>
+<li>PATCH</li>
+</ol>
+<ul>
+<li>用于部分更新资源</li>
+<li>只更新资源的一部分</li>
+<li>不安全,不可缓存</li>
+<li>不幂等</li>
+<li>没有长度限制</li>
+<li>参数通过请求体传递</li>
+</ul>
+<ol>
+<li>DELETE</li>
+</ol>
+<ul>
+<li>用于删除资源</li>
+<li>删除指定的资源</li>
+<li>不安全,不可缓存</li>
+<li>幂等操作</li>
+<li>没有请求体</li>
+</ul>
+<ol>
+<li>HEAD</li>
+</ol>
+<ul>
+<li>与GET方法相同,但只返回报文头</li>
+<li>获取报文首部以确定资源状态及元数据</li>
+<li>对性能和资源消耗最小</li>
+</ul>
+<ol>
+<li>OPTIONS</li>
+</ol>
+<ul>
+<li>用于查询支持的方法</li>
+<li>可以查询服务器对特定资源支持的HTTP方法</li>
+<li>幂等操作</li>
+</ul>
+<h1 id="HTTP常见错误码："><a href="#HTTP常见错误码：" class="headerlink" title="HTTP常见错误码："></a>HTTP常见错误码：</h1><p>当客户端与服务器进行HTTP通信时，可能会遇到各种错误码。以下是HTTP错误码的更多详细列举，按照不同的错误类别划分：</p>
+<p>1XX 信息性状态码（Informational）</p>
+<ul>
+<li>100 Continue：请求已成功收到，客户端应继续发送请求的其余部分。</li>
+<li>101 Switching Protocols：服务器已理解客户端的协议升级请求，并将其切换到新协议。</li>
+</ul>
+<p>2XX 成功状态码（Success）</p>
+<ul>
+<li>200 OK：请求成功，服务器成功处理了请求。</li>
+<li>201 Created：请求成功，服务器成功创建了新的资源。</li>
+<li>202 Accepted：请求已接受，但尚未处理完成。</li>
+<li>204 No Content：请求成功，但响应报文中没有实体的主体部分。</li>
+</ul>
+<p>3XX 重定向状态码（Redirection）</p>
+<ul>
+<li>300 Multiple Choices：请求的资源有多个位置可供选择。</li>
+<li>301 Moved Permanently：请求的资源已永久移动到新位置。</li>
+<li>302 Found：请求的资源暂时移动到其他位置。</li>
+<li>304 Not Modified：客户端缓存的资源未修改，可以使用缓存的版本。</li>
+</ul>
+<p>4XX 客户端错误状态码（Client Errors）</p>
+<ul>
+<li>400 Bad Request：服务器无法理解客户端发送的请求。</li>
+<li>401 Unauthorized：请求需要身份验证，但客户端未提供有效的身份验证信息。</li>
+<li>403 Forbidden：服务器拒绝了请求，客户端没有访问所请求资源的权限。</li>
+<li>404 Not Found：请求的资源不存在于服务器上。</li>
+<li>405 Method Not Allowed：请求方法不被允许。</li>
+</ul>
+<p>5XX 服务器错误状态码（Server Errors）</p>
+<ul>
+<li>500 Internal Server Error：服务器在处理请求时遇到了错误。</li>
+<li>501 Not Implemented：服务器不支持客户端请求的功能或方法。</li>
+<li>502 Bad Gateway：作为代理或网关的服务器从上游服务器接收到无效的响应。</li>
+<li>503 Service Unavailable：服务器暂时无法处理请求，通常由于过载或维护。</li>
+<li>504 Gateway Timeout：作为代理或网关的服务器在等待上游服务器的响应时超时。</li>
+</ul>
+<h2 id="301和302的区别"><a href="#301和302的区别" class="headerlink" title="301和302的区别"></a>301和302的区别</h2><p>301和302是HTTP协议中的重定向状态码，用于指示请求的资源已经被移动到新的位置。它们之间的区别如下：</p>
+<ol>
+<li><p>301 Moved Permanently（永久重定向）：</p>
+</li>
+<li><ul>
+<li>当服务器返回301状态码时，它表示请求的资源已经永久移动到了一个新的位置。</li>
+<li>客户端在收到301响应后，应该更新其链接指向新的URL，并将以后的请求发送到新的URL。</li>
+<li>搜索引擎会更新它们的索引，将旧的URL替换为新的URL。</li>
+<li>使用301重定向时，浏览器会自动将用户重定向到新的URL，用户可能会察觉到网页地址的变化。</li>
+</ul>
+</li>
+<li><p>302 Found（临时重定向）：</p>
+</li>
+<li><ul>
+<li>当服务器返回302状态码时，它表示请求的资源暂时移动到了一个新的位置。</li>
+<li>客户端在收到302响应后，应该继续使用原始的URL发送请求。</li>
+<li>搜索引擎会继续将索引指向原始的URL，而不是新的URL。</li>
+<li>使用302重定向时，浏览器会自动将用户重定向到新的URL，用户可能不会察觉到网页地址的变化。</li>
+</ul>
+</li>
+</ol>
+<p>总结：</p>
+<ul>
+<li>301表示永久重定向，要求客户端更新书签和链接，搜索引擎将索引指向新的URL。</li>
+<li>302表示临时重定向，客户端应该继续使用原始URL发送请求，搜索引擎继续索引原始URL。</li>
+<li>在实际使用中，301常用于网站结构调整或更改域名等情况，而302常用于临时重定向，例如网站维护或临时转移资源。</li>
+<li>若不确定应该使用301还是302时，可以考虑使用302，因为它不会对搜索引擎的索引产生永久性影响。</li>
+</ul>
+<h2 id="401与403的区别"><a href="#401与403的区别" class="headerlink" title="401与403的区别"></a>401与403的区别</h2><p>401 Unauthorized（未授权）和403 Forbidden（禁止访问）是HTTP协议中的客户端错误状态码，用于指示客户端请求的资源的访问权限问题。它们之间的区别如下：</p>
+<ol>
+<li><p>401 Unauthorized（未授权）：</p>
+</li>
+<li><ul>
+<li>当服务器返回401状态码时，表示客户端请求需要进行身份验证才能访问资源。</li>
+<li>这个状态码要求客户端提供有效的身份验证凭据（例如用户名和密码）以便服务器验证其身份。</li>
+<li>通常，在收到401响应后，客户端会弹出身份验证对话框，要求用户提供凭据以重新发送请求。</li>
+</ul>
+</li>
+<li><p>403 Forbidden（禁止访问）：</p>
+</li>
+<li><ul>
+<li>客户端提供的身份验证凭据无效或缺失。</li>
+<li>客户端的身份验证凭据有效，但没有足够的权限来访问特定资源。</li>
+<li>服务器设置了访问控制列表（ACL）或其他访问限制规则，拒绝客户端访问资源。</li>
+<li>当服务器返回403状态码时，表示客户端被服务器禁止访问请求的资源。</li>
+<li>这个状态码表明客户端没有足够的权限或认证来访问资源。</li>
+<li>403状态码可以在以下情况下出现：</li>
+</ul>
+</li>
+</ol>
+<p>总结：</p>
+<ul>
+<li>401表示未授权，要求客户端进行身份验证，用于需要身份验证的资源。</li>
+<li>403表示禁止访问，客户端被服务器拒绝访问请求的资源，通常是由于缺乏权限、身份验证问题或服务器的访问限制。</li>
+</ul>
+<p>在实际应用中，服务器可以根据具体的需求和场景来返回适当的状态码，以便客户端能够理解并采取相应的操作。401状态码通常用于需要身份验证的资源，而403状态码用于明确拒绝访问的情况。</p>
 ]]></content>
       <categories>
         <category>前端充电宝</category>
