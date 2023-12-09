@@ -5600,4 +5600,25 @@
         <tag>手撕</tag>
       </tags>
   </entry>
+  <entry>
+    <title>重排(回流)和重绘</title>
+    <url>/2023/12/09/%E9%87%8D%E6%8E%92-%E5%9B%9E%E6%B5%81-%E5%92%8C%E9%87%8D%E7%BB%98/</url>
+    <content><![CDATA[<h5 id="重排-Reflow-："><a href="#重排-Reflow-：" class="headerlink" title="重排(Reflow)："></a>重排(Reflow)：</h5><p>元素的位置发生变动时发生重排，也叫<code>回流</code>。此时在关键渲染路径(浏览器将html，css和js转换为屏幕上的像素所经历的步骤序列)中的 Layout 阶段，计算每一个元素在设备视口内的确切位置和大小。当一个元素位置发生变化时，其父元素及其后边的元素位置都可能发生变化，代价极高</p>
+<h5 id="重绘-Repaint"><a href="#重绘-Repaint" class="headerlink" title="重绘(Repaint):"></a>重绘(Repaint):</h5><p>元素的样式发生变动，但是位置没有改变。此时在关键渲染路径中的 Paint 阶段，将渲染树中的每个节点转换成屏幕上的实际像素，这一步通常称为绘制或栅格化</p>
+<p>​																		<strong>重绘不一定会出现重排，重排必然会触发重绘</strong></p>
+<h5 id="如何触发重排和重绘"><a href="#如何触发重排和重绘" class="headerlink" title="如何触发重排和重绘"></a>如何触发重排和重绘</h5><p>任何改变用来构建渲染树的信息都会导致一次重排或重绘：</p>
+<p>添加，删除，更新dom节点</p>
+<p>通过display: none隐藏一个DOM节点-触发重排和重绘</p>
+<p>通过visibility: hidden隐藏一个DOM节点-只触发重绘，因为没有几何变化</p>
+<p>用户行为，例如调整窗口大小，改变字号或滚动。</p>
+<h5 id="如何减少重排和重绘"><a href="#如何减少重排和重绘" class="headerlink" title="如何减少重排和重绘"></a>如何减少重排和重绘</h5><p>合并样式修改</p>
+<p>批量操作DOM</p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
