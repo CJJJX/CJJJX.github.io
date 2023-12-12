@@ -5658,4 +5658,33 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>盛最多水的容器</title>
+    <url>/2023/12/12/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/</url>
+    <content><![CDATA[<h3 id="力扣-11-盛最多水的容器"><a href="#力扣-11-盛最多水的容器" class="headerlink" title="力扣-11.盛最多水的容器"></a>力扣-11.盛最多水的容器</h3><p>给定一个长度为 <code>n</code> 的整数数组 <code>height</code> 。有 <code>n</code> 条垂线，第 <code>i</code> 条线的两个端点是 <code>(i, 0)</code> 和 <code>(i, height[i])</code> 。</p>
+<p>找出其中的两条线，使得它们与 <code>x</code> 轴共同构成的容器可以容纳最多的水。</p>
+<p>返回容器可以储存的最大水量。</p>
+<p><strong>说明：</strong>你不能倾斜容器。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="/2023/12/12/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/question_11.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：[1,8,6,2,5,4,8,3,7]<br>输出：49 <br>解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：height = [1,1]<br>输出：1<br></code></pre></td></tr></table></figure>
+
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>这道题可以使用双指针的方法来解决。首先初始化左指针指向数组的起始位置，右指针指向数组的结束位置。然后，计算当前左右指针所指的两条垂直线构成的容器的面积。面积的计算公式是:面积&#x3D;(右指针-左指针)*min(左指针的高度右指针的高度)。接下来，移动指针的原则是: 每次移动高度较小的指针，这样才有可能找到更高的垂直线，从而使容器的面积更大。不断移动指针，并更新最大的面积值，直到左右指针相遇</p>
+<h4 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var maxArea = function(height) &#123;<br>    let left = 0<br>    let right = height.length - 1<br>    let maxarea = 0<br>    while(left &lt; right)&#123;<br>        let minHeight = Math.min(height[left],height[right])<br>        let area = minHeight * (right - left)<br>        maxarea = Math.max(maxarea,area)<br>        if(height[left] &lt; height[right])&#123;<br>            left++<br>        &#125;else&#123;<br>            right--<br>        &#125;<br>    &#125;<br>    return maxarea<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>时间复杂度分析: </p>
+<p>双指针移动的过程中，每次向内移动一个指针，直到左右指针相遇。因此，每个指针最多移动n-1次。所以总的时间复杂度为0(n)，其中n是数组的长度</p>
+<p>空间复杂度分析: </p>
+<p>只使用了几个变量来存储指针的位置和当前的最大面积值，没有使用额外的数据结构。所以空间复杂度是0(1)。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>手撕</tag>
+      </tags>
+  </entry>
 </search>
