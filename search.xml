@@ -5687,4 +5687,65 @@
         <tag>手撕</tag>
       </tags>
   </entry>
+  <entry>
+    <title>pnpm乱杀yarn,npm</title>
+    <url>/2023/12/13/pnpm%E4%B9%B1%E6%9D%80yarn-npm/</url>
+    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1 引言"></a><strong>1 引言</strong></h2><p>  平时在项目开发中，经常用到npm、pnpm、yarn这些来安装包，但是它们之间到底有什么区别呢，一直没太搞明白。</p>
+<p>  我只知道他们都是可以从npm官网上下载包，安装完包咱们就可以写代码了，其他的不觉明历，所以认为需要总结下。</p>
+<h2 id="2-npm"><a href="#2-npm" class="headerlink" title="2 npm"></a><strong>2 npm</strong></h2><p>  npm（Node Package Manager）是Node.js的默认包管理器。它是一个成熟、广泛使用的工具，有着大量的开源包。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li><p>默认随Node.js一起安装，无需额外配置。</p>
+</li>
+<li><p>提供了庞大的包生态系统，有大量的第三方包可用。</p>
+</li>
+<li><p>默认将依赖项安装到项目的<code>node_modules</code>目录中。</p>
+</li>
+</ul>
+<h3 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h3><p>​	1.  依赖没有共用。假如A B C三个包有相同的依赖D，执行npm install时D会被重复下载3次。随着项目越来越复杂，像D这样的包会越来越多，大量的冗余会快速消耗我们的磁盘空间。</p>
+<p>​	2.  嵌套层级过深。windows的文件路径最长是260个字符，随着递归安装依赖，嵌套可能会超过windows路径的长度限制，导致依赖安装失败。</p>
+<h2 id="3-yarn"><a href="#3-yarn" class="headerlink" title="3 yarn"></a><strong>3 yarn</strong></h2><p>yarn 是由Facebook提供的包管理工具，旨在提高性能和安全性。</p>
+<ul>
+<li>并行下载、离线安装，提高安装速度。</li>
+<li>锁定版本以确保不同环境中获得相同的依赖版本。</li>
+<li>yarn针对于npm把所有嵌套的依赖直接拉平，这样就不会触发window的文件路径限制，也解决了依赖包重复的问题。</li>
+</ul>
+<h3 id="存在问题-1"><a href="#存在问题-1" class="headerlink" title="存在问题"></a>存在问题</h3><ol>
+<li>依赖分身：有的包依然有node_modules，没有完全拉平。(当两个包A(C v1),B(C v2)所依赖的C版本不一样时，A,B共用C的版本不一致，只能提一个到第一层级)</li>
+<li>幽灵依赖：因为所有依赖都被拉到同一层级，npm v5也有此类情况。（我其实只依赖了koa这一个包，但是yarn把所有依赖包都拉平了。项目没有依赖xxx，但是可以直接使用xxx这个包，因为koa会依赖xxx。如果有一天koa去掉了这个包的依赖，而我们的项目使用了xxx就跑不起来了）</li>
+</ol>
+<h2 id="4-pnpm"><a href="#4-pnpm" class="headerlink" title="4 pnpm"></a>4 <strong>pnpm</strong></h2><p>pnpm 是一种较新的包管理工具，旨在解决npm中的依赖项重复安装的问题。</p>
+<h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>所有的文件在磁盘中只存在一处。当安装包的时候，所有的文件会被硬链接。这样不会消耗额外的磁盘空间，而且多个项目可以共享同一个依赖。</li>
+<li>解决了npm，yarn的依赖分身问题。</li>
+<li>项目的node_modules文件夹下除了.pnpm这个隐藏文件夹之外，只会出现package.json里需要的依赖，从而避免了npm或yarn的幽灵依赖问题。</li>
+</ul>
+<h2 id="5-比较"><a href="#5-比较" class="headerlink" title="5 比较"></a><strong>5 比较</strong></h2><h3 id="5-1-安装速度"><a href="#5-1-安装速度" class="headerlink" title="5.1 安装速度"></a>5.1 安装速度</h3><ul>
+<li><strong>npm：</strong> 相对较慢，特别是在有大量依赖项的项目中。</li>
+<li><strong>pnpm：</strong> 安装速度较快，尤其在多项目工作区中。</li>
+<li><strong>yarn：</strong> 使用并行下载，速度相对较快。</li>
+</ul>
+<h3 id="5-2-磁盘空间占用"><a href="#5-2-磁盘空间占用" class="headerlink" title="5.2 磁盘空间占用"></a>5.2 磁盘空间占用</h3><ul>
+<li><strong>npm：</strong> 默认将依赖项复制到项目的<code>node_modules</code>目录，可能导致重复占用磁盘空间</li>
+<li><strong>pnpm：</strong> 通过符号链接共享依赖项，减少了磁盘空间占用</li>
+<li><strong>yarn：</strong> 在离线模式下，通过缓存机制减少了磁盘空间占用(本地缓存每个下载过的包，再次使用无需重复下载)</li>
+</ul>
+<h3 id="5-3-并发安装"><a href="#5-3-并发安装" class="headerlink" title="5.3 并发安装"></a>5.3 并发安装</h3><ul>
+<li><strong>npm：</strong> 不支持并发安装，会一个一个地安装依赖项。</li>
+<li><strong>pnpm：</strong> 支持并发安装，提高了安装速度。</li>
+<li><strong>yarn：</strong> 使用并行下载，速度相对较快。</li>
+</ul>
+<h3 id="5-4-稳定性"><a href="#5-4-稳定性" class="headerlink" title="5.4 稳定性"></a>5.4 稳定性</h3><ul>
+<li><strong>npm：</strong> 稳定、成熟，广泛使用。</li>
+<li><strong>pnpm：</strong> 相对较新，但社区正在不断发展。</li>
+<li><strong>yarn：</strong> 由Facebook维护，稳定性较高。</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h2><p><code>npm</code>是默认选择，稳定且易于使用。<code>pnpm</code>通过共享依赖项减少磁盘空间占用，适用于需要优化空间的项目。<code>yarn</code>通过并行下载和版本锁定提供了更快、更可靠的安装。</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+      </tags>
+  </entry>
 </search>
