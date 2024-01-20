@@ -470,6 +470,111 @@
       </tags>
   </entry>
   <entry>
+    <title>JS进阶学习DAY3</title>
+    <url>/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/</url>
+    <content><![CDATA[<h1 id="JavaScript-进阶-第3天"><a href="#JavaScript-进阶-第3天" class="headerlink" title="JavaScript 进阶 - 第3天"></a>JavaScript 进阶 - 第3天</h1><blockquote>
+<p>​	本文是在了解构造函数原型对象的语法特征，掌握 JavaScript 中面向对象编程的实现方式，基于面向对象编程思想实现 DOM 操作封装做的笔记。</p>
+</blockquote>
+<ul>
+<li>了解面向对象编程的一般特征</li>
+<li>掌握基于构造函数原型对象的逻辑封装</li>
+<li>掌握基于原型对象实现的继承</li>
+<li>理解什么原型链及其作用</li>
+<li>能够处理程序异常提升程序执行的健壮性</li>
+</ul>
+<h2 id="编程思想"><a href="#编程思想" class="headerlink" title="编程思想"></a>编程思想</h2><blockquote>
+<p>学习 JavaScript 中基于原型的面向对象编程序的语法实现，理解面向对象编程的特征。</p>
+</blockquote>
+<h3 id="面向过程"><a href="#面向过程" class="headerlink" title="面向过程"></a>面向过程</h3><p>面向过程就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候再一个一个的依次</p>
+<p>调用就可以了。</p>
+<p>举个栗子：蛋炒饭</p>
+<p><img src="/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/1676792906898.png" alt="67679290689"></p>
+<h3 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h3><p>面向对象是把事务分解成为一个个对象，然后由对象之间分工与合作。</p>
+<p><img src="/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/1676792930329.png" alt="67679293032"></p>
+<p>在面向对象程序开发思想中，每一个对象都是功能中心，具有明确分工。</p>
+<p>面向对象编程具有灵活、代码可复用、容易维护和开发的优点，更适合多人合作的大型软件项目。</p>
+<p>面向对象的特性：</p>
+<ul>
+<li>封装性</li>
+<li>继承性</li>
+<li>多态性</li>
+</ul>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><p>对比以下通过面向对象的构造函数实现的封装：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    this.name = &#x27;佚名&#x27;<br>    // 设置名字<br>    this.setName = function (name) &#123;<br>      this.name = name<br>    &#125;<br>    // 读取名字<br>    this.getName = () =&gt; &#123;<br>      console.log(this.name)<br>    &#125;<br>  &#125;<br><br>  // 实例对像，获得了构造函数中封装的所有逻辑<br>  let p1 = new Person()<br>  p1.setName(&#x27;小明&#x27;)<br>  console.log(p1.name)<br><br>  // 实例对象<br>  let p2 = new Person()<br>  console.log(p2.name)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>封装是面向对象思想中比较重要的一部分，js面向对象可以通过构造函数实现的封装。</p>
+<p>同样的将变量和函数组合到了一起并能通过 this 实现数据的共享，所不同的是借助构造函数创建出来的实例对象之</p>
+<p>间是彼此不影响的</p>
+<blockquote>
+<p>总结：</p>
+<ol>
+<li>构造函数体现了面向对象的封装特性</li>
+<li>构造函数实例创建的对象彼此独立、互不影响</li>
+</ol>
+</blockquote>
+<p>封装是面向对象思想中比较重要的一部分，js面向对象可以通过构造函数实现的封装。</p>
+<p>前面我们学过的构造函数方法很好用，但是 存在<code>浪费内存</code>的问题</p>
+<h2 id="原型对象"><a href="#原型对象" class="headerlink" title="原型对象"></a>原型对象</h2><p>构造函数通过原型分配的函数是所有对象所 共享的。</p>
+<ul>
+<li>JavaScript 规定，每一个构造函数都有一个 prototype 属性，指向另一个对象，所以我们也称为原型对象</li>
+<li>这个对象可以挂载函数，对象实例化不会多次创建原型上函数，节约内存</li>
+<li>我们可以把那些不变的方法，直接定义在 prototype 对象上，这样所有对象的实例就可以共享这些方法。</li>
+<li>构造函数和原型对象中的this 都指向 实例化的对象</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    <br>  &#125;<br><br>  // 每个函数都有 prototype 属性<br>  console.log(Person.prototype)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>了解了 JavaScript 中构造函数与原型对象的关系后，再来看原型对象具体的作用，如下代码所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    // 此处未定义任何方法<br>  &#125;<br><br>  // 为构造函数的原型对象添加方法<br>  Person.prototype.sayHi = function () &#123;<br>    console.log(&#x27;Hi~&#x27;);<br>  &#125;<br>	<br>  // 实例化<br>  let p1 = new Person();<br>  p1.sayHi(); // 输出结果为 Hi~<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>构造函数 <code>Person</code> 中未定义任何方法，这时实例对象调用了原型对象中的方法 <code>sayHi</code>，接下来改动一下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    // 此处定义同名方法 sayHi<br>    this.sayHi = function () &#123;<br>      console.log(&#x27;嗨!&#x27;);<br>    &#125;<br>  &#125;<br><br>  // 为构造函数的原型对象添加方法<br>  Person.prototype.sayHi = function () &#123;<br>    console.log(&#x27;Hi~&#x27;);<br>  &#125;<br><br>  let p1 = new Person();<br>  p1.sayHi(); // 输出结果为 嗨!<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>构造函数 <code>Person</code> 中定义与原型对象中相同名称的方法，这时实例对象调用则是构造函中的方法 <code>sayHi</code>。</p>
+<p>通过以上两个简单示例不难发现 JavaScript 中对象的工作机制：<strong>当访问对象的属性或方法时，先在当前实例对象是查找，然后再去原型对象查找，并且原型对象被所有实例共享。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>	function Person() &#123;<br>    // 此处定义同名方法 sayHi<br>    this.sayHi = function () &#123;<br>      console.log(&#x27;嗨!&#x27; + this.name)<br>    &#125;<br>  &#125;<br><br>  // 为构造函数的原型对象添加方法<br>  Person.prototype.sayHi = function () &#123;<br>    console.log(&#x27;Hi~&#x27; + this.name)<br>  &#125;<br>  // 在构造函数的原型对象上添加属性<br>  Person.prototype.name = &#x27;小明&#x27;<br><br>  let p1 = new Person()<br>  p1.sayHi(); // 输出结果为 嗨!<br>  <br>  let p2 = new Person()<br>  p2.sayHi()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>总结：<strong>结合构造函数原型的特征，实际开发重往往会将封装的功能函数添加到原型对象中。</strong></p>
+<h3 id="constructor-属性"><a href="#constructor-属性" class="headerlink" title="constructor 属性"></a>constructor 属性</h3><p>在哪里？ 每个原型对象里面都有个constructor 属性（constructor 构造函数）</p>
+<p>作用：该属性指向该原型对象的构造函数， 简单理解，就是指向我的爸爸，我是有爸爸的孩子</p>
+<p><strong>使用场景：</strong></p>
+<p>如果有多个对象的方法，我们可以给原型对象采取对象形式赋值.</p>
+<p>但是这样就会覆盖构造函数原型对象原来的内容，这样修改后的原型对象 constructor 就不再指向当前构造函数了</p>
+<p>此时，我们可以在修改后的原型对象中，添加一个 constructor 指向原来的构造函数。</p>
+<h3 id="对象原型"><a href="#对象原型" class="headerlink" title="对象原型"></a>对象原型</h3><p>对象都会有一个属性 <strong>proto</strong> 指向构造函数的 prototype 原型对象，之所以我们对象可以使用构造函数 prototype</p>
+<p>原型对象的属性和方法，就是因为对象有 <strong>proto</strong> 原型的存在。</p>
+<p>注意：</p>
+<ul>
+<li><strong>proto</strong> 是JS非标准属性</li>
+<li>[[prototype]]和__proto__意义相同</li>
+<li>用来表明当前实例对象指向哪个原型对象prototype</li>
+<li>__proto__对象原型里面也有一个 constructor属性，指向创建该实例对象的构造函数</li>
+</ul>
+<h3 id="原型继承"><a href="#原型继承" class="headerlink" title="原型继承"></a>原型继承</h3><p>继承是面向对象编程的另一个特征，通过继承进一步提升代码封装的程度，JavaScript 中大多是借助原型对象实现继承</p>
+<p>的特性。</p>
+<p>龙生龙、凤生凤、老鼠的儿子会打洞描述的正是继承的含义。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    // 继续抽取   公共的部分放到原型上<br>    // const Person1 = &#123;<br>    //   eyes: 2,<br>    //   head: 1<br>    // &#125;<br>    // const Person2 = &#123;<br>    //   eyes: 2,<br>    //   head: 1<br>    // &#125;<br>    // 构造函数  new 出来的对象 结构一样，但是对象不一样<br>    function Person() &#123;<br>      this.eyes = 2<br>      this.head = 1<br>    &#125;<br>    // console.log(new Person)<br>    // 女人  构造函数   继承  想要 继承 Person<br>    function Woman() &#123;<br><br>    &#125;<br>    // Woman 通过原型来继承 Person<br>    // 父构造函数（父类）   子构造函数（子类）<br>    // 子类的原型 =  new 父类  <br>    Woman.prototype = new Person()   // &#123;eyes: 2, head: 1&#125; <br>    // 指回原来的构造函数<br>    Woman.prototype.constructor = Woman<br><br>    // 给女人添加一个方法  生孩子<br>    Woman.prototype.baby = function () &#123;<br>      console.log(&#x27;宝贝&#x27;)<br>    &#125;<br>    const red = new Woman()<br>    console.log(red)<br>    // console.log(Woman.prototype)<br>    // 男人 构造函数  继承  想要 继承 Person<br>    function Man() &#123;<br><br>    &#125;<br>    // 通过 原型继承 Person<br>    Man.prototype = new Person()<br>    Man.prototype.constructor = Man<br>    const pink = new Man()<br>    console.log(pink)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h3><p>基于原型对象的继承使得不同构造函数的原型对象关联在一起，并且这种关联的关系是一种链状的结构，我们将原型对</p>
+<p>象的链状结构关系称为原型链</p>
+<p><img src="/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/1676793388695.png" alt="67679338869"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    // function Objetc() &#123;&#125;<br>    console.log(Object.prototype)<br>    console.log(Object.prototype.__proto__)<br><br>    function Person() &#123;<br><br>    &#125;<br>    const ldh = new Person()<br>    // console.log(ldh.__proto__ === Person.prototype)<br>    // console.log(Person.prototype.__proto__ === Object.prototype)<br>    console.log(ldh instanceof Person)<br>    console.log(ldh instanceof Object)<br>    console.log(ldh instanceof Array)<br>    console.log([1, 2, 3] instanceof Array)<br>    console.log(Array instanceof Object)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+
+<p>① 当访问一个对象的属性（包括方法）时，首先查找这个对象自身有没有该属性。</p>
+<p>② 如果没有就查找它的原型（也就是 __proto__指向的 prototype 原型对象）</p>
+<p>③ 如果还没有就查找原型对象的原型（Object的原型对象）</p>
+<p>④ 依此类推一直找到 Object 为止（null）</p>
+<p>⑤ __proto__对象原型的意义就在于为对象成员查找机制提供一个方向，或者说一条路线</p>
+<p>⑥ 可以使用 instanceof 运算符用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JS进阶学习DAY2</title>
     <url>/2023/07/30/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY2/</url>
     <content><![CDATA[<h1 id="JavaScript-进阶-第2天"><a href="#JavaScript-进阶-第2天" class="headerlink" title="JavaScript 进阶 - 第2天"></a>JavaScript 进阶 - 第2天</h1><blockquote>
@@ -606,101 +711,110 @@
       </tags>
   </entry>
   <entry>
-    <title>JS进阶学习DAY3</title>
-    <url>/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/</url>
-    <content><![CDATA[<h1 id="JavaScript-进阶-第3天"><a href="#JavaScript-进阶-第3天" class="headerlink" title="JavaScript 进阶 - 第3天"></a>JavaScript 进阶 - 第3天</h1><blockquote>
-<p>​	本文是在了解构造函数原型对象的语法特征，掌握 JavaScript 中面向对象编程的实现方式，基于面向对象编程思想实现 DOM 操作封装做的笔记。</p>
-</blockquote>
-<ul>
-<li>了解面向对象编程的一般特征</li>
-<li>掌握基于构造函数原型对象的逻辑封装</li>
-<li>掌握基于原型对象实现的继承</li>
-<li>理解什么原型链及其作用</li>
-<li>能够处理程序异常提升程序执行的健壮性</li>
-</ul>
-<h2 id="编程思想"><a href="#编程思想" class="headerlink" title="编程思想"></a>编程思想</h2><blockquote>
-<p>学习 JavaScript 中基于原型的面向对象编程序的语法实现，理解面向对象编程的特征。</p>
-</blockquote>
-<h3 id="面向过程"><a href="#面向过程" class="headerlink" title="面向过程"></a>面向过程</h3><p>面向过程就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候再一个一个的依次</p>
-<p>调用就可以了。</p>
-<p>举个栗子：蛋炒饭</p>
-<p><img src="/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/1676792906898.png" alt="67679290689"></p>
-<h3 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h3><p>面向对象是把事务分解成为一个个对象，然后由对象之间分工与合作。</p>
-<p><img src="/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/1676792930329.png" alt="67679293032"></p>
-<p>在面向对象程序开发思想中，每一个对象都是功能中心，具有明确分工。</p>
-<p>面向对象编程具有灵活、代码可复用、容易维护和开发的优点，更适合多人合作的大型软件项目。</p>
-<p>面向对象的特性：</p>
-<ul>
-<li>封装性</li>
-<li>继承性</li>
-<li>多态性</li>
-</ul>
-<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><p>对比以下通过面向对象的构造函数实现的封装：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    this.name = &#x27;佚名&#x27;<br>    // 设置名字<br>    this.setName = function (name) &#123;<br>      this.name = name<br>    &#125;<br>    // 读取名字<br>    this.getName = () =&gt; &#123;<br>      console.log(this.name)<br>    &#125;<br>  &#125;<br><br>  // 实例对像，获得了构造函数中封装的所有逻辑<br>  let p1 = new Person()<br>  p1.setName(&#x27;小明&#x27;)<br>  console.log(p1.name)<br><br>  // 实例对象<br>  let p2 = new Person()<br>  console.log(p2.name)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>封装是面向对象思想中比较重要的一部分，js面向对象可以通过构造函数实现的封装。</p>
-<p>同样的将变量和函数组合到了一起并能通过 this 实现数据的共享，所不同的是借助构造函数创建出来的实例对象之</p>
-<p>间是彼此不影响的</p>
+    <title>JS进阶学习DAY4</title>
+    <url>/2023/08/01/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY4/</url>
+    <content><![CDATA[<h1 id="JavaScript-进阶-第4天"><a href="#JavaScript-进阶-第4天" class="headerlink" title="JavaScript 进阶 - 第4天"></a>JavaScript 进阶 - 第4天</h1><h2 id="深浅拷贝"><a href="#深浅拷贝" class="headerlink" title="深浅拷贝"></a>深浅拷贝</h2><h3 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h3><p>首先浅拷贝和深拷贝只针对引用类型</p>
+<p>浅拷贝：拷贝的是地址</p>
+<p>常见方法：</p>
+<ol>
+<li>拷贝对象：Object.assgin() &#x2F; 展开运算符 {…obj} 拷贝对象</li>
+<li>拷贝数组：Array.prototype.concat() 或者 […arr]</li>
+</ol>
 <blockquote>
+<p>如果是简单数据类型拷贝值，引用数据类型拷贝的是地址 (简单理解： 如果是单层对象，没问题，如果有多层就有问题)</p>
+</blockquote>
+<h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><p>首先浅拷贝和深拷贝只针对引用类型</p>
+<p>深拷贝：拷贝的是对象，不是地址</p>
+<p>常见方法：</p>
+<ol>
+<li>通过递归实现深拷贝</li>
+<li>lodash&#x2F;cloneDeep</li>
+<li>通过JSON.stringify()实现</li>
+</ol>
+<h4 id="递归实现深拷贝"><a href="#递归实现深拷贝" class="headerlink" title="递归实现深拷贝"></a>递归实现深拷贝</h4><p>函数递归：</p>
+<p>如果一个函数在内部可以调用其本身，那么这个函数就是递归函数</p>
+<ul>
+<li>简单理解:函数内部自己调用自己, 这个函数就是递归函数</li>
+<li>递归函数的作用和循环效果类似</li>
+<li>由于递归很容易发生“栈溢出”错误（stack overflow），所以必须要加退出条件 return</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    const obj = &#123;<br>      uname: &#x27;pink&#x27;,<br>      age: 18,<br>      hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;],<br>      family: &#123;<br>        baby: &#x27;小pink&#x27;<br>      &#125;<br>    &#125;<br>    const o = &#123;&#125;<br>    // 拷贝函数<br>    function deepCopy(newObj, oldObj) &#123;<br>      debugger<br>      for (let k in oldObj) &#123;<br>        // 处理数组的问题  一定先写数组 在写 对象 不能颠倒<br>        if (oldObj[k] instanceof Array) &#123;<br>          newObj[k] = []<br>          //  newObj[k] 接收 []  hobby<br>          //  oldObj[k]   [&#x27;乒乓球&#x27;, &#x27;足球&#x27;]<br>          deepCopy(newObj[k], oldObj[k])<br>        &#125; else if (oldObj[k] instanceof Object) &#123;<br>          newObj[k] = &#123;&#125;<br>          deepCopy(newObj[k], oldObj[k])<br>        &#125;<br>        else &#123;<br>          //  k  属性名 uname age    oldObj[k]  属性值  18<br>          // newObj[k]  === o.uname  给新对象添加属性<br>          newObj[k] = oldObj[k]<br>        &#125;<br>      &#125;<br>    &#125;<br>    deepCopy(o, obj) // 函数调用  两个参数 o 新对象  obj 旧对象<br>    console.log(o)<br>    o.age = 20<br>    o.hobby[0] = &#x27;篮球&#x27;<br>    o.family.baby = &#x27;老pink&#x27;<br>    console.log(obj)<br>    console.log([1, 23] instanceof Object)<br>    // 复习<br>    // const obj = &#123;<br>    //   uname: &#x27;pink&#x27;,<br>    //   age: 18,<br>    //   hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;]<br>    // &#125;<br>    // function deepCopy(&#123; &#125;, oldObj) &#123;<br>    //   // k 属性名  oldObj[k] 属性值<br>    //   for (let k in oldObj) &#123;<br>    //     // 处理数组的问题   k 变量<br>    //     newObj[k] = oldObj[k]<br>    //     // o.uname = &#x27;pink&#x27;<br>    //     // newObj.k  = &#x27;pink&#x27;<br>    //   &#125;<br>    // &#125;<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+
+<h4 id="js库lodash里面cloneDeep内部实现了深拷贝"><a href="#js库lodash里面cloneDeep内部实现了深拷贝" class="headerlink" title="js库lodash里面cloneDeep内部实现了深拷贝"></a>js库lodash里面cloneDeep内部实现了深拷贝</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;!-- 先引用 --&gt;<br>  &lt;script src=&quot;./lodash.min.js&quot;&gt;&lt;/script&gt;<br>  &lt;script&gt;<br>    const obj = &#123;<br>      uname: &#x27;pink&#x27;,<br>      age: 18,<br>      hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;],<br>      family: &#123;<br>        baby: &#x27;小pink&#x27;<br>      &#125;<br>    &#125;<br>    const o = _.cloneDeep(obj)<br>    console.log(o)<br>    o.family.baby = &#x27;老pink&#x27;<br>    console.log(obj)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+
+<h4 id="JSON序列化"><a href="#JSON序列化" class="headerlink" title="JSON序列化"></a>JSON序列化</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    const obj = &#123;<br>      uname: &#x27;pink&#x27;,<br>      age: 18,<br>      hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;],<br>      family: &#123;<br>        baby: &#x27;小pink&#x27;<br>      &#125;<br>    &#125;<br>    // 把对象转换为 JSON 字符串<br>    // console.log(JSON.stringify(obj))<br>    const o = JSON.parse(JSON.stringify(obj))<br>    console.log(o)<br>    o.family.baby = &#x27;123&#x27;<br>    console.log(obj)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
+<p>了解 JavaScript 中程序异常处理的方法，提升代码运行的健壮性。</p>
+</blockquote>
+<h3 id="throw"><a href="#throw" class="headerlink" title="throw"></a>throw</h3><p>异常处理是指预估代码执行过程中可能发生的错误，然后最大程度的避免错误的发生导致整个程序无法继续运行</p>
 <p>总结：</p>
 <ol>
-<li>构造函数体现了面向对象的封装特性</li>
-<li>构造函数实例创建的对象彼此独立、互不影响</li>
+<li>throw 抛出异常信息，程序也会终止执行</li>
+<li>throw 后面跟的是错误提示信息</li>
+<li>Error 对象配合 throw 使用，能够设置更详细的错误信息</li>
 </ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function counter(x, y) &#123;<br><br>    if(!x || !y) &#123;<br>      // throw &#x27;参数不能为空!&#x27;;<br>      throw new Error(&#x27;参数不能为空!&#x27;)<br>    &#125;<br><br>    return x + y<br>  &#125;<br><br>  counter()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>总结：</p>
+<ol>
+<li><code>throw</code> 抛出异常信息，程序也会终止执行</li>
+<li><code>throw</code> 后面跟的是错误提示信息</li>
+<li><code>Error</code> 对象配合 <code>throw</code> 使用，能够设置更详细的错误信息</li>
+</ol>
+<h3 id="try-…-catch"><a href="#try-…-catch" class="headerlink" title="try … catch"></a>try … catch</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>   function foo() &#123;<br>      try &#123;<br>        // 查找 DOM 节点<br>        const p = document.querySelector(&#x27;.p&#x27;)<br>        p.style.color = &#x27;red&#x27;<br>      &#125; catch (error) &#123;<br>        // try 代码段中执行有错误时，会执行 catch 代码段<br>        // 查看错误信息<br>        console.log(error.message)<br>        // 终止代码继续执行<br>        return<br><br>      &#125;<br>      finally &#123;<br>          alert(&#x27;执行&#x27;)<br>      &#125;<br>      console.log(&#x27;如果出现错误，我的语句不会执行&#x27;)<br>    &#125;<br>    foo()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>总结：</p>
+<ol>
+<li><code>try...catch</code> 用于捕获错误信息</li>
+<li>将预估可能发生错误的代码写在 <code>try</code> 代码段中</li>
+<li>如果 <code>try</code> 代码段中出现错误后，会执行 <code>catch</code> 代码段，并截获到错误信息</li>
+</ol>
+<h3 id="debugger"><a href="#debugger" class="headerlink" title="debugger"></a>debugger</h3><p>相当于断点调试</p>
+<h2 id="处理this"><a href="#处理this" class="headerlink" title="处理this"></a>处理this</h2><blockquote>
+<p>了解函数中 this 在不同场景下的默认值，知道动态指定函数 this 值的方法。</p>
 </blockquote>
-<p>封装是面向对象思想中比较重要的一部分，js面向对象可以通过构造函数实现的封装。</p>
-<p>前面我们学过的构造函数方法很好用，但是 存在<code>浪费内存</code>的问题</p>
-<h2 id="原型对象"><a href="#原型对象" class="headerlink" title="原型对象"></a>原型对象</h2><p>构造函数通过原型分配的函数是所有对象所 共享的。</p>
-<ul>
-<li>JavaScript 规定，每一个构造函数都有一个 prototype 属性，指向另一个对象，所以我们也称为原型对象</li>
-<li>这个对象可以挂载函数，对象实例化不会多次创建原型上函数，节约内存</li>
-<li>我们可以把那些不变的方法，直接定义在 prototype 对象上，这样所有对象的实例就可以共享这些方法。</li>
-<li>构造函数和原型对象中的this 都指向 实例化的对象</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    <br>  &#125;<br><br>  // 每个函数都有 prototype 属性<br>  console.log(Person.prototype)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+<p><code>this</code> 是 JavaScript 最具“魅惑”的知识点，不同的应用场合 <code>this</code> 的取值可能会有意想不到的结果，在此我们对以往学习过的关于【 <code>this</code> 默认的取值】情况进行归纳和总结。</p>
+<h3 id="普通函数"><a href="#普通函数" class="headerlink" title="普通函数"></a>普通函数</h3><p><strong>普通函数</strong>的调用方式决定了 <code>this</code> 的值，即【谁调用 <code>this</code> 的值指向谁】，如下代码所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this)  <br>  &#125;<br>  // 函数表达式<br>  const sayHello = function () &#123;<br>    console.log(this)<br>  &#125;<br>  // 函数的调用方式决定了 this 的值<br>  sayHi() // window<br>  window.sayHi()<br>	<br><br>// 普通对象<br>  const user = &#123;<br>    name: &#x27;小明&#x27;,<br>    walk: function () &#123;<br>      console.log(this)<br>    &#125;<br>  &#125;<br>  // 动态为 user 添加方法<br>  user.sayHi = sayHi<br>  uesr.sayHello = sayHello<br>  // 函数调用方式，决定了 this 的值<br>  user.sayHi()<br>  user.sayHello()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
 
-<p>了解了 JavaScript 中构造函数与原型对象的关系后，再来看原型对象具体的作用，如下代码所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    // 此处未定义任何方法<br>  &#125;<br><br>  // 为构造函数的原型对象添加方法<br>  Person.prototype.sayHi = function () &#123;<br>    console.log(&#x27;Hi~&#x27;);<br>  &#125;<br>	<br>  // 实例化<br>  let p1 = new Person();<br>  p1.sayHi(); // 输出结果为 Hi~<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+<p>注： 普通函数没有明确调用者时 <code>this</code> 值为 <code>window</code>，严格模式下没有调用者时 <code>this</code> 的值为 <code>undefined</code>。</p>
+<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><p><strong>箭头函数</strong>中的 <code>this</code> 与普通函数完全不同，也不受调用方式的影响，事实上箭头函数中并不存在 <code>this</code> ！箭头函数中访问的 <code>this</code> 不过是箭头函数所在作用域的 <code>this</code> 变量。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>    <br>  console.log(this) // 此处为 window<br>  // 箭头函数<br>  const sayHi = function() &#123;<br>    console.log(this) // 该箭头函数中的 this 为函数声明环境中 this 一致<br>  &#125;<br>  // 普通对象<br>  const user = &#123;<br>    name: &#x27;小明&#x27;,<br>    // 该箭头函数中的 this 为函数声明环境中 this 一致<br>    walk: () =&gt; &#123;<br>      console.log(this)<br>    &#125;,<br>    <br>    sleep: function () &#123;<br>      let str = &#x27;hello&#x27;<br>      console.log(this)<br>      let fn = () =&gt; &#123;<br>        console.log(str)<br>        console.log(this) // 该箭头函数中的 this 与 sleep 中的 this 一致<br>      &#125;<br>      // 调用箭头函数<br>      fn();<br>    &#125;<br>  &#125;<br><br>  // 动态添加方法<br>  user.sayHi = sayHi<br>  <br>  // 函数调用<br>  user.sayHi()<br>  user.sleep()<br>  user.walk()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
 
-<p>构造函数 <code>Person</code> 中未定义任何方法，这时实例对象调用了原型对象中的方法 <code>sayHi</code>，接下来改动一下代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>    // 此处定义同名方法 sayHi<br>    this.sayHi = function () &#123;<br>      console.log(&#x27;嗨!&#x27;);<br>    &#125;<br>  &#125;<br><br>  // 为构造函数的原型对象添加方法<br>  Person.prototype.sayHi = function () &#123;<br>    console.log(&#x27;Hi~&#x27;);<br>  &#125;<br><br>  let p1 = new Person();<br>  p1.sayHi(); // 输出结果为 嗨!<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+<p>在开发中【使用箭头函数前需要考虑函数中 <code>this</code> 的值】，<strong>事件回调函数</strong>使用箭头函数时，<code>this</code> 为全局的 <code>window</code>，因此DOM事件回调函数不推荐使用箭头函数，如下代码所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // DOM 节点<br>  const btn = document.querySelector(&#x27;.btn&#x27;)<br>  // 箭头函数 此时 this 指向了 window<br>  btn.addEventListener(&#x27;click&#x27;, () =&gt; &#123;<br>    console.log(this)<br>  &#125;)<br>  // 普通函数 此时 this 指向了 DOM 对象<br>  btn.addEventListener(&#x27;click&#x27;, function () &#123;<br>    console.log(this)<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
 
-<p>构造函数 <code>Person</code> 中定义与原型对象中相同名称的方法，这时实例对象调用则是构造函中的方法 <code>sayHi</code>。</p>
-<p>通过以上两个简单示例不难发现 JavaScript 中对象的工作机制：<strong>当访问对象的属性或方法时，先在当前实例对象是查找，然后再去原型对象查找，并且原型对象被所有实例共享。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>	function Person() &#123;<br>    // 此处定义同名方法 sayHi<br>    this.sayHi = function () &#123;<br>      console.log(&#x27;嗨!&#x27; + this.name)<br>    &#125;<br>  &#125;<br><br>  // 为构造函数的原型对象添加方法<br>  Person.prototype.sayHi = function () &#123;<br>    console.log(&#x27;Hi~&#x27; + this.name)<br>  &#125;<br>  // 在构造函数的原型对象上添加属性<br>  Person.prototype.name = &#x27;小明&#x27;<br><br>  let p1 = new Person()<br>  p1.sayHi(); // 输出结果为 嗨!<br>  <br>  let p2 = new Person()<br>  p2.sayHi()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+<p>同样由于箭头函数 <code>this</code> 的原因，<strong>基于原型的面向对象也不推荐采用箭头函数</strong>，如下代码所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>  &#125;<br>  // 原型对像上添加了箭头函数<br>  Person.prototype.walk = () =&gt; &#123;<br>    console.log(&#x27;人都要走路...&#x27;)<br>    console.log(this); // window<br>  &#125;<br>  const p1 = new Person()<br>  p1.walk()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
 
-<p>总结：<strong>结合构造函数原型的特征，实际开发重往往会将封装的功能函数添加到原型对象中。</strong></p>
-<h3 id="constructor-属性"><a href="#constructor-属性" class="headerlink" title="constructor 属性"></a>constructor 属性</h3><p>在哪里？ 每个原型对象里面都有个constructor 属性（constructor 构造函数）</p>
-<p>作用：该属性指向该原型对象的构造函数， 简单理解，就是指向我的爸爸，我是有爸爸的孩子</p>
-<p><strong>使用场景：</strong></p>
-<p>如果有多个对象的方法，我们可以给原型对象采取对象形式赋值.</p>
-<p>但是这样就会覆盖构造函数原型对象原来的内容，这样修改后的原型对象 constructor 就不再指向当前构造函数了</p>
-<p>此时，我们可以在修改后的原型对象中，添加一个 constructor 指向原来的构造函数。</p>
-<h3 id="对象原型"><a href="#对象原型" class="headerlink" title="对象原型"></a>对象原型</h3><p>对象都会有一个属性 <strong>proto</strong> 指向构造函数的 prototype 原型对象，之所以我们对象可以使用构造函数 prototype</p>
-<p>原型对象的属性和方法，就是因为对象有 <strong>proto</strong> 原型的存在。</p>
-<p>注意：</p>
-<ul>
-<li><strong>proto</strong> 是JS非标准属性</li>
-<li>[[prototype]]和__proto__意义相同</li>
-<li>用来表明当前实例对象指向哪个原型对象prototype</li>
-<li>__proto__对象原型里面也有一个 constructor属性，指向创建该实例对象的构造函数</li>
-</ul>
-<h3 id="原型继承"><a href="#原型继承" class="headerlink" title="原型继承"></a>原型继承</h3><p>继承是面向对象编程的另一个特征，通过继承进一步提升代码封装的程度，JavaScript 中大多是借助原型对象实现继承</p>
-<p>的特性。</p>
-<p>龙生龙、凤生凤、老鼠的儿子会打洞描述的正是继承的含义。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    // 继续抽取   公共的部分放到原型上<br>    // const Person1 = &#123;<br>    //   eyes: 2,<br>    //   head: 1<br>    // &#125;<br>    // const Person2 = &#123;<br>    //   eyes: 2,<br>    //   head: 1<br>    // &#125;<br>    // 构造函数  new 出来的对象 结构一样，但是对象不一样<br>    function Person() &#123;<br>      this.eyes = 2<br>      this.head = 1<br>    &#125;<br>    // console.log(new Person)<br>    // 女人  构造函数   继承  想要 继承 Person<br>    function Woman() &#123;<br><br>    &#125;<br>    // Woman 通过原型来继承 Person<br>    // 父构造函数（父类）   子构造函数（子类）<br>    // 子类的原型 =  new 父类  <br>    Woman.prototype = new Person()   // &#123;eyes: 2, head: 1&#125; <br>    // 指回原来的构造函数<br>    Woman.prototype.constructor = Woman<br><br>    // 给女人添加一个方法  生孩子<br>    Woman.prototype.baby = function () &#123;<br>      console.log(&#x27;宝贝&#x27;)<br>    &#125;<br>    const red = new Woman()<br>    console.log(red)<br>    // console.log(Woman.prototype)<br>    // 男人 构造函数  继承  想要 继承 Person<br>    function Man() &#123;<br><br>    &#125;<br>    // 通过 原型继承 Person<br>    Man.prototype = new Person()<br>    Man.prototype.constructor = Man<br>    const pink = new Man()<br>    console.log(pink)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+<h3 id="改变this指向"><a href="#改变this指向" class="headerlink" title="改变this指向"></a>改变this指向</h3><p>以上归纳了普通函数和箭头函数中关于 <code>this</code> 默认值的情形，不仅如此 JavaScript 中还允许指定函数中 <code>this</code> 的指向，有 3 个方法可以动态指定普通函数中 <code>this</code> 的指向：</p>
+<h4 id="call"><a href="#call" class="headerlink" title="call"></a>call</h4><p>使用 <code>call</code> 方法调用函数，同时指定函数中 <code>this</code> 的值，使用方法如下代码所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this);<br>  &#125;<br><br>  let user = &#123;<br>    name: &#x27;小明&#x27;,<br>    age: 18<br>  &#125;<br><br>  let student = &#123;<br>    name: &#x27;小红&#x27;,<br>    age: 16<br>  &#125;<br><br>  // 调用函数并指定 this 的值<br>  sayHi.call(user); // this 值为 user<br>  sayHi.call(student); // this 值为 student<br><br>  // 求和函数<br>  function counter(x, y) &#123;<br>    return x + y;<br>  &#125;<br><br>  // 调用 counter 函数，并传入参数<br>  let result = counter.call(null, 5, 10);<br>  console.log(result);<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
 
-<h3 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h3><p>基于原型对象的继承使得不同构造函数的原型对象关联在一起，并且这种关联的关系是一种链状的结构，我们将原型对</p>
-<p>象的链状结构关系称为原型链</p>
-<p><img src="/2023/07/31/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY3/1676793388695.png" alt="67679338869"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    // function Objetc() &#123;&#125;<br>    console.log(Object.prototype)<br>    console.log(Object.prototype.__proto__)<br><br>    function Person() &#123;<br><br>    &#125;<br>    const ldh = new Person()<br>    // console.log(ldh.__proto__ === Person.prototype)<br>    // console.log(Person.prototype.__proto__ === Object.prototype)<br>    console.log(ldh instanceof Person)<br>    console.log(ldh instanceof Object)<br>    console.log(ldh instanceof Array)<br>    console.log([1, 2, 3] instanceof Array)<br>    console.log(Array instanceof Object)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+<p>总结：</p>
+<ol>
+<li><code>call</code> 方法能够在调用函数的同时指定 <code>this</code> 的值</li>
+<li>使用 <code>call</code> 方法调用函数时，第1个参数为 <code>this</code> 指定的值</li>
+<li><code>call</code> 方法的其余参数会依次自动传入函数做为函数的参数</li>
+</ol>
+<h4 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h4><p>使用 <code>call</code> 方法<strong>调用函数</strong>，同时指定函数中 <code>this</code> 的值，使用方法如下代码所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this)<br>  &#125;<br><br>  let user = &#123;<br>    name: &#x27;小明&#x27;,<br>    age: 18<br>  &#125;<br><br>  let student = &#123;<br>    name: &#x27;小红&#x27;,<br>    age: 16<br>  &#125;<br><br>  // 调用函数并指定 this 的值<br>  sayHi.apply(user) // this 值为 user<br>  sayHi.apply(student) // this 值为 student<br><br>  // 求和函数<br>  function counter(x, y) &#123;<br>    return x + y<br>  &#125;<br>  // 调用 counter 函数，并传入参数<br>  let result = counter.apply(null, [5, 10])<br>  console.log(result)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
 
-<p>① 当访问一个对象的属性（包括方法）时，首先查找这个对象自身有没有该属性。</p>
-<p>② 如果没有就查找它的原型（也就是 __proto__指向的 prototype 原型对象）</p>
-<p>③ 如果还没有就查找原型对象的原型（Object的原型对象）</p>
-<p>④ 依此类推一直找到 Object 为止（null）</p>
-<p>⑤ __proto__对象原型的意义就在于为对象成员查找机制提供一个方向，或者说一条路线</p>
-<p>⑥ 可以使用 instanceof 运算符用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上</p>
+<p>总结：</p>
+<ol>
+<li><code>apply</code> 方法能够在调用函数的同时指定 <code>this</code> 的值</li>
+<li>使用 <code>apply</code> 方法调用函数时，第1个参数为 <code>this</code> 指定的值</li>
+<li><code>apply</code> 方法第2个参数为数组，数组的单元值依次自动传入函数做为函数的参数</li>
+</ol>
+<h4 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h4><p><code>bind</code> 方法并<strong>不会调用函数</strong>，而是创建一个指定了 <code>this</code> 值的新函数，使用方法如下代码所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this)<br>  &#125;<br>  let user = &#123;<br>    name: &#x27;小明&#x27;,<br>    age: 18<br>  &#125;<br>  // 调用 bind 指定 this 的值<br>  let sayHello = sayHi.bind(user);<br>  // 调用使用 bind 创建的新函数<br>  sayHello()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>注：<code>bind</code> 方法创建新的函数，与原函数的唯一的变化是改变了 <code>this</code> 的值。</p>
+<h2 id="防抖节流"><a href="#防抖节流" class="headerlink" title="防抖节流"></a>防抖节流</h2><ol>
+<li>防抖（debounce） 所谓防抖，就是指触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间</li>
+<li>节流（throttle） 所谓节流，就是指连续触发事件但是在 n 秒中只执行一次函数</li>
+</ol>
 ]]></content>
       <categories>
         <category>前端知识</category>
@@ -934,120 +1048,6 @@
       </tags>
   </entry>
   <entry>
-    <title>JS进阶学习DAY4</title>
-    <url>/2023/08/01/JS%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0DAY4/</url>
-    <content><![CDATA[<h1 id="JavaScript-进阶-第4天"><a href="#JavaScript-进阶-第4天" class="headerlink" title="JavaScript 进阶 - 第4天"></a>JavaScript 进阶 - 第4天</h1><h2 id="深浅拷贝"><a href="#深浅拷贝" class="headerlink" title="深浅拷贝"></a>深浅拷贝</h2><h3 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h3><p>首先浅拷贝和深拷贝只针对引用类型</p>
-<p>浅拷贝：拷贝的是地址</p>
-<p>常见方法：</p>
-<ol>
-<li>拷贝对象：Object.assgin() &#x2F; 展开运算符 {…obj} 拷贝对象</li>
-<li>拷贝数组：Array.prototype.concat() 或者 […arr]</li>
-</ol>
-<blockquote>
-<p>如果是简单数据类型拷贝值，引用数据类型拷贝的是地址 (简单理解： 如果是单层对象，没问题，如果有多层就有问题)</p>
-</blockquote>
-<h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><p>首先浅拷贝和深拷贝只针对引用类型</p>
-<p>深拷贝：拷贝的是对象，不是地址</p>
-<p>常见方法：</p>
-<ol>
-<li>通过递归实现深拷贝</li>
-<li>lodash&#x2F;cloneDeep</li>
-<li>通过JSON.stringify()实现</li>
-</ol>
-<h4 id="递归实现深拷贝"><a href="#递归实现深拷贝" class="headerlink" title="递归实现深拷贝"></a>递归实现深拷贝</h4><p>函数递归：</p>
-<p>如果一个函数在内部可以调用其本身，那么这个函数就是递归函数</p>
-<ul>
-<li>简单理解:函数内部自己调用自己, 这个函数就是递归函数</li>
-<li>递归函数的作用和循环效果类似</li>
-<li>由于递归很容易发生“栈溢出”错误（stack overflow），所以必须要加退出条件 return</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    const obj = &#123;<br>      uname: &#x27;pink&#x27;,<br>      age: 18,<br>      hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;],<br>      family: &#123;<br>        baby: &#x27;小pink&#x27;<br>      &#125;<br>    &#125;<br>    const o = &#123;&#125;<br>    // 拷贝函数<br>    function deepCopy(newObj, oldObj) &#123;<br>      debugger<br>      for (let k in oldObj) &#123;<br>        // 处理数组的问题  一定先写数组 在写 对象 不能颠倒<br>        if (oldObj[k] instanceof Array) &#123;<br>          newObj[k] = []<br>          //  newObj[k] 接收 []  hobby<br>          //  oldObj[k]   [&#x27;乒乓球&#x27;, &#x27;足球&#x27;]<br>          deepCopy(newObj[k], oldObj[k])<br>        &#125; else if (oldObj[k] instanceof Object) &#123;<br>          newObj[k] = &#123;&#125;<br>          deepCopy(newObj[k], oldObj[k])<br>        &#125;<br>        else &#123;<br>          //  k  属性名 uname age    oldObj[k]  属性值  18<br>          // newObj[k]  === o.uname  给新对象添加属性<br>          newObj[k] = oldObj[k]<br>        &#125;<br>      &#125;<br>    &#125;<br>    deepCopy(o, obj) // 函数调用  两个参数 o 新对象  obj 旧对象<br>    console.log(o)<br>    o.age = 20<br>    o.hobby[0] = &#x27;篮球&#x27;<br>    o.family.baby = &#x27;老pink&#x27;<br>    console.log(obj)<br>    console.log([1, 23] instanceof Object)<br>    // 复习<br>    // const obj = &#123;<br>    //   uname: &#x27;pink&#x27;,<br>    //   age: 18,<br>    //   hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;]<br>    // &#125;<br>    // function deepCopy(&#123; &#125;, oldObj) &#123;<br>    //   // k 属性名  oldObj[k] 属性值<br>    //   for (let k in oldObj) &#123;<br>    //     // 处理数组的问题   k 变量<br>    //     newObj[k] = oldObj[k]<br>    //     // o.uname = &#x27;pink&#x27;<br>    //     // newObj.k  = &#x27;pink&#x27;<br>    //   &#125;<br>    // &#125;<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
-
-<h4 id="js库lodash里面cloneDeep内部实现了深拷贝"><a href="#js库lodash里面cloneDeep内部实现了深拷贝" class="headerlink" title="js库lodash里面cloneDeep内部实现了深拷贝"></a>js库lodash里面cloneDeep内部实现了深拷贝</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;!-- 先引用 --&gt;<br>  &lt;script src=&quot;./lodash.min.js&quot;&gt;&lt;/script&gt;<br>  &lt;script&gt;<br>    const obj = &#123;<br>      uname: &#x27;pink&#x27;,<br>      age: 18,<br>      hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;],<br>      family: &#123;<br>        baby: &#x27;小pink&#x27;<br>      &#125;<br>    &#125;<br>    const o = _.cloneDeep(obj)<br>    console.log(o)<br>    o.family.baby = &#x27;老pink&#x27;<br>    console.log(obj)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
-
-<h4 id="JSON序列化"><a href="#JSON序列化" class="headerlink" title="JSON序列化"></a>JSON序列化</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;body&gt;<br>  &lt;script&gt;<br>    const obj = &#123;<br>      uname: &#x27;pink&#x27;,<br>      age: 18,<br>      hobby: [&#x27;乒乓球&#x27;, &#x27;足球&#x27;],<br>      family: &#123;<br>        baby: &#x27;小pink&#x27;<br>      &#125;<br>    &#125;<br>    // 把对象转换为 JSON 字符串<br>    // console.log(JSON.stringify(obj))<br>    const o = JSON.parse(JSON.stringify(obj))<br>    console.log(o)<br>    o.family.baby = &#x27;123&#x27;<br>    console.log(obj)<br>  &lt;/script&gt;<br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
-<p>了解 JavaScript 中程序异常处理的方法，提升代码运行的健壮性。</p>
-</blockquote>
-<h3 id="throw"><a href="#throw" class="headerlink" title="throw"></a>throw</h3><p>异常处理是指预估代码执行过程中可能发生的错误，然后最大程度的避免错误的发生导致整个程序无法继续运行</p>
-<p>总结：</p>
-<ol>
-<li>throw 抛出异常信息，程序也会终止执行</li>
-<li>throw 后面跟的是错误提示信息</li>
-<li>Error 对象配合 throw 使用，能够设置更详细的错误信息</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function counter(x, y) &#123;<br><br>    if(!x || !y) &#123;<br>      // throw &#x27;参数不能为空!&#x27;;<br>      throw new Error(&#x27;参数不能为空!&#x27;)<br>    &#125;<br><br>    return x + y<br>  &#125;<br><br>  counter()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>总结：</p>
-<ol>
-<li><code>throw</code> 抛出异常信息，程序也会终止执行</li>
-<li><code>throw</code> 后面跟的是错误提示信息</li>
-<li><code>Error</code> 对象配合 <code>throw</code> 使用，能够设置更详细的错误信息</li>
-</ol>
-<h3 id="try-…-catch"><a href="#try-…-catch" class="headerlink" title="try … catch"></a>try … catch</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>   function foo() &#123;<br>      try &#123;<br>        // 查找 DOM 节点<br>        const p = document.querySelector(&#x27;.p&#x27;)<br>        p.style.color = &#x27;red&#x27;<br>      &#125; catch (error) &#123;<br>        // try 代码段中执行有错误时，会执行 catch 代码段<br>        // 查看错误信息<br>        console.log(error.message)<br>        // 终止代码继续执行<br>        return<br><br>      &#125;<br>      finally &#123;<br>          alert(&#x27;执行&#x27;)<br>      &#125;<br>      console.log(&#x27;如果出现错误，我的语句不会执行&#x27;)<br>    &#125;<br>    foo()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>总结：</p>
-<ol>
-<li><code>try...catch</code> 用于捕获错误信息</li>
-<li>将预估可能发生错误的代码写在 <code>try</code> 代码段中</li>
-<li>如果 <code>try</code> 代码段中出现错误后，会执行 <code>catch</code> 代码段，并截获到错误信息</li>
-</ol>
-<h3 id="debugger"><a href="#debugger" class="headerlink" title="debugger"></a>debugger</h3><p>相当于断点调试</p>
-<h2 id="处理this"><a href="#处理this" class="headerlink" title="处理this"></a>处理this</h2><blockquote>
-<p>了解函数中 this 在不同场景下的默认值，知道动态指定函数 this 值的方法。</p>
-</blockquote>
-<p><code>this</code> 是 JavaScript 最具“魅惑”的知识点，不同的应用场合 <code>this</code> 的取值可能会有意想不到的结果，在此我们对以往学习过的关于【 <code>this</code> 默认的取值】情况进行归纳和总结。</p>
-<h3 id="普通函数"><a href="#普通函数" class="headerlink" title="普通函数"></a>普通函数</h3><p><strong>普通函数</strong>的调用方式决定了 <code>this</code> 的值，即【谁调用 <code>this</code> 的值指向谁】，如下代码所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this)  <br>  &#125;<br>  // 函数表达式<br>  const sayHello = function () &#123;<br>    console.log(this)<br>  &#125;<br>  // 函数的调用方式决定了 this 的值<br>  sayHi() // window<br>  window.sayHi()<br>	<br><br>// 普通对象<br>  const user = &#123;<br>    name: &#x27;小明&#x27;,<br>    walk: function () &#123;<br>      console.log(this)<br>    &#125;<br>  &#125;<br>  // 动态为 user 添加方法<br>  user.sayHi = sayHi<br>  uesr.sayHello = sayHello<br>  // 函数调用方式，决定了 this 的值<br>  user.sayHi()<br>  user.sayHello()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>注： 普通函数没有明确调用者时 <code>this</code> 值为 <code>window</code>，严格模式下没有调用者时 <code>this</code> 的值为 <code>undefined</code>。</p>
-<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><p><strong>箭头函数</strong>中的 <code>this</code> 与普通函数完全不同，也不受调用方式的影响，事实上箭头函数中并不存在 <code>this</code> ！箭头函数中访问的 <code>this</code> 不过是箭头函数所在作用域的 <code>this</code> 变量。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>    <br>  console.log(this) // 此处为 window<br>  // 箭头函数<br>  const sayHi = function() &#123;<br>    console.log(this) // 该箭头函数中的 this 为函数声明环境中 this 一致<br>  &#125;<br>  // 普通对象<br>  const user = &#123;<br>    name: &#x27;小明&#x27;,<br>    // 该箭头函数中的 this 为函数声明环境中 this 一致<br>    walk: () =&gt; &#123;<br>      console.log(this)<br>    &#125;,<br>    <br>    sleep: function () &#123;<br>      let str = &#x27;hello&#x27;<br>      console.log(this)<br>      let fn = () =&gt; &#123;<br>        console.log(str)<br>        console.log(this) // 该箭头函数中的 this 与 sleep 中的 this 一致<br>      &#125;<br>      // 调用箭头函数<br>      fn();<br>    &#125;<br>  &#125;<br><br>  // 动态添加方法<br>  user.sayHi = sayHi<br>  <br>  // 函数调用<br>  user.sayHi()<br>  user.sleep()<br>  user.walk()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>在开发中【使用箭头函数前需要考虑函数中 <code>this</code> 的值】，<strong>事件回调函数</strong>使用箭头函数时，<code>this</code> 为全局的 <code>window</code>，因此DOM事件回调函数不推荐使用箭头函数，如下代码所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // DOM 节点<br>  const btn = document.querySelector(&#x27;.btn&#x27;)<br>  // 箭头函数 此时 this 指向了 window<br>  btn.addEventListener(&#x27;click&#x27;, () =&gt; &#123;<br>    console.log(this)<br>  &#125;)<br>  // 普通函数 此时 this 指向了 DOM 对象<br>  btn.addEventListener(&#x27;click&#x27;, function () &#123;<br>    console.log(this)<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>同样由于箭头函数 <code>this</code> 的原因，<strong>基于原型的面向对象也不推荐采用箭头函数</strong>，如下代码所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  function Person() &#123;<br>  &#125;<br>  // 原型对像上添加了箭头函数<br>  Person.prototype.walk = () =&gt; &#123;<br>    console.log(&#x27;人都要走路...&#x27;)<br>    console.log(this); // window<br>  &#125;<br>  const p1 = new Person()<br>  p1.walk()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h3 id="改变this指向"><a href="#改变this指向" class="headerlink" title="改变this指向"></a>改变this指向</h3><p>以上归纳了普通函数和箭头函数中关于 <code>this</code> 默认值的情形，不仅如此 JavaScript 中还允许指定函数中 <code>this</code> 的指向，有 3 个方法可以动态指定普通函数中 <code>this</code> 的指向：</p>
-<h4 id="call"><a href="#call" class="headerlink" title="call"></a>call</h4><p>使用 <code>call</code> 方法调用函数，同时指定函数中 <code>this</code> 的值，使用方法如下代码所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this);<br>  &#125;<br><br>  let user = &#123;<br>    name: &#x27;小明&#x27;,<br>    age: 18<br>  &#125;<br><br>  let student = &#123;<br>    name: &#x27;小红&#x27;,<br>    age: 16<br>  &#125;<br><br>  // 调用函数并指定 this 的值<br>  sayHi.call(user); // this 值为 user<br>  sayHi.call(student); // this 值为 student<br><br>  // 求和函数<br>  function counter(x, y) &#123;<br>    return x + y;<br>  &#125;<br><br>  // 调用 counter 函数，并传入参数<br>  let result = counter.call(null, 5, 10);<br>  console.log(result);<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>总结：</p>
-<ol>
-<li><code>call</code> 方法能够在调用函数的同时指定 <code>this</code> 的值</li>
-<li>使用 <code>call</code> 方法调用函数时，第1个参数为 <code>this</code> 指定的值</li>
-<li><code>call</code> 方法的其余参数会依次自动传入函数做为函数的参数</li>
-</ol>
-<h4 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h4><p>使用 <code>call</code> 方法<strong>调用函数</strong>，同时指定函数中 <code>this</code> 的值，使用方法如下代码所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this)<br>  &#125;<br><br>  let user = &#123;<br>    name: &#x27;小明&#x27;,<br>    age: 18<br>  &#125;<br><br>  let student = &#123;<br>    name: &#x27;小红&#x27;,<br>    age: 16<br>  &#125;<br><br>  // 调用函数并指定 this 的值<br>  sayHi.apply(user) // this 值为 user<br>  sayHi.apply(student) // this 值为 student<br><br>  // 求和函数<br>  function counter(x, y) &#123;<br>    return x + y<br>  &#125;<br>  // 调用 counter 函数，并传入参数<br>  let result = counter.apply(null, [5, 10])<br>  console.log(result)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>总结：</p>
-<ol>
-<li><code>apply</code> 方法能够在调用函数的同时指定 <code>this</code> 的值</li>
-<li>使用 <code>apply</code> 方法调用函数时，第1个参数为 <code>this</code> 指定的值</li>
-<li><code>apply</code> 方法第2个参数为数组，数组的单元值依次自动传入函数做为函数的参数</li>
-</ol>
-<h4 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h4><p><code>bind</code> 方法并<strong>不会调用函数</strong>，而是创建一个指定了 <code>this</code> 值的新函数，使用方法如下代码所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;script&gt;<br>  // 普通函数<br>  function sayHi() &#123;<br>    console.log(this)<br>  &#125;<br>  let user = &#123;<br>    name: &#x27;小明&#x27;,<br>    age: 18<br>  &#125;<br>  // 调用 bind 指定 this 的值<br>  let sayHello = sayHi.bind(user);<br>  // 调用使用 bind 创建的新函数<br>  sayHello()<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>注：<code>bind</code> 方法创建新的函数，与原函数的唯一的变化是改变了 <code>this</code> 的值。</p>
-<h2 id="防抖节流"><a href="#防抖节流" class="headerlink" title="防抖节流"></a>防抖节流</h2><ol>
-<li>防抖（debounce） 所谓防抖，就是指触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间</li>
-<li>节流（throttle） 所谓节流，就是指连续触发事件但是在 n 秒中只执行一次函数</li>
-</ol>
-]]></content>
-      <categories>
-        <category>前端知识</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-        <tag>notes</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>css八股文1</title>
     <url>/2023/09/21/css%E5%85%AB%E8%82%A1%E6%96%871/</url>
     <content><![CDATA[<h1 id="2023前端面试题整理二-CSS篇"><a href="#2023前端面试题整理二-CSS篇" class="headerlink" title="2023前端面试题整理二(CSS篇)"></a>2023前端面试题整理二(CSS篇)</h1><h3 id="1、让元素水平垂直居中显示"><a href="#1、让元素水平垂直居中显示" class="headerlink" title="1、让元素水平垂直居中显示"></a>1、让元素水平垂直居中显示</h3><p>方法一、设置父元素position:relative;子元素position:absolute;top和left设置为50%的情况下，使用translate在水平和垂直方向，反方向移动50%；</p>
@@ -1179,11 +1179,6 @@
       <tags>
         <tag>css</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>js中堆和栈的概念和区别</title>
-    <url>/2024/01/19/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>git命令大全</title>
@@ -2031,6 +2026,11 @@
       </tags>
   </entry>
   <entry>
+    <title>js中堆和栈的概念和区别</title>
+    <url>/2024/01/19/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>js中的this指向</title>
     <url>/2023/11/10/js%E4%B8%AD%E7%9A%84this%E6%8C%87%E5%90%91/</url>
     <content><![CDATA[<h2 id="JavaScript中的this"><a href="#JavaScript中的this" class="headerlink" title="JavaScript中的this"></a>JavaScript中的this</h2><p>this是JavaScript中一个特殊关键字，用于指代当前执行上下文中的对象。它的难以理解之处就是值不是固定的，是再函数被调用时根据调用场景动态确定的，主要根据函数的调用方式来决定this指向的对象。<code>this</code> 的值在函数被调用时动态确定，以下是几种常见的情况：</p>
@@ -2179,6 +2179,33 @@
       </tags>
   </entry>
   <entry>
+    <title>js的Object.keys方法</title>
+    <url>/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h5 id="今天看到项目中有使用到Object-keys方法，又去查阅MDN文档学习了一下。"><a href="#今天看到项目中有使用到Object-keys方法，又去查阅MDN文档学习了一下。" class="headerlink" title="今天看到项目中有使用到Object.keys方法，又去查阅MDN文档学习了一下。"></a>今天看到项目中有使用到Object.keys方法，又去查阅MDN文档学习了一下。</h5><h3 id="一、语法"><a href="#一、语法" class="headerlink" title="一、语法"></a>一、语法</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">Object.keys(obj)<br><br>参数：要返回其枚举自身属性的对象<br><br>返回值：一个表示给定对象的所有可枚举属性的字符串数组<br></code></pre></td></tr></table></figure>
+
+<h3 id="二、处理对象，返回可枚举的属性数组"><a href="#二、处理对象，返回可枚举的属性数组" class="headerlink" title="二、处理对象，返回可枚举的属性数组"></a>二、处理对象，返回可<a href="https://so.csdn.net/so/search?q=%E6%9E%9A%E4%B8%BE&spm=1001.2101.3001.7020">枚举</a>的属性数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let person = &#123;name:&quot;张三&quot;,age:25,address:&quot;深圳&quot;,getName:function()&#123;&#125;&#125;<br><br>Object.keys(person) // [&quot;name&quot;, &quot;age&quot;, &quot;address&quot;,&quot;getName&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/971b10a06fa0476caa5fc54c8667a0a6.png" alt="在这里插入图片描述"></p>
+<h3 id="三、处理数组，返回索引值数组"><a href="#三、处理数组，返回索引值数组" class="headerlink" title="三、处理数组，返回索引值数组"></a>三、处理数组，返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let arr = [1,2,3,4,5,6]<br><br>Object.keys(arr) // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/d006dc3d4d5d4195948b02881745794b.png" alt="在这里插入图片描述"></p>
+<h3 id="四、处理字符串，返回索引值数组"><a href="#四、处理字符串，返回索引值数组" class="headerlink" title="四、处理字符串，返回索引值数组"></a>四、处理<a href="https://so.csdn.net/so/search?q=%E5%AD%97%E7%AC%A6%E4%B8%B2&spm=1001.2101.3001.7020">字符串</a>，返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let str = &quot;saasd字符串&quot;<br><br>Object.keys(str) // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/015ea84c833e44eca08ac38867cabe84.png" alt="在这里插入图片描述"></p>
+<h3 id="五、常用技巧"><a href="#五、常用技巧" class="headerlink" title="五、常用技巧"></a>五、常用技巧</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let person = &#123;name:&quot;张三&quot;,age:25,address:&quot;深圳&quot;,getName:function()&#123;&#125;&#125;<br><br>Object.keys(person).map((key)=&gt;&#123;<br><br>　　person[key] // 获取到属性对应的值，做一些处理<br><br>&#125;) <br></code></pre></td></tr></table></figure>
+
+<h3 id="六、Object-values-和Object-keys-是相反的操作，把一个对象的值转换为数组"><a href="#六、Object-values-和Object-keys-是相反的操作，把一个对象的值转换为数组" class="headerlink" title="六、Object.values()和Object.keys()是相反的操作，把一个对象的值转换为数组"></a>六、Object.values()和Object.keys()是相反的操作，把一个对象的值转换为数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let str = &quot;abc字符串&quot;;<br>let str2 = &#123;<br>  a: &#x27;123&#x27;,<br>  b: 12<br>&#125;<br><br>console.log(Object.keys(str));<br>console.log(Object.values(str));<br>console.log(Object.values(str2));<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/image-20231022122644494.png" alt="image-20231022122644494"></p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>osi和tcp模型</title>
     <url>/2023/11/24/osi%E5%92%8Ctcp%E6%A8%A1%E5%9E%8B%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h6 id="iso-osi参考模型有七层，tcp-ip模型有四层，结构图如下"><a href="#iso-osi参考模型有七层，tcp-ip模型有四层，结构图如下" class="headerlink" title="iso&#x2F;osi参考模型有七层，tcp&#x2F;ip模型有四层，结构图如下"></a>iso&#x2F;osi参考模型有七层，tcp&#x2F;ip模型有四层，结构图如下</h6><p><img src="/2023/11/24/osi%E5%92%8Ctcp%E6%A8%A1%E5%9E%8B%E5%8C%BA%E5%88%AB/image-20231124125132185.png" alt="image-20231124125132185"></p>
@@ -2222,33 +2249,6 @@
       </categories>
       <tags>
         <tag>八股文</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js的Object.keys方法</title>
-    <url>/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h5 id="今天看到项目中有使用到Object-keys方法，又去查阅MDN文档学习了一下。"><a href="#今天看到项目中有使用到Object-keys方法，又去查阅MDN文档学习了一下。" class="headerlink" title="今天看到项目中有使用到Object.keys方法，又去查阅MDN文档学习了一下。"></a>今天看到项目中有使用到Object.keys方法，又去查阅MDN文档学习了一下。</h5><h3 id="一、语法"><a href="#一、语法" class="headerlink" title="一、语法"></a>一、语法</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">Object.keys(obj)<br><br>参数：要返回其枚举自身属性的对象<br><br>返回值：一个表示给定对象的所有可枚举属性的字符串数组<br></code></pre></td></tr></table></figure>
-
-<h3 id="二、处理对象，返回可枚举的属性数组"><a href="#二、处理对象，返回可枚举的属性数组" class="headerlink" title="二、处理对象，返回可枚举的属性数组"></a>二、处理对象，返回可<a href="https://so.csdn.net/so/search?q=%E6%9E%9A%E4%B8%BE&spm=1001.2101.3001.7020">枚举</a>的属性数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let person = &#123;name:&quot;张三&quot;,age:25,address:&quot;深圳&quot;,getName:function()&#123;&#125;&#125;<br><br>Object.keys(person) // [&quot;name&quot;, &quot;age&quot;, &quot;address&quot;,&quot;getName&quot;]<br></code></pre></td></tr></table></figure>
-
-<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/971b10a06fa0476caa5fc54c8667a0a6.png" alt="在这里插入图片描述"></p>
-<h3 id="三、处理数组，返回索引值数组"><a href="#三、处理数组，返回索引值数组" class="headerlink" title="三、处理数组，返回索引值数组"></a>三、处理数组，返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let arr = [1,2,3,4,5,6]<br><br>Object.keys(arr) // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;]<br></code></pre></td></tr></table></figure>
-
-<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/d006dc3d4d5d4195948b02881745794b.png" alt="在这里插入图片描述"></p>
-<h3 id="四、处理字符串，返回索引值数组"><a href="#四、处理字符串，返回索引值数组" class="headerlink" title="四、处理字符串，返回索引值数组"></a>四、处理<a href="https://so.csdn.net/so/search?q=%E5%AD%97%E7%AC%A6%E4%B8%B2&spm=1001.2101.3001.7020">字符串</a>，返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let str = &quot;saasd字符串&quot;<br><br>Object.keys(str) // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;]<br></code></pre></td></tr></table></figure>
-
-<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/015ea84c833e44eca08ac38867cabe84.png" alt="在这里插入图片描述"></p>
-<h3 id="五、常用技巧"><a href="#五、常用技巧" class="headerlink" title="五、常用技巧"></a>五、常用技巧</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let person = &#123;name:&quot;张三&quot;,age:25,address:&quot;深圳&quot;,getName:function()&#123;&#125;&#125;<br><br>Object.keys(person).map((key)=&gt;&#123;<br><br>　　person[key] // 获取到属性对应的值，做一些处理<br><br>&#125;) <br></code></pre></td></tr></table></figure>
-
-<h3 id="六、Object-values-和Object-keys-是相反的操作，把一个对象的值转换为数组"><a href="#六、Object-values-和Object-keys-是相反的操作，把一个对象的值转换为数组" class="headerlink" title="六、Object.values()和Object.keys()是相反的操作，把一个对象的值转换为数组"></a>六、Object.values()和Object.keys()是相反的操作，把一个对象的值转换为数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let str = &quot;abc字符串&quot;;<br>let str2 = &#123;<br>  a: &#x27;123&#x27;,<br>  b: 12<br>&#125;<br><br>console.log(Object.keys(str));<br>console.log(Object.values(str));<br>console.log(Object.values(str2));<br></code></pre></td></tr></table></figure>
-
-<p><img src="/2023/10/22/js%E7%9A%84Object-keys%E6%96%B9%E6%B3%95/image-20231022122644494.png" alt="image-20231022122644494"></p>
-]]></content>
-      <categories>
-        <category>前端充电宝</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
       </tags>
   </entry>
   <entry>
@@ -3866,188 +3866,6 @@
       </tags>
   </entry>
   <entry>
-    <title>vue学习Day8</title>
-    <url>/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/</url>
-    <content><![CDATA[<h1 id="认识Vue3"><a href="#认识Vue3" class="headerlink" title="认识Vue3"></a>认识Vue3</h1><h2 id="1-Vue2-选项式-API-vs-Vue3-组合式API"><a href="#1-Vue2-选项式-API-vs-Vue3-组合式API" class="headerlink" title="1. Vue2 选项式 API vs Vue3 组合式API"></a>1. Vue2 选项式 API vs Vue3 组合式API</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>export default &#123;<br>  data()&#123;<br>    return &#123;<br>      count:0<br>    &#125;<br>  &#125;,<br>  methods:&#123;<br>    addCount()&#123;<br>      this.count++<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>import &#123; ref &#125; from &#x27;vue&#x27;<br>const count = ref(0)<br>const addCount = ()=&gt; count.value++<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>特点：</p>
-<ol>
-<li>代码量变少</li>
-<li>分散式维护变成集中式维护</li>
-</ol>
-<h2 id="2-Vue3的优势"><a href="#2-Vue3的优势" class="headerlink" title="2. Vue3的优势"></a>2. Vue3的优势</h2><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/01.png" alt="image.png"></p>
-<h1 id="使用create-vue搭建Vue3项目"><a href="#使用create-vue搭建Vue3项目" class="headerlink" title="使用create-vue搭建Vue3项目"></a>使用create-vue搭建Vue3项目</h1><h2 id="1-认识create-vue"><a href="#1-认识create-vue" class="headerlink" title="1. 认识create-vue"></a>1. 认识create-vue</h2><blockquote>
-<p>create-vue是Vue官方新的脚手架工具，底层切换到了 vite （下一代前端工具链），为开发提供极速响应</p>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/2.png" alt="image.png"></p>
-<h2 id="2-使用create-vue创建项目"><a href="#2-使用create-vue创建项目" class="headerlink" title="2. 使用create-vue创建项目"></a>2. 使用create-vue创建项目</h2><blockquote>
-<p>前置条件 - 已安装16.0或更高版本的Node.js</p>
-</blockquote>
-<p>执行如下命令，这一指令将会安装并执行 create-vue</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm init vue@latest<br></code></pre></td></tr></table></figure>
-
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/3.png" alt="image.png"></p>
-<h1 id="熟悉项目和关键文件"><a href="#熟悉项目和关键文件" class="headerlink" title="熟悉项目和关键文件"></a>熟悉项目和关键文件</h1><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/4.png" alt="image.png"></p>
-<h1 id="组合式API-setup选项"><a href="#组合式API-setup选项" class="headerlink" title="组合式API - setup选项"></a>组合式API - setup选项</h1><h2 id="1-setup选项的写法和执行时机"><a href="#1-setup选项的写法和执行时机" class="headerlink" title="1. setup选项的写法和执行时机"></a>1. setup选项的写法和执行时机</h2><p>写法</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      <br>    &#125;,<br>    beforeCreate()&#123;<br>      <br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<p>执行时机</p>
-<blockquote>
-<p>在beforeCreate钩子之前执行</p>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/5.png" alt="image.png"></p>
-<h2 id="2-setup中写代码的特点"><a href="#2-setup中写代码的特点" class="headerlink" title="2. setup中写代码的特点"></a>2. setup中写代码的特点</h2><blockquote>
-<p>在setup函数中写的数据和方法需要在末尾以对象的方式return，才能给模版使用</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      const message = &#x27;this is message&#x27;<br>      const logMessage = ()=&gt;&#123;<br>        console.log(message)<br>      &#125;<br>      // 必须return才可以<br>      return &#123;<br>        message,<br>        logMessage<br>      &#125;<br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="3-语法糖"><a href="#3-语法糖" class="headerlink" title="3. &lt;script setup&gt;语法糖"></a>3. &lt;script setup&gt;语法糖</h2><blockquote>
-<p>script标签添加 setup标记，不需要再写导出语句，默认会添加导出语句</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  const message = &#x27;this is message&#x27;<br>  const logMessage = ()=&gt;&#123;<br>    console.log(message)<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h1 id="组合式API-reactive和ref函数"><a href="#组合式API-reactive和ref函数" class="headerlink" title="组合式API - reactive和ref函数"></a>组合式API - reactive和ref函数</h1><h2 id="1-reactive"><a href="#1-reactive" class="headerlink" title="1. reactive"></a>1. reactive</h2><blockquote>
-<p>接受对象类型数据的参数传入并返回一个响应式的对象</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; reactive &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const state = reactive(&#123;<br>   msg:&#x27;this is msg&#x27;<br> &#125;)<br> const setSate = ()=&gt;&#123;<br>   // 修改数据更新视图<br>   state.msg = &#x27;this is new msg&#x27;<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &#123;&#123; state.msg &#125;&#125;<br>  &lt;button @click=&quot;setState&quot;&gt;change msg&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="2-ref"><a href="#2-ref" class="headerlink" title="2. ref"></a>2. ref</h2><blockquote>
-<p>接收简单类型或者对象类型的数据传入并返回一个响应式的对象</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; ref &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const count = ref(0)<br> const setCount = ()=&gt;&#123;<br>   // 修改数据更新视图必须加上.value<br>   count.value++<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;button @click=&quot;setCount&quot;&gt;&#123;&#123;count&#125;&#125;&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="3-reactive-对比-ref"><a href="#3-reactive-对比-ref" class="headerlink" title="3. reactive 对比 ref"></a>3. reactive 对比 ref</h2><ol>
-<li>都是用来生成响应式数据</li>
-<li>不同点<ol>
-<li>reactive不能处理简单类型的数据</li>
-<li>ref参数类型支持更好，但是必须通过.value做访问修改</li>
-<li>ref函数内部的实现依赖于reactive函数</li>
-</ol>
-</li>
-<li>在实际工作中的推荐<ol>
-<li>推荐使用ref函数，减少记忆负担，小兔鲜项目都使用ref</li>
-</ol>
-</li>
-</ol>
-<h1 id="组合式API-computed"><a href="#组合式API-computed" class="headerlink" title="组合式API - computed"></a>组合式API - computed</h1><blockquote>
-<p>计算属性基本思想和Vue2保持一致，组合式API下的计算属性只是修改了API写法</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>// 导入<br>import &#123;ref, computed &#125; from &#x27;vue&#x27;<br>// 原始数据<br>const count = ref(0)<br>// 计算属性<br>const doubleCount = computed(()=&gt;count.value * 2)<br><br>// 原始数据<br>const list = ref([1,2,3,4,5,6,7,8])<br>// 计算属性list<br>const filterList = computed(item=&gt;item &gt; 2)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h1 id="组合式API-watch"><a href="#组合式API-watch" class="headerlink" title="组合式API - watch"></a>组合式API - watch</h1><blockquote>
-<p>侦听一个或者多个数据的变化，数据变化时执行回调函数，俩个额外参数 immediate控制立刻执行，deep开启深度侦听</p>
-</blockquote>
-<h2 id="1-侦听单个数据"><a href="#1-侦听单个数据" class="headerlink" title="1. 侦听单个数据"></a>1. 侦听单个数据</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="2-侦听多个数据"><a href="#2-侦听多个数据" class="headerlink" title="2. 侦听多个数据"></a>2. 侦听多个数据</h2><blockquote>
-<p>侦听多个数据，第一个参数可以改写成数组的写法</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  const name = ref(&#x27;cp&#x27;)<br>  // 2. 调用watch 侦听变化<br>  watch([count, name], ([newCount, newName],[oldCount,oldName])=&gt;&#123;<br>    console.log(`count或者name变化了，[newCount, newName],[oldCount,oldName])<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="3-immediate"><a href="#3-immediate" class="headerlink" title="3. immediate"></a>3. immediate</h2><blockquote>
-<p>在侦听器创建时立即出发回调，响应式数据变化之后继续执行回调</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;,&#123;<br>    immediate: true<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="4-deep"><a href="#4-deep" class="headerlink" title="4. deep"></a>4. deep</h2><blockquote>
-<p>通过watch监听的ref对象默认是浅层侦听的，直接修改嵌套的对象属性不会触发回调执行，需要开启deep</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 直接修改不会引发回调执行<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br>&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state 并开启deep<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;,&#123;deep:true&#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 此时修改可以触发回调<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br></code></pre></td></tr></table></figure>
-
-<h1 id="组合式API-生命周期函数"><a href="#组合式API-生命周期函数" class="headerlink" title="组合式API - 生命周期函数"></a>组合式API - 生命周期函数</h1><h2 id="1-选项式对比组合式"><a href="#1-选项式对比组合式" class="headerlink" title="1. 选项式对比组合式"></a>1. 选项式对比组合式</h2><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/6.png" alt="image.png"></p>
-<h2 id="2-生命周期函数基本使用"><a href="#2-生命周期函数基本使用" class="headerlink" title="2. 生命周期函数基本使用"></a>2. 生命周期函数基本使用</h2><blockquote>
-<ol>
-<li>导入生命周期函数</li>
-<li>执行生命周期函数，传入回调</li>
-</ol>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="3-执行多次"><a href="#3-执行多次" class="headerlink" title="3. 执行多次"></a>3. 执行多次</h2><blockquote>
-<p>生命周期函数执行多次的时候，会按照顺序依次执行</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br><br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
-
-<h1 id="组合式API-父子通信"><a href="#组合式API-父子通信" class="headerlink" title="组合式API - 父子通信"></a>组合式API - 父子通信</h1><h2 id="1-父传子"><a href="#1-父传子" class="headerlink" title="1. 父传子"></a>1. 父传子</h2><blockquote>
-<p>基本思想</p>
-<ol>
-<li>父组件中给子组件绑定属性</li>
-<li>子组件内部通过props选项接收数据</li>
-</ol>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/7.png" alt="image.png"></p>
-<h2 id="2-子传父"><a href="#2-子传父" class="headerlink" title="2. 子传父"></a>2. 子传父</h2><blockquote>
-<p>基本思想</p>
-<ol>
-<li>父组件中给子组件标签通过@绑定事件</li>
-<li>子组件内部通过 emit 方法触发事件</li>
-</ol>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/8.png" alt="image.png"></p>
-<h1 id="组合式API-模版引用"><a href="#组合式API-模版引用" class="headerlink" title="组合式API - 模版引用"></a>组合式API - 模版引用</h1><blockquote>
-<p>概念：通过 ref标识 获取真实的 dom对象或者组件实例对象</p>
-</blockquote>
-<h2 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h2><blockquote>
-<p>实现步骤：</p>
-<ol>
-<li>调用ref函数生成一个ref对象</li>
-<li>通过ref标识绑定ref对象到标签</li>
-</ol>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/9.png" alt="image.png"></p>
-<h2 id="2-defineExpose"><a href="#2-defineExpose" class="headerlink" title="2. defineExpose"></a>2. defineExpose</h2><blockquote>
-<p>默认情况下在 &lt;script setup&gt;语法糖下组件内部的属性和方法是不开放给父组件访问的，可以通过defineExpose编译宏指定哪些属性和方法容许访问<br>说明：指定testMessage属性可以被访问到</p>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/10.png" alt="image.png"></p>
-<h1 id="组合式API-provide和inject"><a href="#组合式API-provide和inject" class="headerlink" title="组合式API - provide和inject"></a>组合式API - provide和inject</h1><h2 id="1-作用和场景"><a href="#1-作用和场景" class="headerlink" title="1. 作用和场景"></a>1. 作用和场景</h2><blockquote>
-<p>顶层组件向任意的底层组件传递数据和方法，实现跨层组件通信</p>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/11.png" alt="image.png"></p>
-<h2 id="2-跨层传递普通数据"><a href="#2-跨层传递普通数据" class="headerlink" title="2. 跨层传递普通数据"></a>2. 跨层传递普通数据</h2><blockquote>
-<p>实现步骤</p>
-<ol>
-<li>顶层组件通过 <code>provide</code> 函数提供数据</li>
-<li>底层组件通过 <code>inject</code> 函数提供数据</li>
-</ol>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/12.png" alt="image.png"></p>
-<h2 id="3-跨层传递响应式数据"><a href="#3-跨层传递响应式数据" class="headerlink" title="3. 跨层传递响应式数据"></a>3. 跨层传递响应式数据</h2><blockquote>
-<p>在调用provide函数时，第二个参数设置为ref对象</p>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/13.png" alt="image.png"></p>
-<h2 id="4-跨层传递方法"><a href="#4-跨层传递方法" class="headerlink" title="4. 跨层传递方法"></a>4. 跨层传递方法</h2><blockquote>
-<p>顶层组件可以向底层组件传递方法，底层组件调用方法修改顶层组件的数据</p>
-</blockquote>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/14.png" alt="image.png"></p>
-<h1 id="Vue3-3-新特性-defineOptions"><a href="#Vue3-3-新特性-defineOptions" class="headerlink" title="Vue3.3 新特性-defineOptions"></a>Vue3.3 新特性-defineOptions</h1><p>背景说明：</p>
-<p>有 &lt;script setup&gt; 之前，如果要定义 props, emits 可以轻而易举地添加一个与 setup 平级的属性。 </p>
-<p>但是用了 &lt;script setup&gt; 后，就没法这么干了 setup 属性已经没有了，自然无法添加与其平级的属性。</p>
-<hr>
-<p>为了解决这一问题，引入了 defineProps 与 defineEmits 这两个宏。但这只解决了 props 与 emits 这两个属性。</p>
-<p>如果我们要定义组件的 name 或其他自定义的属性，还是得回到最原始的用法——再添加一个普通的 &lt;script&gt; 标签。</p>
-<p>这样就会存在两个 &lt;script&gt;标签。让人无法接受。</p>
-<hr>
-<p>所以在 Vue 3.3 中新引入了 defineOptions 宏。顾名思义，主要是用来定义 Options API 的选项。可以用 defineOptions 定义任意的选项， props, emits, expose, slots 除外（因为这些可以使用 defineXXX 来做到）</p>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704082955748.png" alt="image-20230704082955748"></p>
-<h1 id="Vue3-3新特性-defineModel"><a href="#Vue3-3新特性-defineModel" class="headerlink" title="Vue3.3新特性-defineModel"></a>Vue3.3新特性-defineModel</h1><p>在Vue3中，自定义组件上使用v-model, 相当于传递一个modelValue属性，同时触发 update:modelValue 事件</p>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083027349.png" alt="image-20230704083027349"></p>
-<p>我们需要先定义 props，再定义 emits 。其中有许多重复的代码。如果需要修改此值，还需要手动调用 emit 函数。</p>
-<p>于是乎 defineModel 诞生了。</p>
-<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083056549.png" alt="image-20230704083056549"></p>
-<p>生效需要配置 vite.config.js</p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><code class="hljs jsx"><span class="hljs-keyword">import</span> &#123; fileURLToPath, <span class="hljs-variable constant_">URL</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:url&#x27;</span><br><br><span class="hljs-keyword">import</span> &#123; defineConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span><br><span class="hljs-keyword">import</span> vue <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-vue&#x27;</span><br><br><span class="hljs-comment">// https://vitejs.dev/config/</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>(&#123;<br>  <span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-title function_">vue</span>(&#123;<br>      <span class="hljs-attr">script</span>: &#123;<br>        <span class="hljs-attr">defineModel</span>: <span class="hljs-literal">true</span><br>      &#125;<br>    &#125;),<br>  ],<br>  <span class="hljs-attr">resolve</span>: &#123;<br>    <span class="hljs-attr">alias</span>: &#123;<br>      <span class="hljs-string">&#x27;@&#x27;</span>: <span class="hljs-title function_">fileURLToPath</span>(<span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">&#x27;./src&#x27;</span>, <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">url</span>))<br>    &#125;<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>前端知识</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vue学习Day6</title>
     <url>/2023/08/13/vue%E5%AD%A6%E4%B9%A0Day6/</url>
     <content><![CDATA[<h2 id="一、声明式导航-导航链接"><a href="#一、声明式导航-导航链接" class="headerlink" title="一、声明式导航-导航链接"></a>一、声明式导航-导航链接</h2><h3 id="1-需求"><a href="#1-需求" class="headerlink" title="1.需求"></a>1.需求</h3><p>实现导航高亮效果</p>
@@ -4549,136 +4367,6 @@
       </tags>
   </entry>
   <entry>
-    <title>vue八股文1</title>
-    <url>/2023/09/11/vue%E9%9D%A2%E8%AF%95%E9%A2%981/</url>
-    <content><![CDATA[<h1 id="2023前端面试题整理一-Vue篇"><a href="#2023前端面试题整理一-Vue篇" class="headerlink" title="2023前端面试题整理一(Vue篇)"></a>2023前端面试题整理一(Vue篇)</h1><h3 id="简述-MVVM-框架"><a href="#简述-MVVM-框架" class="headerlink" title="简述 MVVM 框架"></a>简述 MVVM 框架</h3><p>Model: 代表数据模型，也可以在 Model 中定义数据修改和操作的业务逻辑。</p>
-<p>View: 代表 UI 组件，它负责将数据模型转化成 UI 展现出来。</p>
-<p>ViewModel: 监听数据模型的改变和控制视图行为、处理用户交互，简单理解就是一个同步 View 和 Model 的对象，连接 Model 和 View。</p>
-<h3 id="vue2-和-vue3-区别"><a href="#vue2-和-vue3-区别" class="headerlink" title="vue2 和 vue3 区别"></a>vue2 和 vue3 区别</h3><p>1.写法上的区别:vue2 使用的是options(选项)Api,vue3 的是composition Api(当然 vue3 也兼容composition api)。options Api中methods，compute，data等 api 都是分散的。而composition api中的代码是根据逻辑功能来组织的,我们可以将一个功能所定义的methods，compute，data等 api 会放在一起,让我们可以更灵活地组合组件逻辑。</p>
-<p>2.vue2 将响应式数据放到 data 函数中,而 vue3 则是使用ref和reactive将数据声明为响应式</p>
-<p>3.响应式实现方式:vue2 中是通过Object.defineProperty对数据劫持实现的,vue3 中则是使用Proxy对数据代理实现的。</p>
-<p>4.生命周期区别:vue3 中将beforeCreate和created合并到了setup函数中</p>
-<p>5.根节点: vue3 组件允许多个根节点,而 vue2 只允许一个</p>
-<p>6.内置组件: vue3 新增了传送组件Teleport和异步依赖处理组件Suspense</p>
-<h3 id="v-if-和-v-show"><a href="#v-if-和-v-show" class="headerlink" title="v-if 和 v-show"></a>v-if 和 v-show</h3><p>1.v-if表示一个 dom 元素是否被创建，而v-show则是控制这个 dom 元素的display属性是否为none</p>
-<p>2.一般在频繁切换状态的地方使用v-show,v-if则更适合条件不经常改变的场景，因为它切换开销相对较大</p>
-<h3 id="v-for-和-v-if-优先级"><a href="#v-for-和-v-if-优先级" class="headerlink" title="v-for 和 v-if 优先级"></a>v-for 和 v-if 优先级</h3><p>1.开发过程中一般不建议同时将 v-for 和 v-if 放在一个标签中使用</p>
-<p>2.Vue2 中 v-for 的优先级会更高，所以会先执行循环，再进行 v-if 判断，所以这样就会导致无论需不需展示这个元素，都会先遍历整个列表</p>
-<p>3.在 Vue3 中 v-if 的优先级会更高，但是当我们遍历一个数组的时候，根据数组中的某个元素进行 v-if 判断的时候就会报错，因为 v-if 会先执行此时还没有拿到这个数组。所以 Vue3 中会报错</p>
-<h3 id="介绍-Vue-插槽用法"><a href="#介绍-Vue-插槽用法" class="headerlink" title="介绍 Vue 插槽用法"></a>介绍 Vue 插槽用法</h3><p>插槽slot可以理解为占坑，当使用一个组件的时候，在组件标签里的对应的内容就会替换掉这个组件中的slot标签。插槽分为默认插槽，具名插槽，作用域插槽。</p>
-<p><em>默认插槽</em></p>
-<p>子组件中用slot标签来确定渲染位置，父组件使用它时直接在子组件的标签内写入内容即可</p>
-<p>&#x2F;&#x2F;子组件</p>
-<p><template>   <slot></slot></template></p>
-<p>&#x2F;&#x2F;父组件</p>
-<p>&lt;Child&gt;&lt;div&gt;默认插槽&lt;&#x2F;div&gt;&lt;&#x2F;Child&gt;</p>
-<p><em>具名插槽</em></p>
-<p>顾名思义就是具有名字的插槽，子组件中可以用name熟悉对slot命名，父组件在使用的时候通过template中的v-slot:name或者#name来定义这个插槽中的内容</p>
-<p>&#x2F;&#x2F;子组件&lt;template&gt; &lt;slot name&#x3D;”content”&gt;&lt;&#x2F;slot&gt;&lt;&#x2F;template&gt;</p>
-<p>&#x2F;&#x2F;父组件&lt;Child&gt;   &lt;template v-slot:content&gt;具名插槽内容&lt;&#x2F;template&gt;&lt;&#x2F;Child&gt;</p>
-<p><em>作用域插槽</em></p>
-<p>子组件中的slot可以通过类似组件属性传递的方式将子组件的值传递给父组件中这个子组件的插槽内容中（子组件标签内），在父组件使用子组件的时候要用v-slot的值进行接收这些参数，默认插槽可以将其直接写在子组件标签上，具名插槽则写在template上。而传过来的值只能在子组件标签中或者template标签中使用。所以在父组件作用域中获取到了子组件作用域中的变量，可以认为作用域插槽延伸了子组件数据的作用范围，因此叫做作用域插槽</p>
-<h3 id="常见的事件修饰符及其作用"><a href="#常见的事件修饰符及其作用" class="headerlink" title="常见的事件修饰符及其作用"></a>常见的事件修饰符及其作用</h3><p>●.stop：等同于 JavaScript 中的 event.stopPropagation() ，防止事件冒泡；</p>
-<p>●.prevent ：等同于 JavaScript 中的 event.preventDefault() ，防止执行预设的行为（如果事件可取消，则取消该事件，而不停止事件的进一步传播）；</p>
-<p>●.capture ：将事件改成捕获模式,由外到内触发</p>
-<p>●.self ：只会触发自己范围内的事件，不包含子元素；</p>
-<p>●.once ：只会触发一次。</p>
-<h3 id="v-model-如何实现的"><a href="#v-model-如何实现的" class="headerlink" title="v-model 如何实现的"></a>v-model 如何实现的</h3><p>v-model 其实是一个语法糖,比如&lt;input v-model&#x3D;”message” &#x2F;&gt;等同于&lt;input  :value&#x3D;”message”  @input&#x3D;”message&#x3D;$event.target.value”&gt;</p>
-<p>Vue2 中给 data 中的对象属性添加一个新的属性时会发生什么？如何解决？</p>
-<p>Vue2 中对象添加新属性绑定的视图不会更新,因为 Vue2 中 Object.defineProperty 劫持不到 data 对象中新增的属性,可以使用this.$set(this.obj, ‘b’, ‘obj.b’)解决$set()方法相当于手动的去把 obj.b 处理成一个响应式的属性，此时视图也会跟着改变了。</p>
-<h3 id="Vue-插件用法"><a href="#Vue-插件用法" class="headerlink" title="Vue 插件用法"></a>Vue 插件用法</h3><p>面试一般会问你如何写一个 vue 插件,所以没写过 vue 插件的最好去亲自体验一下回答:vue实例会有一个use函数,它接受的是一个带有install函数的对象和一个可选的选项对象,当我们使用 vue.use(plugin)或者app.use(plugin)会调用我们插件的install属性的函数,并且将当前组件的实例传进来.所以在插件中就可以对这个实例进行一些操作来实现我们插件的功能</p>
-<h3 id="Vue-自定义指令"><a href="#Vue-自定义指令" class="headerlink" title="Vue 自定义指令"></a>Vue 自定义指令</h3><p>vue 官方提供了 v-text、v-for、v-model、v-if 等常用的指令。除此之外 vue 还允许开发者自定义指令。面试经常会问什么是自定义指令?你用自定义指令做过哪些功能?</p>
-<p><em>Q1:什么是自定义指令?</em></p>
-<p>1.自定义指令包含局部指令和全局指令,在模板中使用指令前必须先使用directives选项注册。局部指令指在某个组件中注册,而全局则是将指令注册到全局,通常在 main.js 中注册。</p>
-<p>2.自定义指令由一个包含类似组件生命周期钩子的对象来定义。它的生命周期钩子包含created,beforeMount,mounted,beforeUpdate,updated,beforeUnmount,unmounted,</p>
-<p>3.常用的钩子为mounted 和  updated,它接受el,binding等参数.binding参数的值一般包含绑定到这个元素上的信息,比如下面这个指令&lt;div v-example:foo.bar&#x3D;”baz”&gt;它的 binding 会是这个对象{   arg: ‘foo’,   modifiers: { bar: true },   value: &#x2F;* <code>baz</code> 的值 <em>&#x2F;,   oldValue: &#x2F;</em> 上一次更新时 <code>baz</code> 的值 *&#x2F;}</p>
-<p><em>Q2:你用自定义指令做过哪些功能?</em></p>
-<p>1.数据埋点,通过绑定自定义事件传入点击当前元素需要埋点的事件名,在指令中监听当前元素的点击事件后调用后台接口将事件名传入</p>
-<p>2.权限控制,通过绑定自定义事件传入控制当前元素的权限字段,在指令中获取到当前元素根据权限字段来控制该元素的状态(显示,隐藏等)</p>
-<h3 id="computed-和-watch"><a href="#computed-和-watch" class="headerlink" title="computed 和 watch"></a>computed 和 watch</h3><p>1.computed是计算属性,依赖其它属性值,用于解决模板中放入过多的逻辑会让模板过重且难以维护的问题.watch是侦听器,当我们需要根据一个属性的变化而做出一些处理的时候,可以使用watch来对这个属性进行监听</p>
-<p>2.computed具有缓存的特点,即当它所依赖的属性发生改变的时候它才会重新执行内部逻辑.如下代码</p>
-<template>
-    <div></div>
-    <div></div>
-    <div></div>
-</template>
-
-<script setup>
-    import { computed, ref, watch } from "vue";
-    const a = ref(1)
-    const b = ref(2)
-    let addSum = computed(() => {
-        console.log('内部逻辑执行')   return a.value + b.value})
-</script>
-
-
-
-<p>页面多次使用addSum,但是只会打印一次”内部逻辑执行”</p>
-<p>1.watch在页面首次加载的时候默认不会执行,需要设置immediate:true首次才会执行监听</p>
-<p>2.watch默认只监听一层数据,不监听多层数据里属性的变化,需要设置deep:true才会进行深度监听</p>
-<h3 id="vue-生命周期"><a href="#vue-生命周期" class="headerlink" title="vue 生命周期"></a>vue 生命周期</h3><p>Vue2(选项式 API)Vue3(setup)描述beforeCreate-实例创建前created-实例创建后beforeMountonBeforeMountDOM 挂载前调用mountedonMountedDOM 挂载完成调用beforeUpdateonBeforeUpdate数据更新之前被调用updatedonUpdated数据更新之后被调用beforeDestroyonBeforeUnmount组件销毁前调用destroyedonUnmounted组件销毁完成调用</p>
-<p>vue 父子组件生命周期执行顺序</p>
-<p>这个相对于上一个问题稍微复杂一点,可以试着理解记忆或者直接记住吧</p>
-<p><em>渲染过程</em></p>
-<p>父beforeCreate –&gt; 父created –&gt; 父beforeMount –&gt; 子beforeCreate –&gt; 子created –&gt; 子beforeMount –&gt; 子mounted  –&gt; 父mounted</p>
-<p><em>更新过程</em></p>
-<p>父beforeUpdate –&gt; 子beforeUpdate –&gt; 子updated –&gt; 父updated</p>
-<p><em>销毁过程</em></p>
-<p>父beforeDestroy –&gt; 子beforeDestroy –&gt; 子destroyed –&gt; 父destroyed注意如果子组件是异步组件的话它们的执行顺序会发生改变，会先执行完父组件的生命周期然后再执行子组件的生命周期</p>
-<h3 id="vue-导航-路由守卫"><a href="#vue-导航-路由守卫" class="headerlink" title="vue 导航(路由守卫)"></a>vue 导航(路由守卫)</h3><p>路由守卫分为全局路由守卫，路由独享守卫，组件路由守卫</p>
-<p>●<em>全局路由守卫</em></p>
-<p>1.beforeEach,接收to、from、next三个参数，每个路由跳转前都会触发，登录验证时用的比较多2.beforeResolve，和beforeEach类似，区别是在导航被确认之前，同时在所有组件内守卫和异步路由组件被解析之后调用</p>
-<p>3.afterEach，在路由跳转完成后调用，接收 to、from 两个参数</p>
-<p>●<em>路由独享守卫</em></p>
-<p>beforeEnter,一般配置在路由配置文件中（router&#x2F;index.js），对进入某个路由之前进行相关操作</p>
-<p>●<em>组件路由守卫</em></p>
-<p>接收to、from、next三个参数</p>
-<p>1.beforeRouteEnter,进入该组件之前调用，无法获取到 vue 实例</p>
-<p>2.beforeRouteUpdate，在当前路由改变，但是该组件被复用时调用</p>
-<p>3.beforeRouteLeave, 在离开当前组件时调用</p>
-<p><strong>Vue-Router 的懒加载如何实现</strong></p>
-<p>使用箭头函数+import 动态加载</p>
-<p>const router &#x3D; new VueRouter({</p>
-<p> routes: [{ path: “&#x2F;list”, component: () &#x3D;&gt; import(“@&#x2F;components&#x2F;list.vue”) }],</p>
-<p>});</p>
-<h3 id="路由的-hash-和-history-模式的区别"><a href="#路由的-hash-和-history-模式的区别" class="headerlink" title="路由的 hash 和 history 模式的区别"></a>路由的 hash 和 history 模式的区别</h3><p>Vue-Router 有两种模式：hash 模式和 history 模式。默认的路由模式是 hash 模式。</p>
-<p><em>1.hash</em> 模式</p>
-<p>简介： hash 模式是开发中默认的模式，它的 URL 带着一个#，例如：<a href="http://www.abc.com/#/vue%EF%BC%8C%E5%AE%83%E7%9A%84hash%E5%80%BC%E5%B0%B1%E6%98%AF#/vue%E3%80%82%E7%89%B9%E7%82%B9%EF%BC%9Ahash">www.abc.com/#/vue，它的hash值就是#/vue。特点：hash</a> 值会出现在 URL 里面，但是不会出现在 HTTP 请求中，对后端完全没有影响。所以改变 hash 值，不会重新加载页面。这种模式的浏览器支持度很好，低版本的 IE 浏览器也支持这种模式。hash 路由被称为是前端路由，已经成为 SPA（单页面应用）的标配。原理： hash 模式的主要原理就是 onhashchange()事件：window.onhashchange &#x3D; function (event)</p>
-<p> { console.log(event.oldURL, event.newURL); </p>
-<p>let hash &#x3D; location.hash.slice(1);};</p>
-<p><em>2.history</em> 模式</p>
-<p>简介： history 模式的 URL 中没有#，它使用的是传统的路由分发模式，即用户在输入一个 URL 时，服务器会接收这个请求，并解析这个 URL，然后做出相应的逻辑处理。 特点： 当使用 history 模式时，URL 就像这样：abc.com&#x2F;user&#x2F;id。相比 hash 模式更加好看。但是，history 模式需要后台配置支持。如果后台没有正确配置，访问时会返回 404。 API： history api 可以分为两大部分，切换历史状态和修改历史状态：</p>
-<p>修改历史状态：包括了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法，这两个方法应用于浏览器的历史记录栈，提供了对历史记录进行修改的功能。只是当他们进行修改时，虽然修改了 url，但浏览器不会立即向后端发送请求。如果要做到改变 url 但又不刷新页面的效果，就需要前端用上这两个 API。</p>
-<p>切换历史状态： 包括 forward()、back()、go()三个方法，对应浏览器的前进，后退，跳转操作。虽然 history 模式丢弃了丑陋的#。但是，它也有自己的缺点，就是在刷新页面的时候，如果没有相应的路由或资源，就会刷出 404 来。</p>
-<h3 id="nexttick-原理"><a href="#nexttick-原理" class="headerlink" title="nexttick 原理"></a>nexttick 原理</h3><p>关于 nextTick 会问到它的用法,然后是它的原理,然后还可能问到 JS 的事件循环机制。</p>
-<p><em>Q1:vue 中的 nextTick 是干什么用的?</em></p>
-<p>这个其实比较简单,用过都知道它是干嘛的,vue 官方的解释是:在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。这是什么意思呢,其实 vue 中修改 data 不会立刻触发 dom 更新;而是把需要更新的 Watcher 加入到 queueWatcher 队列中,然后在合适的时机在 nextTick 中调用这些 Watcher 的更新函数进行 dom 更新,所以在 data 刚被修改的时候,我们是获取不到更新后的 dom 的,这时候便需要调用 nextTick 函数在它的回调函数中获取到变化后的 dom</p>
-<p><em>Q2:nextTick 原理</em></p>
-<p>1.nextTick 原理是借助浏览器事件循环来完成的,因为每次事件循环之间都有一次视图渲染,nextTick 尽量在视图渲染之前完成 dom 更新,所以 nextTick 优先使用的是 promise(微任务)实现</p>
-<p>2.每次执行 nextTick 时会将传入的回调函数放入一个队列中(callbacks 数组),然后当在本次事件循环的同步代码执行完毕后开启一个微任务(promise 或者 MutationObserver)去依次执行这个 callbacks 中的回调函数。</p>
-<p>3.但是当浏览器不支持 promise 的时候在 vue2 中会进行进行降级处理,依次使用setImmediate、setTimeout开启一个宏任务执行 callbacks</p>
-<p>4.当一个 data 数据更新时对应的 watcher 便会调用一次 nextTick,将它对应的 dom 更新操作作为回调函数放入 callbacks 中,所以当我们想获取这个 data 更新后的 dom 需要在其值变化后也调用 nextTick 将回调函数传入排在上个更新 dom 的回调函数后面,所以我们可以在这个 nextTick 的回调函数中获取到更新后的 data</p>
-<h3 id="Vue-组件传参"><a href="#Vue-组件传参" class="headerlink" title="Vue 组件传参"></a>Vue 组件传参</h3><p>这里大概归纳了一下 vue2 和 vue3 的传参方式</p>
-<p>Vue2Vue3父传子propsprops子传父$emitemits父传子$attrsattrs子传父$listeners无(合并到 attrs 方式)父传子provide&#x2F;injectprovide&#x2F;inject子组件访问父组件$parent无父组件访问子组件$children无父组件访问子组件$refexpose&amp;ref兄弟组件传值EventBusmitt</p>
-<h3 id="Vuex"><a href="#Vuex" class="headerlink" title="Vuex"></a>Vuex</h3><p>1.Vuex 是 Vue 中的全局状态管理框架，它可以管理应用的所有组件的状态。并不是每个项目都需要引入 Vuex 的，当我们的项目有很多个页面，并且这些页面共享着多个数据状态，此时我们可以引入 Vuex。</p>
-<p>2.Vuex 有三个核心的概念，state,mutations,actions,其中state为存放数据的地方，mutations中的函数作用则是用来修改state，actions中一般是用了处理一些异步操作的函数。</p>
-<p>3.Vuex 除了上面三个概念还有getters,moudles，getters就像 Vue 中的计算属性computed一样用来描述依赖响应式状态 state 中的复杂逻辑。moudles则是可以将 store 分割成模块（module），每个模块都拥有自己的state,mutations,actions等，在大型应用中经常用到</p>
-<p>4.场景：当我们异步获取结果并赋值给 state 的时候，比如数据请求，我们可以在actions中进行数据请求，拿到结果通过它的dispatch方法调用mutations中修改state的函数，从而将结果赋值给了state</p>
-<h3 id="Pinia"><a href="#Pinia" class="headerlink" title="Pinia"></a>Pinia</h3><p>pinia其实就是 Vuex5，它和 Vuex 的主要区别有以下几点</p>
-<p>1.Pinia 使用更简单，更符合开发者的开发习惯</p>
-<p>2.pinia中没有了mutations,状态state的修改可以直接进行修改，或者在actions中修改，或者使用它的$patch方法进行修改</p>
-<p>3.pinia中没有了modules,如果想使用多个 store，直接使用defineStore定义多个 store 传入不同的 id 即可</p>
-<p>4.更好的 TS 支持，不需要创建自定义的复杂包装器来支持 TS篇幅有限</p>
-]]></content>
-      <categories>
-        <category>前端知识</category>
-      </categories>
-      <tags>
-        <tag>八股文</tag>
-        <tag>vue</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vue学习Day7</title>
     <url>/2023/08/18/vue%E5%AD%A6%E4%B9%A0Day7/</url>
     <content><![CDATA[<h2 id="一、Vuex-概述"><a href="#一、Vuex-概述" class="headerlink" title="一、Vuex 概述"></a>一、<a href="https://vuex.vuejs.org/zh/">Vuex</a> 概述</h2><p>目标：明确<a href="https://vuex.vuejs.org/zh/">Vuex</a>是什么，应用场景以及优势</p>
@@ -5137,6 +4825,318 @@
         <category>前端知识</category>
       </categories>
       <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vue学习Day8</title>
+    <url>/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/</url>
+    <content><![CDATA[<h1 id="认识Vue3"><a href="#认识Vue3" class="headerlink" title="认识Vue3"></a>认识Vue3</h1><h2 id="1-Vue2-选项式-API-vs-Vue3-组合式API"><a href="#1-Vue2-选项式-API-vs-Vue3-组合式API" class="headerlink" title="1. Vue2 选项式 API vs Vue3 组合式API"></a>1. Vue2 选项式 API vs Vue3 组合式API</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>export default &#123;<br>  data()&#123;<br>    return &#123;<br>      count:0<br>    &#125;<br>  &#125;,<br>  methods:&#123;<br>    addCount()&#123;<br>      this.count++<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>import &#123; ref &#125; from &#x27;vue&#x27;<br>const count = ref(0)<br>const addCount = ()=&gt; count.value++<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>特点：</p>
+<ol>
+<li>代码量变少</li>
+<li>分散式维护变成集中式维护</li>
+</ol>
+<h2 id="2-Vue3的优势"><a href="#2-Vue3的优势" class="headerlink" title="2. Vue3的优势"></a>2. Vue3的优势</h2><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/01.png" alt="image.png"></p>
+<h1 id="使用create-vue搭建Vue3项目"><a href="#使用create-vue搭建Vue3项目" class="headerlink" title="使用create-vue搭建Vue3项目"></a>使用create-vue搭建Vue3项目</h1><h2 id="1-认识create-vue"><a href="#1-认识create-vue" class="headerlink" title="1. 认识create-vue"></a>1. 认识create-vue</h2><blockquote>
+<p>create-vue是Vue官方新的脚手架工具，底层切换到了 vite （下一代前端工具链），为开发提供极速响应</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/2.png" alt="image.png"></p>
+<h2 id="2-使用create-vue创建项目"><a href="#2-使用create-vue创建项目" class="headerlink" title="2. 使用create-vue创建项目"></a>2. 使用create-vue创建项目</h2><blockquote>
+<p>前置条件 - 已安装16.0或更高版本的Node.js</p>
+</blockquote>
+<p>执行如下命令，这一指令将会安装并执行 create-vue</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm init vue@latest<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/3.png" alt="image.png"></p>
+<h1 id="熟悉项目和关键文件"><a href="#熟悉项目和关键文件" class="headerlink" title="熟悉项目和关键文件"></a>熟悉项目和关键文件</h1><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/4.png" alt="image.png"></p>
+<h1 id="组合式API-setup选项"><a href="#组合式API-setup选项" class="headerlink" title="组合式API - setup选项"></a>组合式API - setup选项</h1><h2 id="1-setup选项的写法和执行时机"><a href="#1-setup选项的写法和执行时机" class="headerlink" title="1. setup选项的写法和执行时机"></a>1. setup选项的写法和执行时机</h2><p>写法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      <br>    &#125;,<br>    beforeCreate()&#123;<br>      <br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>执行时机</p>
+<blockquote>
+<p>在beforeCreate钩子之前执行</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/5.png" alt="image.png"></p>
+<h2 id="2-setup中写代码的特点"><a href="#2-setup中写代码的特点" class="headerlink" title="2. setup中写代码的特点"></a>2. setup中写代码的特点</h2><blockquote>
+<p>在setup函数中写的数据和方法需要在末尾以对象的方式return，才能给模版使用</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script&gt;<br>  export default &#123;<br>    setup()&#123;<br>      const message = &#x27;this is message&#x27;<br>      const logMessage = ()=&gt;&#123;<br>        console.log(message)<br>      &#125;<br>      // 必须return才可以<br>      return &#123;<br>        message,<br>        logMessage<br>      &#125;<br>    &#125;<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-语法糖"><a href="#3-语法糖" class="headerlink" title="3. &lt;script setup&gt;语法糖"></a>3. &lt;script setup&gt;语法糖</h2><blockquote>
+<p>script标签添加 setup标记，不需要再写导出语句，默认会添加导出语句</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  const message = &#x27;this is message&#x27;<br>  const logMessage = ()=&gt;&#123;<br>    console.log(message)<br>  &#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-reactive和ref函数"><a href="#组合式API-reactive和ref函数" class="headerlink" title="组合式API - reactive和ref函数"></a>组合式API - reactive和ref函数</h1><h2 id="1-reactive"><a href="#1-reactive" class="headerlink" title="1. reactive"></a>1. reactive</h2><blockquote>
+<p>接受对象类型数据的参数传入并返回一个响应式的对象</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; reactive &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const state = reactive(&#123;<br>   msg:&#x27;this is msg&#x27;<br> &#125;)<br> const setSate = ()=&gt;&#123;<br>   // 修改数据更新视图<br>   state.msg = &#x27;this is new msg&#x27;<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &#123;&#123; state.msg &#125;&#125;<br>  &lt;button @click=&quot;setState&quot;&gt;change msg&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-ref"><a href="#2-ref" class="headerlink" title="2. ref"></a>2. ref</h2><blockquote>
+<p>接收简单类型或者对象类型的数据传入并返回一个响应式的对象</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> // 导入<br> import &#123; ref &#125; from &#x27;vue&#x27;<br> // 执行函数 传入参数 变量接收<br> const count = ref(0)<br> const setCount = ()=&gt;&#123;<br>   // 修改数据更新视图必须加上.value<br>   count.value++<br> &#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;button @click=&quot;setCount&quot;&gt;&#123;&#123;count&#125;&#125;&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-reactive-对比-ref"><a href="#3-reactive-对比-ref" class="headerlink" title="3. reactive 对比 ref"></a>3. reactive 对比 ref</h2><ol>
+<li>都是用来生成响应式数据</li>
+<li>不同点<ol>
+<li>reactive不能处理简单类型的数据</li>
+<li>ref参数类型支持更好，但是必须通过.value做访问修改</li>
+<li>ref函数内部的实现依赖于reactive函数</li>
+</ol>
+</li>
+<li>在实际工作中的推荐<ol>
+<li>推荐使用ref函数，减少记忆负担，小兔鲜项目都使用ref</li>
+</ol>
+</li>
+</ol>
+<h1 id="组合式API-computed"><a href="#组合式API-computed" class="headerlink" title="组合式API - computed"></a>组合式API - computed</h1><blockquote>
+<p>计算属性基本思想和Vue2保持一致，组合式API下的计算属性只是修改了API写法</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>// 导入<br>import &#123;ref, computed &#125; from &#x27;vue&#x27;<br>// 原始数据<br>const count = ref(0)<br>// 计算属性<br>const doubleCount = computed(()=&gt;count.value * 2)<br><br>// 原始数据<br>const list = ref([1,2,3,4,5,6,7,8])<br>// 计算属性list<br>const filterList = computed(item=&gt;item &gt; 2)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-watch"><a href="#组合式API-watch" class="headerlink" title="组合式API - watch"></a>组合式API - watch</h1><blockquote>
+<p>侦听一个或者多个数据的变化，数据变化时执行回调函数，俩个额外参数 immediate控制立刻执行，deep开启深度侦听</p>
+</blockquote>
+<h2 id="1-侦听单个数据"><a href="#1-侦听单个数据" class="headerlink" title="1. 侦听单个数据"></a>1. 侦听单个数据</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-侦听多个数据"><a href="#2-侦听多个数据" class="headerlink" title="2. 侦听多个数据"></a>2. 侦听多个数据</h2><blockquote>
+<p>侦听多个数据，第一个参数可以改写成数组的写法</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  const name = ref(&#x27;cp&#x27;)<br>  // 2. 调用watch 侦听变化<br>  watch([count, name], ([newCount, newName],[oldCount,oldName])=&gt;&#123;<br>    console.log(`count或者name变化了，[newCount, newName],[oldCount,oldName])<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-immediate"><a href="#3-immediate" class="headerlink" title="3. immediate"></a>3. immediate</h2><blockquote>
+<p>在侦听器创建时立即出发回调，响应式数据变化之后继续执行回调</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const count = ref(0)<br>  // 2. 调用watch 侦听变化<br>  watch(count, (newValue, oldValue)=&gt;&#123;<br>    console.log(`count发生了变化，老值为$&#123;oldValue&#125;,新值为$&#123;newValue&#125;`)<br>  &#125;,&#123;<br>    immediate: true<br>  &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-deep"><a href="#4-deep" class="headerlink" title="4. deep"></a>4. deep</h2><blockquote>
+<p>通过watch监听的ref对象默认是浅层侦听的，直接修改嵌套的对象属性不会触发回调执行，需要开启deep</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 直接修改不会引发回调执行<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br>&lt;script setup&gt;<br>  // 1. 导入watch<br>  import &#123; ref, watch &#125; from &#x27;vue&#x27;<br>  const state = ref(&#123; count: 0 &#125;)<br>  // 2. 监听对象state 并开启deep<br>  watch(state, ()=&gt;&#123;<br>    console.log(&#x27;数据变化了&#x27;)<br>  &#125;,&#123;deep:true&#125;)<br>  const changeStateByCount = ()=&gt;&#123;<br>    // 此时修改可以触发回调<br>    state.value.count++<br>  &#125;<br>&lt;/script&gt;<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-生命周期函数"><a href="#组合式API-生命周期函数" class="headerlink" title="组合式API - 生命周期函数"></a>组合式API - 生命周期函数</h1><h2 id="1-选项式对比组合式"><a href="#1-选项式对比组合式" class="headerlink" title="1. 选项式对比组合式"></a>1. 选项式对比组合式</h2><p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/6.png" alt="image.png"></p>
+<h2 id="2-生命周期函数基本使用"><a href="#2-生命周期函数基本使用" class="headerlink" title="2. 生命周期函数基本使用"></a>2. 生命周期函数基本使用</h2><blockquote>
+<ol>
+<li>导入生命周期函数</li>
+<li>执行生命周期函数，传入回调</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-执行多次"><a href="#3-执行多次" class="headerlink" title="3. 执行多次"></a>3. 执行多次</h2><blockquote>
+<p>生命周期函数执行多次的时候，会按照顺序依次执行</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;scirpt setup&gt;<br>import &#123; onMounted &#125; from &#x27;vue&#x27;<br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br><br>onMounted(()=&gt;&#123;<br>  // 自定义逻辑<br>&#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="组合式API-父子通信"><a href="#组合式API-父子通信" class="headerlink" title="组合式API - 父子通信"></a>组合式API - 父子通信</h1><h2 id="1-父传子"><a href="#1-父传子" class="headerlink" title="1. 父传子"></a>1. 父传子</h2><blockquote>
+<p>基本思想</p>
+<ol>
+<li>父组件中给子组件绑定属性</li>
+<li>子组件内部通过props选项接收数据</li>
+</ol>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/7.png" alt="image.png"></p>
+<h2 id="2-子传父"><a href="#2-子传父" class="headerlink" title="2. 子传父"></a>2. 子传父</h2><blockquote>
+<p>基本思想</p>
+<ol>
+<li>父组件中给子组件标签通过@绑定事件</li>
+<li>子组件内部通过 emit 方法触发事件</li>
+</ol>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/8.png" alt="image.png"></p>
+<h1 id="组合式API-模版引用"><a href="#组合式API-模版引用" class="headerlink" title="组合式API - 模版引用"></a>组合式API - 模版引用</h1><blockquote>
+<p>概念：通过 ref标识 获取真实的 dom对象或者组件实例对象</p>
+</blockquote>
+<h2 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h2><blockquote>
+<p>实现步骤：</p>
+<ol>
+<li>调用ref函数生成一个ref对象</li>
+<li>通过ref标识绑定ref对象到标签</li>
+</ol>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/9.png" alt="image.png"></p>
+<h2 id="2-defineExpose"><a href="#2-defineExpose" class="headerlink" title="2. defineExpose"></a>2. defineExpose</h2><blockquote>
+<p>默认情况下在 &lt;script setup&gt;语法糖下组件内部的属性和方法是不开放给父组件访问的，可以通过defineExpose编译宏指定哪些属性和方法容许访问<br>说明：指定testMessage属性可以被访问到</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/10.png" alt="image.png"></p>
+<h1 id="组合式API-provide和inject"><a href="#组合式API-provide和inject" class="headerlink" title="组合式API - provide和inject"></a>组合式API - provide和inject</h1><h2 id="1-作用和场景"><a href="#1-作用和场景" class="headerlink" title="1. 作用和场景"></a>1. 作用和场景</h2><blockquote>
+<p>顶层组件向任意的底层组件传递数据和方法，实现跨层组件通信</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/11.png" alt="image.png"></p>
+<h2 id="2-跨层传递普通数据"><a href="#2-跨层传递普通数据" class="headerlink" title="2. 跨层传递普通数据"></a>2. 跨层传递普通数据</h2><blockquote>
+<p>实现步骤</p>
+<ol>
+<li>顶层组件通过 <code>provide</code> 函数提供数据</li>
+<li>底层组件通过 <code>inject</code> 函数提供数据</li>
+</ol>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/12.png" alt="image.png"></p>
+<h2 id="3-跨层传递响应式数据"><a href="#3-跨层传递响应式数据" class="headerlink" title="3. 跨层传递响应式数据"></a>3. 跨层传递响应式数据</h2><blockquote>
+<p>在调用provide函数时，第二个参数设置为ref对象</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/13.png" alt="image.png"></p>
+<h2 id="4-跨层传递方法"><a href="#4-跨层传递方法" class="headerlink" title="4. 跨层传递方法"></a>4. 跨层传递方法</h2><blockquote>
+<p>顶层组件可以向底层组件传递方法，底层组件调用方法修改顶层组件的数据</p>
+</blockquote>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/14.png" alt="image.png"></p>
+<h1 id="Vue3-3-新特性-defineOptions"><a href="#Vue3-3-新特性-defineOptions" class="headerlink" title="Vue3.3 新特性-defineOptions"></a>Vue3.3 新特性-defineOptions</h1><p>背景说明：</p>
+<p>有 &lt;script setup&gt; 之前，如果要定义 props, emits 可以轻而易举地添加一个与 setup 平级的属性。 </p>
+<p>但是用了 &lt;script setup&gt; 后，就没法这么干了 setup 属性已经没有了，自然无法添加与其平级的属性。</p>
+<hr>
+<p>为了解决这一问题，引入了 defineProps 与 defineEmits 这两个宏。但这只解决了 props 与 emits 这两个属性。</p>
+<p>如果我们要定义组件的 name 或其他自定义的属性，还是得回到最原始的用法——再添加一个普通的 &lt;script&gt; 标签。</p>
+<p>这样就会存在两个 &lt;script&gt;标签。让人无法接受。</p>
+<hr>
+<p>所以在 Vue 3.3 中新引入了 defineOptions 宏。顾名思义，主要是用来定义 Options API 的选项。可以用 defineOptions 定义任意的选项， props, emits, expose, slots 除外（因为这些可以使用 defineXXX 来做到）</p>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704082955748.png" alt="image-20230704082955748"></p>
+<h1 id="Vue3-3新特性-defineModel"><a href="#Vue3-3新特性-defineModel" class="headerlink" title="Vue3.3新特性-defineModel"></a>Vue3.3新特性-defineModel</h1><p>在Vue3中，自定义组件上使用v-model, 相当于传递一个modelValue属性，同时触发 update:modelValue 事件</p>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083027349.png" alt="image-20230704083027349"></p>
+<p>我们需要先定义 props，再定义 emits 。其中有许多重复的代码。如果需要修改此值，还需要手动调用 emit 函数。</p>
+<p>于是乎 defineModel 诞生了。</p>
+<p><img src="/2023/08/28/vue%E5%AD%A6%E4%B9%A0Day8/image-20230704083056549.png" alt="image-20230704083056549"></p>
+<p>生效需要配置 vite.config.js</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><code class="hljs jsx"><span class="hljs-keyword">import</span> &#123; fileURLToPath, <span class="hljs-variable constant_">URL</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:url&#x27;</span><br><br><span class="hljs-keyword">import</span> &#123; defineConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span><br><span class="hljs-keyword">import</span> vue <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-vue&#x27;</span><br><br><span class="hljs-comment">// https://vitejs.dev/config/</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>(&#123;<br>  <span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-title function_">vue</span>(&#123;<br>      <span class="hljs-attr">script</span>: &#123;<br>        <span class="hljs-attr">defineModel</span>: <span class="hljs-literal">true</span><br>      &#125;<br>    &#125;),<br>  ],<br>  <span class="hljs-attr">resolve</span>: &#123;<br>    <span class="hljs-attr">alias</span>: &#123;<br>      <span class="hljs-string">&#x27;@&#x27;</span>: <span class="hljs-title function_">fileURLToPath</span>(<span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">&#x27;./src&#x27;</span>, <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">url</span>))<br>    &#125;<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vue八股文1</title>
+    <url>/2023/09/11/vue%E9%9D%A2%E8%AF%95%E9%A2%981/</url>
+    <content><![CDATA[<h1 id="2023前端面试题整理一-Vue篇"><a href="#2023前端面试题整理一-Vue篇" class="headerlink" title="2023前端面试题整理一(Vue篇)"></a>2023前端面试题整理一(Vue篇)</h1><h3 id="简述-MVVM-框架"><a href="#简述-MVVM-框架" class="headerlink" title="简述 MVVM 框架"></a>简述 MVVM 框架</h3><p>Model: 代表数据模型，也可以在 Model 中定义数据修改和操作的业务逻辑。</p>
+<p>View: 代表 UI 组件，它负责将数据模型转化成 UI 展现出来。</p>
+<p>ViewModel: 监听数据模型的改变和控制视图行为、处理用户交互，简单理解就是一个同步 View 和 Model 的对象，连接 Model 和 View。</p>
+<h3 id="vue2-和-vue3-区别"><a href="#vue2-和-vue3-区别" class="headerlink" title="vue2 和 vue3 区别"></a>vue2 和 vue3 区别</h3><p>1.写法上的区别:vue2 使用的是options(选项)Api,vue3 的是composition Api(当然 vue3 也兼容composition api)。options Api中methods，compute，data等 api 都是分散的。而composition api中的代码是根据逻辑功能来组织的,我们可以将一个功能所定义的methods，compute，data等 api 会放在一起,让我们可以更灵活地组合组件逻辑。</p>
+<p>2.vue2 将响应式数据放到 data 函数中,而 vue3 则是使用ref和reactive将数据声明为响应式</p>
+<p>3.响应式实现方式:vue2 中是通过Object.defineProperty对数据劫持实现的,vue3 中则是使用Proxy对数据代理实现的。</p>
+<p>4.生命周期区别:vue3 中将beforeCreate和created合并到了setup函数中</p>
+<p>5.根节点: vue3 组件允许多个根节点,而 vue2 只允许一个</p>
+<p>6.内置组件: vue3 新增了传送组件Teleport和异步依赖处理组件Suspense</p>
+<h3 id="v-if-和-v-show"><a href="#v-if-和-v-show" class="headerlink" title="v-if 和 v-show"></a>v-if 和 v-show</h3><p>1.v-if表示一个 dom 元素是否被创建，而v-show则是控制这个 dom 元素的display属性是否为none</p>
+<p>2.一般在频繁切换状态的地方使用v-show,v-if则更适合条件不经常改变的场景，因为它切换开销相对较大</p>
+<h3 id="v-for-和-v-if-优先级"><a href="#v-for-和-v-if-优先级" class="headerlink" title="v-for 和 v-if 优先级"></a>v-for 和 v-if 优先级</h3><p>1.开发过程中一般不建议同时将 v-for 和 v-if 放在一个标签中使用</p>
+<p>2.Vue2 中 v-for 的优先级会更高，所以会先执行循环，再进行 v-if 判断，所以这样就会导致无论需不需展示这个元素，都会先遍历整个列表</p>
+<p>3.在 Vue3 中 v-if 的优先级会更高，但是当我们遍历一个数组的时候，根据数组中的某个元素进行 v-if 判断的时候就会报错，因为 v-if 会先执行此时还没有拿到这个数组。所以 Vue3 中会报错</p>
+<h3 id="介绍-Vue-插槽用法"><a href="#介绍-Vue-插槽用法" class="headerlink" title="介绍 Vue 插槽用法"></a>介绍 Vue 插槽用法</h3><p>插槽slot可以理解为占坑，当使用一个组件的时候，在组件标签里的对应的内容就会替换掉这个组件中的slot标签。插槽分为默认插槽，具名插槽，作用域插槽。</p>
+<p><em>默认插槽</em></p>
+<p>子组件中用slot标签来确定渲染位置，父组件使用它时直接在子组件的标签内写入内容即可</p>
+<p>&#x2F;&#x2F;子组件</p>
+<p><template>   <slot></slot></template></p>
+<p>&#x2F;&#x2F;父组件</p>
+<p>&lt;Child&gt;&lt;div&gt;默认插槽&lt;&#x2F;div&gt;&lt;&#x2F;Child&gt;</p>
+<p><em>具名插槽</em></p>
+<p>顾名思义就是具有名字的插槽，子组件中可以用name熟悉对slot命名，父组件在使用的时候通过template中的v-slot:name或者#name来定义这个插槽中的内容</p>
+<p>&#x2F;&#x2F;子组件&lt;template&gt; &lt;slot name&#x3D;”content”&gt;&lt;&#x2F;slot&gt;&lt;&#x2F;template&gt;</p>
+<p>&#x2F;&#x2F;父组件&lt;Child&gt;   &lt;template v-slot:content&gt;具名插槽内容&lt;&#x2F;template&gt;&lt;&#x2F;Child&gt;</p>
+<p><em>作用域插槽</em></p>
+<p>子组件中的slot可以通过类似组件属性传递的方式将子组件的值传递给父组件中这个子组件的插槽内容中（子组件标签内），在父组件使用子组件的时候要用v-slot的值进行接收这些参数，默认插槽可以将其直接写在子组件标签上，具名插槽则写在template上。而传过来的值只能在子组件标签中或者template标签中使用。所以在父组件作用域中获取到了子组件作用域中的变量，可以认为作用域插槽延伸了子组件数据的作用范围，因此叫做作用域插槽</p>
+<h3 id="常见的事件修饰符及其作用"><a href="#常见的事件修饰符及其作用" class="headerlink" title="常见的事件修饰符及其作用"></a>常见的事件修饰符及其作用</h3><p>●.stop：等同于 JavaScript 中的 event.stopPropagation() ，防止事件冒泡；</p>
+<p>●.prevent ：等同于 JavaScript 中的 event.preventDefault() ，防止执行预设的行为（如果事件可取消，则取消该事件，而不停止事件的进一步传播）；</p>
+<p>●.capture ：将事件改成捕获模式,由外到内触发</p>
+<p>●.self ：只会触发自己范围内的事件，不包含子元素；</p>
+<p>●.once ：只会触发一次。</p>
+<h3 id="v-model-如何实现的"><a href="#v-model-如何实现的" class="headerlink" title="v-model 如何实现的"></a>v-model 如何实现的</h3><p>v-model 其实是一个语法糖,比如&lt;input v-model&#x3D;”message” &#x2F;&gt;等同于&lt;input  :value&#x3D;”message”  @input&#x3D;”message&#x3D;$event.target.value”&gt;</p>
+<p>Vue2 中给 data 中的对象属性添加一个新的属性时会发生什么？如何解决？</p>
+<p>Vue2 中对象添加新属性绑定的视图不会更新,因为 Vue2 中 Object.defineProperty 劫持不到 data 对象中新增的属性,可以使用this.$set(this.obj, ‘b’, ‘obj.b’)解决$set()方法相当于手动的去把 obj.b 处理成一个响应式的属性，此时视图也会跟着改变了。</p>
+<h3 id="Vue-插件用法"><a href="#Vue-插件用法" class="headerlink" title="Vue 插件用法"></a>Vue 插件用法</h3><p>面试一般会问你如何写一个 vue 插件,所以没写过 vue 插件的最好去亲自体验一下回答:vue实例会有一个use函数,它接受的是一个带有install函数的对象和一个可选的选项对象,当我们使用 vue.use(plugin)或者app.use(plugin)会调用我们插件的install属性的函数,并且将当前组件的实例传进来.所以在插件中就可以对这个实例进行一些操作来实现我们插件的功能</p>
+<h3 id="Vue-自定义指令"><a href="#Vue-自定义指令" class="headerlink" title="Vue 自定义指令"></a>Vue 自定义指令</h3><p>vue 官方提供了 v-text、v-for、v-model、v-if 等常用的指令。除此之外 vue 还允许开发者自定义指令。面试经常会问什么是自定义指令?你用自定义指令做过哪些功能?</p>
+<p><em>Q1:什么是自定义指令?</em></p>
+<p>1.自定义指令包含局部指令和全局指令,在模板中使用指令前必须先使用directives选项注册。局部指令指在某个组件中注册,而全局则是将指令注册到全局,通常在 main.js 中注册。</p>
+<p>2.自定义指令由一个包含类似组件生命周期钩子的对象来定义。它的生命周期钩子包含created,beforeMount,mounted,beforeUpdate,updated,beforeUnmount,unmounted,</p>
+<p>3.常用的钩子为mounted 和  updated,它接受el,binding等参数.binding参数的值一般包含绑定到这个元素上的信息,比如下面这个指令&lt;div v-example:foo.bar&#x3D;”baz”&gt;它的 binding 会是这个对象{   arg: ‘foo’,   modifiers: { bar: true },   value: &#x2F;* <code>baz</code> 的值 <em>&#x2F;,   oldValue: &#x2F;</em> 上一次更新时 <code>baz</code> 的值 *&#x2F;}</p>
+<p><em>Q2:你用自定义指令做过哪些功能?</em></p>
+<p>1.数据埋点,通过绑定自定义事件传入点击当前元素需要埋点的事件名,在指令中监听当前元素的点击事件后调用后台接口将事件名传入</p>
+<p>2.权限控制,通过绑定自定义事件传入控制当前元素的权限字段,在指令中获取到当前元素根据权限字段来控制该元素的状态(显示,隐藏等)</p>
+<h3 id="computed-和-watch"><a href="#computed-和-watch" class="headerlink" title="computed 和 watch"></a>computed 和 watch</h3><p>1.computed是计算属性,依赖其它属性值,用于解决模板中放入过多的逻辑会让模板过重且难以维护的问题.watch是侦听器,当我们需要根据一个属性的变化而做出一些处理的时候,可以使用watch来对这个属性进行监听</p>
+<p>2.computed具有缓存的特点,即当它所依赖的属性发生改变的时候它才会重新执行内部逻辑.如下代码</p>
+<template>
+    <div></div>
+    <div></div>
+    <div></div>
+</template>
+
+<script setup>
+    import { computed, ref, watch } from "vue";
+    const a = ref(1)
+    const b = ref(2)
+    let addSum = computed(() => {
+        console.log('内部逻辑执行')   return a.value + b.value})
+</script>
+
+
+
+<p>页面多次使用addSum,但是只会打印一次”内部逻辑执行”</p>
+<p>1.watch在页面首次加载的时候默认不会执行,需要设置immediate:true首次才会执行监听</p>
+<p>2.watch默认只监听一层数据,不监听多层数据里属性的变化,需要设置deep:true才会进行深度监听</p>
+<h3 id="vue-生命周期"><a href="#vue-生命周期" class="headerlink" title="vue 生命周期"></a>vue 生命周期</h3><p>Vue2(选项式 API)Vue3(setup)描述beforeCreate-实例创建前created-实例创建后beforeMountonBeforeMountDOM 挂载前调用mountedonMountedDOM 挂载完成调用beforeUpdateonBeforeUpdate数据更新之前被调用updatedonUpdated数据更新之后被调用beforeDestroyonBeforeUnmount组件销毁前调用destroyedonUnmounted组件销毁完成调用</p>
+<p>vue 父子组件生命周期执行顺序</p>
+<p>这个相对于上一个问题稍微复杂一点,可以试着理解记忆或者直接记住吧</p>
+<p><em>渲染过程</em></p>
+<p>父beforeCreate –&gt; 父created –&gt; 父beforeMount –&gt; 子beforeCreate –&gt; 子created –&gt; 子beforeMount –&gt; 子mounted  –&gt; 父mounted</p>
+<p><em>更新过程</em></p>
+<p>父beforeUpdate –&gt; 子beforeUpdate –&gt; 子updated –&gt; 父updated</p>
+<p><em>销毁过程</em></p>
+<p>父beforeDestroy –&gt; 子beforeDestroy –&gt; 子destroyed –&gt; 父destroyed注意如果子组件是异步组件的话它们的执行顺序会发生改变，会先执行完父组件的生命周期然后再执行子组件的生命周期</p>
+<h3 id="vue-导航-路由守卫"><a href="#vue-导航-路由守卫" class="headerlink" title="vue 导航(路由守卫)"></a>vue 导航(路由守卫)</h3><p>路由守卫分为全局路由守卫，路由独享守卫，组件路由守卫</p>
+<p>●<em>全局路由守卫</em></p>
+<p>1.beforeEach,接收to、from、next三个参数，每个路由跳转前都会触发，登录验证时用的比较多2.beforeResolve，和beforeEach类似，区别是在导航被确认之前，同时在所有组件内守卫和异步路由组件被解析之后调用</p>
+<p>3.afterEach，在路由跳转完成后调用，接收 to、from 两个参数</p>
+<p>●<em>路由独享守卫</em></p>
+<p>beforeEnter,一般配置在路由配置文件中（router&#x2F;index.js），对进入某个路由之前进行相关操作</p>
+<p>●<em>组件路由守卫</em></p>
+<p>接收to、from、next三个参数</p>
+<p>1.beforeRouteEnter,进入该组件之前调用，无法获取到 vue 实例</p>
+<p>2.beforeRouteUpdate，在当前路由改变，但是该组件被复用时调用</p>
+<p>3.beforeRouteLeave, 在离开当前组件时调用</p>
+<p><strong>Vue-Router 的懒加载如何实现</strong></p>
+<p>使用箭头函数+import 动态加载</p>
+<p>const router &#x3D; new VueRouter({</p>
+<p> routes: [{ path: “&#x2F;list”, component: () &#x3D;&gt; import(“@&#x2F;components&#x2F;list.vue”) }],</p>
+<p>});</p>
+<h3 id="路由的-hash-和-history-模式的区别"><a href="#路由的-hash-和-history-模式的区别" class="headerlink" title="路由的 hash 和 history 模式的区别"></a>路由的 hash 和 history 模式的区别</h3><p>Vue-Router 有两种模式：hash 模式和 history 模式。默认的路由模式是 hash 模式。</p>
+<p><em>1.hash</em> 模式</p>
+<p>简介： hash 模式是开发中默认的模式，它的 URL 带着一个#，例如：<a href="http://www.abc.com/#/vue%EF%BC%8C%E5%AE%83%E7%9A%84hash%E5%80%BC%E5%B0%B1%E6%98%AF#/vue%E3%80%82%E7%89%B9%E7%82%B9%EF%BC%9Ahash">www.abc.com/#/vue，它的hash值就是#/vue。特点：hash</a> 值会出现在 URL 里面，但是不会出现在 HTTP 请求中，对后端完全没有影响。所以改变 hash 值，不会重新加载页面。这种模式的浏览器支持度很好，低版本的 IE 浏览器也支持这种模式。hash 路由被称为是前端路由，已经成为 SPA（单页面应用）的标配。原理： hash 模式的主要原理就是 onhashchange()事件：window.onhashchange &#x3D; function (event)</p>
+<p> { console.log(event.oldURL, event.newURL); </p>
+<p>let hash &#x3D; location.hash.slice(1);};</p>
+<p><em>2.history</em> 模式</p>
+<p>简介： history 模式的 URL 中没有#，它使用的是传统的路由分发模式，即用户在输入一个 URL 时，服务器会接收这个请求，并解析这个 URL，然后做出相应的逻辑处理。 特点： 当使用 history 模式时，URL 就像这样：abc.com&#x2F;user&#x2F;id。相比 hash 模式更加好看。但是，history 模式需要后台配置支持。如果后台没有正确配置，访问时会返回 404。 API： history api 可以分为两大部分，切换历史状态和修改历史状态：</p>
+<p>修改历史状态：包括了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法，这两个方法应用于浏览器的历史记录栈，提供了对历史记录进行修改的功能。只是当他们进行修改时，虽然修改了 url，但浏览器不会立即向后端发送请求。如果要做到改变 url 但又不刷新页面的效果，就需要前端用上这两个 API。</p>
+<p>切换历史状态： 包括 forward()、back()、go()三个方法，对应浏览器的前进，后退，跳转操作。虽然 history 模式丢弃了丑陋的#。但是，它也有自己的缺点，就是在刷新页面的时候，如果没有相应的路由或资源，就会刷出 404 来。</p>
+<h3 id="nexttick-原理"><a href="#nexttick-原理" class="headerlink" title="nexttick 原理"></a>nexttick 原理</h3><p>关于 nextTick 会问到它的用法,然后是它的原理,然后还可能问到 JS 的事件循环机制。</p>
+<p><em>Q1:vue 中的 nextTick 是干什么用的?</em></p>
+<p>这个其实比较简单,用过都知道它是干嘛的,vue 官方的解释是:在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。这是什么意思呢,其实 vue 中修改 data 不会立刻触发 dom 更新;而是把需要更新的 Watcher 加入到 queueWatcher 队列中,然后在合适的时机在 nextTick 中调用这些 Watcher 的更新函数进行 dom 更新,所以在 data 刚被修改的时候,我们是获取不到更新后的 dom 的,这时候便需要调用 nextTick 函数在它的回调函数中获取到变化后的 dom</p>
+<p><em>Q2:nextTick 原理</em></p>
+<p>1.nextTick 原理是借助浏览器事件循环来完成的,因为每次事件循环之间都有一次视图渲染,nextTick 尽量在视图渲染之前完成 dom 更新,所以 nextTick 优先使用的是 promise(微任务)实现</p>
+<p>2.每次执行 nextTick 时会将传入的回调函数放入一个队列中(callbacks 数组),然后当在本次事件循环的同步代码执行完毕后开启一个微任务(promise 或者 MutationObserver)去依次执行这个 callbacks 中的回调函数。</p>
+<p>3.但是当浏览器不支持 promise 的时候在 vue2 中会进行进行降级处理,依次使用setImmediate、setTimeout开启一个宏任务执行 callbacks</p>
+<p>4.当一个 data 数据更新时对应的 watcher 便会调用一次 nextTick,将它对应的 dom 更新操作作为回调函数放入 callbacks 中,所以当我们想获取这个 data 更新后的 dom 需要在其值变化后也调用 nextTick 将回调函数传入排在上个更新 dom 的回调函数后面,所以我们可以在这个 nextTick 的回调函数中获取到更新后的 data</p>
+<h3 id="Vue-组件传参"><a href="#Vue-组件传参" class="headerlink" title="Vue 组件传参"></a>Vue 组件传参</h3><p>这里大概归纳了一下 vue2 和 vue3 的传参方式</p>
+<p>Vue2Vue3父传子propsprops子传父$emitemits父传子$attrsattrs子传父$listeners无(合并到 attrs 方式)父传子provide&#x2F;injectprovide&#x2F;inject子组件访问父组件$parent无父组件访问子组件$children无父组件访问子组件$refexpose&amp;ref兄弟组件传值EventBusmitt</p>
+<h3 id="Vuex"><a href="#Vuex" class="headerlink" title="Vuex"></a>Vuex</h3><p>1.Vuex 是 Vue 中的全局状态管理框架，它可以管理应用的所有组件的状态。并不是每个项目都需要引入 Vuex 的，当我们的项目有很多个页面，并且这些页面共享着多个数据状态，此时我们可以引入 Vuex。</p>
+<p>2.Vuex 有三个核心的概念，state,mutations,actions,其中state为存放数据的地方，mutations中的函数作用则是用来修改state，actions中一般是用了处理一些异步操作的函数。</p>
+<p>3.Vuex 除了上面三个概念还有getters,moudles，getters就像 Vue 中的计算属性computed一样用来描述依赖响应式状态 state 中的复杂逻辑。moudles则是可以将 store 分割成模块（module），每个模块都拥有自己的state,mutations,actions等，在大型应用中经常用到</p>
+<p>4.场景：当我们异步获取结果并赋值给 state 的时候，比如数据请求，我们可以在actions中进行数据请求，拿到结果通过它的dispatch方法调用mutations中修改state的函数，从而将结果赋值给了state</p>
+<h3 id="Pinia"><a href="#Pinia" class="headerlink" title="Pinia"></a>Pinia</h3><p>pinia其实就是 Vuex5，它和 Vuex 的主要区别有以下几点</p>
+<p>1.Pinia 使用更简单，更符合开发者的开发习惯</p>
+<p>2.pinia中没有了mutations,状态state的修改可以直接进行修改，或者在actions中修改，或者使用它的$patch方法进行修改</p>
+<p>3.pinia中没有了modules,如果想使用多个 store，直接使用defineStore定义多个 store 传入不同的 id 即可</p>
+<p>4.更好的 TS 支持，不需要创建自定义的复杂包装器来支持 TS篇幅有限</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
         <tag>vue</tag>
       </tags>
   </entry>
@@ -5759,37 +5759,6 @@
       </tags>
   </entry>
   <entry>
-    <title>面试如何回答JSON.stringify的使用场景</title>
-    <url>/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/</url>
-    <content><![CDATA[<p>当面试被问到JSON.stringify 的作用意义该如何回答呢。网上查到的八股文答案基本都这样回答：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">JSON.stringify(value,replacer,space)<br></code></pre></td></tr></table></figure>
-
-<p><em><strong>它是一个用于序列化对象的方法，接受三个参数，第一个参数是要被序列化的对象，接受对象或数组类型。第二个参数用于标记需要序列化的属性，接受数组和函数类型。第三个参数用于描述序列化后的缩进字符数，用于美化格式</strong></em>。当然这样的回答也没有错，不过面试考察的更多是我们的实际应用能力以及实战场景，如果只回答八股文的内容，更多的只能体现背诵能力，所以今天整理了 JSON.stringify 的实际应用场景。</p>
-<h3 id="场景一：localStorage-的存储"><a href="#场景一：localStorage-的存储" class="headerlink" title="场景一：localStorage 的存储"></a><strong>场景一：localStorage 的存储</strong></h3><p>前端 localStorage 中只能接受字符串的存储类型，而且它是一个 KV 的结构，我们尝试模拟<em><strong>存储一个对象</strong></em>这种场景：</p>
-<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640.png" alt="图片"></p>
-<p>我们会发现是存储失败的，我们没有办法把整个 obj 存储到 localStorage 中，所以在这种场景下，我们就需要用到 JSON.stringify，把对象先序列化再进行存储：</p>
-<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020901.png" alt="图片"></p>
-<p>我们发现这样是可以存储成功的，我们只需要把存进去的对象再进行一次 JSON.parse：</p>
-<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020902.png" alt="图片"></p>
-<p>整个过程我们就可以把对象给存储进去，同时能提取出来，这样就ok了。</p>
-<h3 id="场景二：对象的深拷贝"><a href="#场景二：对象的深拷贝" class="headerlink" title="场景二：对象的深拷贝"></a><strong>场景二：对象的深拷贝</strong></h3><p>JS 中的对象它都是一个引用的类型。</p>
-<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020903.png" alt="图片"></p>
-<p>如上图把obj赋予给objA，当改动objA里面的a属性，本质上其实在obj里面的a属性它也被改动了，那怎么样解决这个问题呢？这里可以利用 JSON.stringify 以及 JSON.parse 给做一次对象的深复制，具体应用是这样的：</p>
-<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020904.png" alt="图片"></p>
-<p>我们用 JSON.stringify 序列化一次这个obj，再把它解析出来，最后的结果赋予给objB，这时候我改动objB里面的a属性，但obj里面的属性并没有进行变化，这样的话我们就成功的做了一次深度复制，这也是 JSON.parse 一个巧妙的应用。</p>
-<h3 id="场景三：删除对象属性"><a href="#场景三：删除对象属性" class="headerlink" title="场景三：删除对象属性"></a><strong>场景三：删除对象属性</strong></h3><p>如果我们需要删除对象中某个属性，也可以利用 JSON.stringify 去实现，比如说下面这个对象我们要把b属性删掉，可以利用 JSON.stringify 的第二个参数去巧妙应用：</p>
-<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020905.png" alt="图片"></p>
-<p>第二个参数接受一个方法，方法接受两个参数，一个是key，一个是value，我们可以在里面写逻辑，如果key&#x3D;&#x3D;&#x3D;’b’，这时候我们返回undefine，否则的话我们把 value 返回，这时候我们就可以得到一个没有b属性的一个序列化的字符串，我们再把这个字符串给 JSON.parse 回来，就可以得到消除 b 之后的一个对象，这也是 JSON.stringify 的一个巧妙应用。</p>
-]]></content>
-      <categories>
-        <category>前端知识</category>
-      </categories>
-      <tags>
-        <tag>八股文</tag>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>防抖和节流</title>
     <url>/2023/11/18/%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/</url>
     <content><![CDATA[<p>防抖<code>（Debounce）</code>和节流<code>（Throttle）</code>是前端开发中最常用的优化处理方式，本文介绍防抖和节流的区别，应用场景，手撕代码，介绍相关可以直接在项目中使用的库。</p>
@@ -5842,6 +5811,37 @@
       </categories>
       <tags>
         <tag>八股文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>面试如何回答JSON.stringify的使用场景</title>
+    <url>/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/</url>
+    <content><![CDATA[<p>当面试被问到JSON.stringify 的作用意义该如何回答呢。网上查到的八股文答案基本都这样回答：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">JSON.stringify(value,replacer,space)<br></code></pre></td></tr></table></figure>
+
+<p><em><strong>它是一个用于序列化对象的方法，接受三个参数，第一个参数是要被序列化的对象，接受对象或数组类型。第二个参数用于标记需要序列化的属性，接受数组和函数类型。第三个参数用于描述序列化后的缩进字符数，用于美化格式</strong></em>。当然这样的回答也没有错，不过面试考察的更多是我们的实际应用能力以及实战场景，如果只回答八股文的内容，更多的只能体现背诵能力，所以今天整理了 JSON.stringify 的实际应用场景。</p>
+<h3 id="场景一：localStorage-的存储"><a href="#场景一：localStorage-的存储" class="headerlink" title="场景一：localStorage 的存储"></a><strong>场景一：localStorage 的存储</strong></h3><p>前端 localStorage 中只能接受字符串的存储类型，而且它是一个 KV 的结构，我们尝试模拟<em><strong>存储一个对象</strong></em>这种场景：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640.png" alt="图片"></p>
+<p>我们会发现是存储失败的，我们没有办法把整个 obj 存储到 localStorage 中，所以在这种场景下，我们就需要用到 JSON.stringify，把对象先序列化再进行存储：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020901.png" alt="图片"></p>
+<p>我们发现这样是可以存储成功的，我们只需要把存进去的对象再进行一次 JSON.parse：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020902.png" alt="图片"></p>
+<p>整个过程我们就可以把对象给存储进去，同时能提取出来，这样就ok了。</p>
+<h3 id="场景二：对象的深拷贝"><a href="#场景二：对象的深拷贝" class="headerlink" title="场景二：对象的深拷贝"></a><strong>场景二：对象的深拷贝</strong></h3><p>JS 中的对象它都是一个引用的类型。</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020903.png" alt="图片"></p>
+<p>如上图把obj赋予给objA，当改动objA里面的a属性，本质上其实在obj里面的a属性它也被改动了，那怎么样解决这个问题呢？这里可以利用 JSON.stringify 以及 JSON.parse 给做一次对象的深复制，具体应用是这样的：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020904.png" alt="图片"></p>
+<p>我们用 JSON.stringify 序列化一次这个obj，再把它解析出来，最后的结果赋予给objB，这时候我改动objB里面的a属性，但obj里面的属性并没有进行变化，这样的话我们就成功的做了一次深度复制，这也是 JSON.parse 一个巧妙的应用。</p>
+<h3 id="场景三：删除对象属性"><a href="#场景三：删除对象属性" class="headerlink" title="场景三：删除对象属性"></a><strong>场景三：删除对象属性</strong></h3><p>如果我们需要删除对象中某个属性，也可以利用 JSON.stringify 去实现，比如说下面这个对象我们要把b属性删掉，可以利用 JSON.stringify 的第二个参数去巧妙应用：</p>
+<p><img src="/2023/09/17/%E9%9D%A2%E8%AF%95%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94JSON-stringify%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/640-16949602020905.png" alt="图片"></p>
+<p>第二个参数接受一个方法，方法接受两个参数，一个是key，一个是value，我们可以在里面写逻辑，如果key&#x3D;&#x3D;&#x3D;’b’，这时候我们返回undefine，否则的话我们把 value 返回，这时候我们就可以得到一个没有b属性的一个序列化的字符串，我们再把这个字符串给 JSON.parse 回来，就可以得到消除 b 之后的一个对象，这也是 JSON.stringify 的一个巧妙应用。</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+        <tag>js</tag>
       </tags>
   </entry>
 </search>
