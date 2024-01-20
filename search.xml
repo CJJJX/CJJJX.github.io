@@ -1870,8 +1870,33 @@
   </entry>
   <entry>
     <title>js中堆和栈的概念和区别</title>
-    <url>/2024/01/19/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[]]></content>
+    <url>/2024/01/20/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h3 id="一、-栈-stack-和-堆-heap"><a href="#一、-栈-stack-和-堆-heap" class="headerlink" title="一、 栈(stack)和 堆(heap)"></a>一、 栈(stack)和 堆(heap)</h3><p><strong>栈(stack)：</strong>是栈内存的简称，栈是<strong>自动分配</strong>相对<strong>固定大小</strong>的内存空间，并由系<strong>统自动释放，</strong>栈<strong>数据结构</strong>遵循<strong>FILO</strong>（first in last out）<strong>先进后出</strong>的原则，较为经典的就是乒乓球盒结构，先放进去的乒乓球只能最后取出来；</p>
+<p><img src="/2024/01/20/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/1739946914d2b233tplv-t2oaga2asx-jj-mark3024000q75.png" alt="img"></p>
+<p><strong>堆(heap)：</strong>是堆内存的简称，堆是<strong>动态分配</strong>内存，<strong>内存大小不固定</strong>，也<strong>不会自动释放，</strong>堆<strong>数据结构</strong>是一种无序的树状结构，同时它还满足key-value键值对的存储方式；我们只用知道key名，就能通过key查找到对应的value。比较经典的就是书架存书的例子，我们知道书名，就可以找到对应的书籍；</p>
+<p><img src="/2024/01/20/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/173995964a8ebad8tplv-t2oaga2asx-jj-mark3024000q75.png" alt="img"></p>
+<p><strong>**栈的特点**：**开口向上、速度快,容量小</strong>；**<strong>堆的特点</strong>：速度稍慢、容量比较大；</p>
+<p><img src="/2024/01/20/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/17375f8624e6c831tplv-t2oaga2asx-jj-mark3024000q75.png" alt="img"></p>
+<h3 id="二、-基本类型和引用类型"><a href="#二、-基本类型和引用类型" class="headerlink" title="二、  基本类型和引用类型"></a>二、  基本类型和引用类型</h3><p><img src="/2024/01/20/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/17379552d18f1b91tplv-t2oaga2asx-jj-mark3024000q75.png" alt="img"></p>
+<p><strong>基本数据类型</strong>：<strong>Undefined,String,Boolean,Null,Number，</strong>都是直接按值存放在栈内存中，占用的内存空间的大小是确定的，并由系统自动分配和自动释放。这样带来的好处就是，内存可以及时得到回收，相对于堆来说，更加容易管理内存空间。</p>
+<p><strong>引用数据类型</strong>：指那些可能由多个值构成的对象，如<strong>对象(Object)、数组(Array)、函数(Function)</strong> ，它们是通过拷贝和new出来的，这样的数据存储于堆中。</p>
+<h3 id="三、-传值和传址的区别"><a href="#三、-传值和传址的区别" class="headerlink" title="三、 传值和传址的区别"></a>三、 传值和传址的区别</h3><p><strong>基本类型</strong>：采用的是<strong>值传递</strong>。</p>
+<p><strong>引用类型</strong>：则是<strong>地址传递</strong>。</p>
+<p>引用类型的数据的地址指针是存储于栈中的，将存放在栈内存中的地址赋值给接收的变量。当我们想要访问引用类型的值的时候，需要先从栈中获得对象的地址指针，然后，在通过地址指针找到堆中的所需要的数据（保存在堆内存中,包含引用类型的变量实际上保存的不是变量本身，而是指向该对象的指针）。</p>
+<h3 id="四、-内存分配垃圾回收"><a href="#四、-内存分配垃圾回收" class="headerlink" title="四、 内存分配垃圾回收"></a>四、 内存分配垃圾回收</h3><p><strong>1.内存分配：</strong></p>
+<p><strong>（1）栈内存：</strong>线性有序存储，容量小，系统分配效率高。</p>
+<p><strong>（2）堆内存：</strong>首先要在堆内存新分配存储区域，之后又要把指针存储到栈内存中，效率相对就要低一些了。 </p>
+<p><strong>2.垃圾回收</strong>：</p>
+<p><strong>（1）栈内存：</strong>变量基本上用完就回收了，相比于堆来说存取速度会快，并且栈内存中的数据是可以共享的。</p>
+<p><strong>（2）****堆内存</strong>：堆内存中的对象不会随方法的结束而销毁，就算方法结束了，这个对象也可能会被其他引用变量所引用(参数传递)。创建对象是为了反复利用（因为对象的创建成本通常较大），这个对象将被保存到运行时数据区（也就是堆内存）。只有当一个对象没有任何引用变量引用它时，系统的垃圾回收机制才会在核实的时候回收它。</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+        <tag>js</tag>
+      </tags>
   </entry>
   <entry>
     <title>新用户注册(正则表达式)</title>
@@ -5299,11 +5324,6 @@
       <categories>
         <category>前端充电宝</category>
       </categories>
-  </entry>
-  <entry>
-    <title>事件冒泡，捕获，委托</title>
-    <url>/2024/01/20/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1%EF%BC%8C%E6%8D%95%E8%8E%B7%EF%BC%8C%E5%A7%94%E6%89%98/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>二叉树层序遍历</title>
