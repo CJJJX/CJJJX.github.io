@@ -1,0 +1,339 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>git分支命名规范 | CJJJX's BLOG</title><meta name="author" content="CJJJX"><meta name="copyright" content="CJJJX"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Git分支管理及命名规范一、分支分类 Git主分支（保留分支）：master、develop  主要分支：Master和Develop。前者用于正式发布，后者用于日常开发。  Git辅助分支（临时分支）：feature、release、fixbug  除了常设分支以外，还有一些临时性分支，用于应对一些特定目的的版本开发。临时性分支主要有三种：   功能（feature）分支 预发布（release">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git分支命名规范">
+<meta property="og:url" content="http://cjjjx.github.io/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/index.html">
+<meta property="og:site_name" content="CJJJX&#39;s BLOG">
+<meta property="og:description" content="Git分支管理及命名规范一、分支分类 Git主分支（保留分支）：master、develop  主要分支：Master和Develop。前者用于正式发布，后者用于日常开发。  Git辅助分支（临时分支）：feature、release、fixbug  除了常设分支以外，还有一些临时性分支，用于应对一些特定目的的版本开发。临时性分支主要有三种：   功能（feature）分支 预发布（release">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg">
+<meta property="article:published_time" content="2024-01-23T01:11:13.000Z">
+<meta property="article:modified_time" content="2024-01-23T01:13:21.824Z">
+<meta property="article:author" content="CJJJX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://cjjjx.github.io/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'git分支命名规范',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-01-23 09:13:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">57</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="CJJJX's BLOG"><span class="site-name">CJJJX's BLOG</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">git分支命名规范</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-01-23T01:11:13.000Z" title="发表于 2024-01-23 09:11:13">2024-01-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-23T01:13:21.824Z" title="更新于 2024-01-23 09:13:21">2024-01-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86/">前端知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="git分支命名规范"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Git分支管理及命名规范"><a href="#Git分支管理及命名规范" class="headerlink" title="Git分支管理及命名规范"></a>Git分支管理及命名规范</h1><h2 id="一、分支分类"><a href="#一、分支分类" class="headerlink" title="一、分支分类"></a>一、分支分类</h2><ul>
+<li><h4 id="Git主分支（保留分支）：master、develop"><a href="#Git主分支（保留分支）：master、develop" class="headerlink" title="Git主分支（保留分支）：master、develop"></a>Git主分支（保留分支）：master、develop</h4></li>
+</ul>
+<p>主要分支：Master和Develop。前者用于正式发布，后者用于日常开发。</p>
+<ul>
+<li><h4 id="Git辅助分支（临时分支）：feature、release、fixbug"><a href="#Git辅助分支（临时分支）：feature、release、fixbug" class="headerlink" title="Git辅助分支（临时分支）：feature、release、fixbug"></a>Git辅助分支（临时分支）：feature、release、fixbug</h4></li>
+</ul>
+<p>除了常设分支以外，还有一些临时性分支，用于应对一些特定目的的版本开发。临时性分支主要有三种：</p>
+<blockquote>
+<ul>
+<li>功能（feature）分支</li>
+<li>预发布（release）分支</li>
+<li>修补bug（fixbug）分支</li>
+</ul>
+</blockquote>
+<p>这三种分支都属于临时性需要，使用完以后，应该删除，使得代码库的常设分支始终只有Master和Develop。</p>
+<p><img src="/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/c5943fafc8b34d57bc226eb11b172c9ctplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="Git"></p>
+<h2 id="二、分支简介"><a href="#二、分支简介" class="headerlink" title="二、分支简介"></a>二、分支简介</h2><h3 id="1、主分支-Master"><a href="#1、主分支-Master" class="headerlink" title="1、主分支 Master"></a>1、主分支 Master</h3><p>代码库有且仅有一个主分支，所有提供给用户使用的正式版本，都在这个主分支上发布。 Git默认主分支Master，它是自动建立的，版本库初始化以后，默认就是在主分支在进行开发。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6ec547c9e2204d53b9cadabf6a031547~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="Git"></p>
+<h3 id="2、开发分支-Develop"><a href="#2、开发分支-Develop" class="headerlink" title="2、开发分支 Develop"></a>2、开发分支 Develop</h3><p>主分支只用来分布重大版本，日常开发应该在另一条分支上完成。我们把开发用的分支，叫做Develop。这个分支可以用来生成代码的最新隔夜版本（nightly）。如果想正式对外发布，就在Master分支上，对Develop分支进行”合并”（merge）。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3e4d7e0778754f25a060148eb346dad8~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="Git"></p>
+<ul>
+<li><h4 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h4></li>
+</ul>
+<p>Git创建Develop分支的命令：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">css<br>复制代码git checkout -<span class="hljs-selector-tag">b</span> develop master<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="发布分支"><a href="#发布分支" class="headerlink" title="发布分支"></a>发布分支</h4></li>
+</ul>
+<p>将Develop分支发布到Master分支的命令：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs scss">scss复制代码<span class="hljs-comment">// 切换到 Master 分支</span><br>git checkout master<br><br><span class="hljs-comment">// 对 Develop 分支进行合并</span><br>git merge <span class="hljs-attr">--no-ff</span> develop<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>–no-ff参数是什么意思？默认情况下，Git执行”快进式合并”（fast-farward merge），会直接将Master分支指向Develop分支。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8ecef6451cf444e7ac49565c153bf80b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="Git"></p>
+<p>使用–no-ff参数后，会执行正常合并，在Master分支上生成一个新节点。为了保证版本演进的清晰，建议采用这种做法。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9272e08a360648f5a6ab207e2172c818~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="Git"></p>
+</blockquote>
+<h3 id="3、功能分支-feature"><a href="#3、功能分支-feature" class="headerlink" title="3、功能分支 feature"></a>3、功能分支 feature</h3><p>功能分支，是为了开发某种特定功能，从Develop分支上面分出来，<strong>开发完成后，再并入Develop</strong>。 功能分支的名字，可以采用feature-*的形式命名。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d7b58e36f664455a9d0599d664910f5f~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="Git"></p>
+<ul>
+<li><h4 id="创建分支-1"><a href="#创建分支-1" class="headerlink" title="创建分支"></a>创建分支</h4></li>
+</ul>
+<p>创建一个功能分支的命令：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">css<br>复制代码git checkout -<span class="hljs-selector-tag">b</span> feature-xxx develop<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h4></li>
+</ul>
+<p>开发完成后，将功能分支合并到develop分支的命令：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">sql</span>复制代码git checkout develop<br><br>git <span class="hljs-keyword">merge</span> <span class="hljs-comment">--no-ff feature-xxx</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h4></li>
+</ul>
+<p>删除feature分支的命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">复制代码git branch -d feature-xxx<br></code></pre></td></tr></table></figure>
+
+<h3 id="4、预发布分支-release"><a href="#4、预发布分支-release" class="headerlink" title="4、预发布分支 release"></a>4、预发布分支 release</h3><p>预发布分支，是指发布正式版本之前（即合并到Master分支之前），我们可能需要有一个预发布的版本进行测试。</p>
+<p>预发布分支是从Develop分支上面分出来的，<strong>预发布结束以后，必须合并进Develop和Master分支</strong>。它的命名，可以采用release-*的形式。</p>
+<ul>
+<li><h4 id="创建分支-2"><a href="#创建分支-2" class="headerlink" title="创建分支"></a>创建分支</h4></li>
+</ul>
+<p>创建一个预发布分支的命令：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">arduino<br>复制代码git checkout -b release<span class="hljs-number">-2.5</span> develop<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="合并分支-1"><a href="#合并分支-1" class="headerlink" title="合并分支"></a>合并分支</h4></li>
+</ul>
+<p>确认没有问题后，合并到master分支的命令：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs css">css复制代码git checkout master<br><br>git merge <span class="hljs-attr">--no-ff</span> release-<span class="hljs-number">2.5</span><br><br># 对合并生成的新节点，做一个标签<br>git tag -<span class="hljs-selector-tag">a</span> <span class="hljs-number">2.5</span><br></code></pre></td></tr></table></figure>
+
+<p>再合并到develop分支的命令：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">sql</span>复制代码git checkout develop<br><br>git <span class="hljs-keyword">merge</span> <span class="hljs-comment">--no-ff release-2.5</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="删除分支-1"><a href="#删除分支-1" class="headerlink" title="删除分支"></a>删除分支</h4></li>
+</ul>
+<p>最后，删除预发布分支的命令：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">arduino<br>复制代码git branch -d release<span class="hljs-number">-2.5</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5、修补bug分支-fixbug"><a href="#5、修补bug分支-fixbug" class="headerlink" title="5、修补bug分支 fixbug"></a>5、修补bug分支 fixbug</h3><p>修补bug分支，软件正式发布以后，难免会出现bug，这时就需要创建一个分支，进行bug修补。</p>
+<p>修补bug分支是从Master分支上面分出来的。<strong>修补结束以后，再合并进Master和Develop分支</strong>。它的命名，可以采用fixbug-*的形式。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/43a9827da5e747ea926300bfd79f0bb5~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="Git"></p>
+<ul>
+<li><h4 id="创建分支-3"><a href="#创建分支-3" class="headerlink" title="创建分支"></a>创建分支</h4></li>
+</ul>
+<p>创建一个修补bug分支的命令：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">css<br>复制代码git checkout -<span class="hljs-selector-tag">b</span> fixbug-<span class="hljs-number">0.1</span> master<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="合并分支-2"><a href="#合并分支-2" class="headerlink" title="合并分支"></a>合并分支</h4></li>
+</ul>
+<p>修补结束后，合并到master分支的命令：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs css">css复制代码git checkout master<br><br>git merge <span class="hljs-attr">--no-ff</span> fixbug-<span class="hljs-number">0.1</span><br><br>git tag -<span class="hljs-selector-tag">a</span> <span class="hljs-number">0.1</span><br></code></pre></td></tr></table></figure>
+
+<p>再合并到develop分支的命令：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">sql</span>复制代码git checkout develop<br><br>git <span class="hljs-keyword">merge</span> <span class="hljs-comment">--no-ff fixbug-0.1</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="删除分支-2"><a href="#删除分支-2" class="headerlink" title="删除分支"></a>删除分支</h4></li>
+</ul>
+<p>最后，删除修补bug分支的命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">复制代码git branch -d fixbug-0.1<br></code></pre></td></tr></table></figure>
+
+<h2 id="三、总结归纳"><a href="#三、总结归纳" class="headerlink" title="三、总结归纳"></a>三、总结归纳</h2><p>最后回顾开头的大图，掌握两大主分支、三个辅助分支的生命周期，起于哪个分支始于哪个分支。</p>
+<p><img src="/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/c5943fafc8b34d57bc226eb11b172c9ctplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="Git"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://CJJJX.github.io">CJJJX</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://cjjjx.github.io/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/">http://cjjjx.github.io/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://CJJJX.github.io" target="_blank">CJJJX's BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/01/21/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1-%E6%8D%95%E8%8E%B7-%E5%A7%94%E6%89%98/" title="事件冒泡,捕获,委托"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">事件冒泡,捕获,委托</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJJJX</div><div class="author-info__description">Front-end/NWU/SE/2021</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">57</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CJJJX" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:2873180579@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客一起学习共同进步~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86%E5%8F%8A%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="toc-number">1.</span> <span class="toc-text">Git分支管理及命名规范</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%86%E6%94%AF%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">一、分支分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Git%E4%B8%BB%E5%88%86%E6%94%AF%EF%BC%88%E4%BF%9D%E7%95%99%E5%88%86%E6%94%AF%EF%BC%89%EF%BC%9Amaster%E3%80%81develop"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">Git主分支（保留分支）：master、develop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Git%E8%BE%85%E5%8A%A9%E5%88%86%E6%94%AF%EF%BC%88%E4%B8%B4%E6%97%B6%E5%88%86%E6%94%AF%EF%BC%89%EF%BC%9Afeature%E3%80%81release%E3%80%81fixbug"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">Git辅助分支（临时分支）：feature、release、fixbug</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%88%86%E6%94%AF%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">二、分支简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%B8%BB%E5%88%86%E6%94%AF-Master"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、主分支 Master</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%BC%80%E5%8F%91%E5%88%86%E6%94%AF-Develop"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、开发分支 Develop</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">创建分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%88%86%E6%94%AF"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">发布分支</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8A%9F%E8%83%BD%E5%88%86%E6%94%AF-feature"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、功能分支 feature</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF-1"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">创建分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">删除分支</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E9%A2%84%E5%8F%91%E5%B8%83%E5%88%86%E6%94%AF-release"><span class="toc-number">1.2.4.</span> <span class="toc-text">4、预发布分支 release</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF-2"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">创建分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF-1"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF-1"><span class="toc-number">1.2.4.3.</span> <span class="toc-text">删除分支</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E8%A1%A5bug%E5%88%86%E6%94%AF-fixbug"><span class="toc-number">1.2.5.</span> <span class="toc-text">5、修补bug分支 fixbug</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF-3"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">创建分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF-2"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF-2"><span class="toc-number">1.2.5.3.</span> <span class="toc-text">删除分支</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%80%BB%E7%BB%93%E5%BD%92%E7%BA%B3"><span class="toc-number">1.3.</span> <span class="toc-text">三、总结归纳</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/" title="git分支命名规范">git分支命名规范</a><time datetime="2024-01-23T01:11:13.000Z" title="发表于 2024-01-23 09:11:13">2024-01-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/21/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1-%E6%8D%95%E8%8E%B7-%E5%A7%94%E6%89%98/" title="事件冒泡,捕获,委托">事件冒泡,捕获,委托</a><time datetime="2024-01-21T11:41:24.000Z" title="发表于 2024-01-21 19:41:24">2024-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/20/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/" title="js中堆和栈的概念和区别">js中堆和栈的概念和区别</a><time datetime="2024-01-20T13:24:32.000Z" title="发表于 2024-01-20 21:24:32">2024-01-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/12/%E5%8E%9F%E5%9E%8B%E9%93%BE-%E5%8D%8E%E9%A1%BA%E4%BF%A1%E5%AE%89%E5%AE%9E%E4%B9%A0%E4%B8%80%E9%9D%A2/" title="原型链-华顺信安实习一面">原型链-华顺信安实习一面</a><time datetime="2024-01-12T01:53:28.000Z" title="发表于 2024-01-12 09:53:28">2024-01-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/10/%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/" title="二叉树层序遍历">二叉树层序遍历</a><time datetime="2024-01-10T13:57:37.000Z" title="发表于 2024-01-10 21:57:37">2024-01-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By CJJJX</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addModeChange('mermaid', runMermaid)
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var qweather_key = 'b16a1fa0e63c46a4b8f28abfb06ae3fe';
+  var gaud_map_key = 'e2b04289e870b005374ee030148d64fd&s=rsv3';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '113.34532,23.15624';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><!-- hexo injector body_end end --></body></html>
