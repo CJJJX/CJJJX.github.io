@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Vue3+tsx开发语法详解 | CJJJX's BLOG</title><meta name="author" content="CJJJX"><meta name="copyright" content="CJJJX"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="很多组件库都使用了TSX的方式开发，主要因为其灵活性比较高，TSX和SFC开发的优缺点就不介绍了，这里主要说一下将SFC项目改造为TSX的过程。 安装JSX库 安装完之后在vite.config.ts进行插件使用，代码如下：  然后就可以愉快的使用TSX来开发Vue组件了，下面主要说一下SFC和TSX的部分区别。 基本语法对照 SFCdefineComponent 和 setupSFC方式结构固定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue3+tsx开发语法详解">
+<meta property="og:url" content="http://cjjjx.github.io/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="CJJJX&#39;s BLOG">
+<meta property="og:description" content="很多组件库都使用了TSX的方式开发，主要因为其灵活性比较高，TSX和SFC开发的优缺点就不介绍了，这里主要说一下将SFC项目改造为TSX的过程。 安装JSX库 安装完之后在vite.config.ts进行插件使用，代码如下：  然后就可以愉快的使用TSX来开发Vue组件了，下面主要说一下SFC和TSX的部分区别。 基本语法对照 SFCdefineComponent 和 setupSFC方式结构固定">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg">
+<meta property="article:published_time" content="2024-01-31T11:28:31.000Z">
+<meta property="article:modified_time" content="2024-01-31T12:47:35.375Z">
+<meta property="article:author" content="CJJJX">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://cjjjx.github.io/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Vue3+tsx开发语法详解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-01-31 20:47:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">59</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="CJJJX's BLOG"><span class="site-name">CJJJX's BLOG</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Vue3+tsx开发语法详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-01-31T11:28:31.000Z" title="发表于 2024-01-31 19:28:31">2024-01-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-31T12:47:35.375Z" title="更新于 2024-01-31 20:47:35">2024-01-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86/">前端知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Vue3+tsx开发语法详解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>很多组件库都使用了<code>TSX</code>的方式开发，主要因为其灵活性比较高，<code>TSX</code>和<code>SFC</code>开发的优缺点就不介绍了，这里主要说一下将<code>SFC</code>项目改造为<code>TSX</code>的过程。</p>
+<h3 id="安装JSX库"><a href="#安装JSX库" class="headerlink" title="安装JSX库"></a>安装JSX库</h3><p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/faedab64034f78f0b0cba4c5cf94e45fb2191c77.png" alt="img"></p>
+<p>安装完之后在vite.config.ts进行插件使用，代码如下：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/95eef01f3a292df52285b6930494b26a35a87326.png" alt="img"></p>
+<p>然后就可以愉快的使用<code>TSX</code>来开发<code>Vue</code>组件了，下面主要说一下<code>SFC</code>和<code>TSX</code>的部分区别。</p>
+<h3 id="基本语法对照-SFC"><a href="#基本语法对照-SFC" class="headerlink" title="基本语法对照 SFC"></a>基本语法对照 SFC</h3><h3 id="defineComponent-和-setup"><a href="#defineComponent-和-setup" class="headerlink" title="defineComponent 和 setup"></a>defineComponent 和 setup</h3><p>SFC方式结构固定：template、script、style</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/0823dd54564e92583b09a07125273f52cdbf4ea4.jpeg" alt="img"></p>
+<p>TSX方式就完全是一个ts文件的写法，没有模板template和样式style</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/9825bc315c6034a88dd8926e77b6a75e08237653.jpeg" alt="img"></p>
+<p>setup中函数的返回值有多种方式，可以直接返回html，这个适合结构简单的页面，如果返回比较多，可以使用如下方式：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/241f95cad1c8a7865d780621d8ac273771cf50fb.jpeg" alt="img"></p>
+<p>如果是多节点，可以使用空符号包裹</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/8435e5dde71190efb239bb2772be731cfffa60bc.jpeg" alt="img"></p>
+<p>在以上的方式中我们把除了布局以外的逻辑都写在&#x2F;&#x2F;Todo部分，但是有时候我们需要做一些按条件渲染的逻辑，那么也可以在return里加处理逻辑，例如：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/18d8bc3eb13533fa905a792d7876131540345b71.png" alt="img"></p>
+<p>这种方式类似v-if，但是和v-if还是有点区别，v-if可以作用在更小的范围，而这种方式只适合整个组件的条件渲染，这个可能不好理解，在下面v-if的使用中我们会看到区别。</p>
+<h3 id="v-if"><a href="#v-if" class="headerlink" title="v-if"></a>v-if</h3><p>使用条件判断语句来实现v-if的功能，一般是三目运算符</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/359b033b5bb5c9ea1a88924d639c580a3bf3b351.png" alt="img"></p>
+<p>在这里你可以看到<code>v-if</code>的使用和我们上面的条件返回不一样，区别就是整体渲染没有大的变化，只是其中部分地方要按条件显示。</p>
+<h3 id="v-bind"><a href="#v-bind" class="headerlink" title="v-bind"></a>v-bind</h3><p>绑定变量，也就是简写的:冒号，修改方式就是将冒号去掉，把双引号改为大括号</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/a71ea8d3fd1f41343015591d93ba7bc0d0c85ee7.png" alt="img"></p>
+<h3 id="v-for"><a href="#v-for" class="headerlink" title="v-for"></a>v-for</h3><p>采用map循环的方式，返回一个数组</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/dbb44aed2e738bd49628c0b3162e69dc267ff953.png" alt="img"></p>
+<h3 id="自定义指令"><a href="#自定义指令" class="headerlink" title="自定义指令"></a>自定义指令</h3><p>自定义指令和普通指令<code>v-model</code>一样</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/3ac79f3df8dcd1000330a86dc52ea91ab8122f7a.png" alt="img"></p>
+<h3 id="插槽"><a href="#插槽" class="headerlink" title="插槽"></a>插槽</h3><p>插槽有两种实现方式，一种是用<code>v-slots</code>绑定对象，一种是直接在元素中使用对象。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/63d9f2d3572c11df99d3de2bd5828cdaf603c2ec.png" alt="img"></p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/c995d143ad4bd113c66209cae50a4a0549fb05cf.png" alt="img"></p>
+<h3 id="props"><a href="#props" class="headerlink" title="props"></a>props</h3><p>父组件向子组件传值</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/6159252dd42a2834a8d017f7ee1027e014cebf0c.png" alt="img"></p>
+<p>需要注意的是，prop传递过来的值如果没有默认值，需要判断是否为空，可以使用计算属性或者条件渲染处理。</p>
+<h3 id="emit"><a href="#emit" class="headerlink" title="emit"></a>emit</h3><p>子组件向父组件传值</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/3ac79f3df8dcd100b93cd628c52ea91ab8122f42.png" alt="img"></p>
+<h3 id="事件监听"><a href="#事件监听" class="headerlink" title="事件监听"></a>事件监听</h3><p>事件监听就是<code>v-on</code>或者<code>@</code>，在<code>TSX</code>中事件以<code>on</code>开头，即使我们的自定义事件没有<code>on</code>，也要在监听的时候加上，一般都采用的是小驼峰的方式。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/7aec54e736d12f2e9c1d2cc9f7673b68843568ab.png" alt="img"></p>
+<p>自定义事件只需要在事件名前面加上on即可，参数传递与上面一致</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/f31fbe096b63f62464aa82053be105f21b4ca375.png" alt="img"></p>
+<p>在<code>TSX</code>中处理事件不能使用事件修饰符，因此需要在事件函数中自行处理，例如冒泡、阻止默认行为等。</p>
+<h3 id="属性-事件继承"><a href="#属性-事件继承" class="headerlink" title="属性&#x2F;事件继承"></a>属性&#x2F;事件继承</h3><p>对于这个我也不知道怎么描述，当我们给一个组件传递属性和事件时，一般子组件在<code>props</code>中接收属性值，<code>emits</code>中接收事件，但是我们也可以传一些额外的属性和事件，即不在<code>props</code>和<code>emits</code>中的属性和事件，虽然这是不推荐的做法，但是有时候当我们封装第三方库的时候，这种用法就非常的方便。具体看如下代码：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/d1a20cf431adcbef4e77c469120ac0d7a2cc9f4a.png" alt="img"></p>
+<p><code>SFC</code>中，在<code>template</code>中我们可以通过<code>$attrs</code>获取到额外的属性和方法，<code>script</code>中可以通过<code>getCurrentInstance</code>方法获取组件对象，然后通过<code>.attrs</code>拿到属性和方法。</p>
+<p><code>TSX</code>中，直接通过<code>attrs</code>获取属性和方法，通过<code>&#123;...attrs&#125;</code>把属性和方法传递给子元素。</p>
+<h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><p><code>v-show</code>和<code>v-model</code>与<code>SFC</code>中使用一样，这里不做示例</p>
+<h3 id="组件引用"><a href="#组件引用" class="headerlink" title="组件引用"></a>组件引用</h3><p>通过<code>ref</code>获取组件<code>dom</code>信息</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/9358d109b3de9c82c091223dd6246e0018d84338.png" alt="img"></p>
+<h3 id="对外暴露属性和方法"><a href="#对外暴露属性和方法" class="headerlink" title="对外暴露属性和方法"></a>对外暴露属性和方法</h3><p>在父组件中直接调用子组件的属性和方法</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/7aec54e736d12f2e0836b5e2fa673b68843568b5.png" alt="img"></p>
+<h3 id="样式修改"><a href="#样式修改" class="headerlink" title="样式修改"></a>样式修改</h3><p>样式的改造一度是我切换<code>TSX</code>的最大痛点，因为在<code>SFC</code>中最麻烦的是修改第三方库的样式，一般要用到<code>:deep</code>，而且有时候还不一定成功，非常麻烦，改为<code>TSX</code>后我一直不知道怎么解决这种问题，后来搞定以后再回过头来看，发现是<code>vue</code>写久了养成了固定思维。我们在<code>vue</code>文件中写的样式都包含在<code>scoped</code>下面，如果不加<code>scoped</code>就可能会造成全局样式污染。那为什么会造成全局样式污染？又为什么加了<code>scoped</code>就不会呢？实际上我们只要知道<code>CSS</code>基础，明白<code>CSS</code>中的样式优先级即可。<code>vue</code>生成的项目最终还是会回归到<code>html</code>、<code>css</code>、<code>js</code>来，因此我们从这里来理解就方便多了。</p>
+<ul>
+<li>为什么会造成全局样式污染？</li>
+</ul>
+<p>这个不是<code>vue</code>的专利，而是<code>css</code>本身的优先级问题，就是如果我们定义了相同的<code>css</code>类，并以相同的方式来使用它，那么根据先后加载顺序，就会导致后加载的覆盖掉先加载的样式，造成先加载的样式无效，这就是所谓的样式污染。</p>
+<ul>
+<li>为什么加了<code>scoped</code>就不会造成样式污染呢？</li>
+</ul>
+<p>我们看一个简单的例子：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/562c11dfa9ec8a13b6bed33c41a67f85a2ecc0f3.png" alt="img"></p>
+<p>看一下html和css源码</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/a044ad345982b2b78ae47d4a870825e577099b71.png" alt="img"></p>
+<p>可以看到，<code>vue</code>组件在渲染的时候，会给元素增加一个属性<code>data-v-xxxx</code>，然后在生成样式的时候也会在样式上加上<code>[data-v-xxxxx]</code>，这是<code>css</code>属性选择器的用法，这样根据<code>css</code>选择器的优先级，这个属性就具有唯一性。</p>
+<p>但是在<code>TSX</code>中没有了<code>scoped</code>怎么办？很简单，回归原始的<code>css</code>即可。在原始<code>css</code>中需要我们自己来保证<code>css</code>选择的唯一性，具体做法就是给组件内使用的css类都加上唯一前缀，例如组件名称为<code>Child</code>，那么所有的<code>css</code>类都加上<code>child-xxx</code>，因为我们肯定要保证组件名称的唯一性，所以这样下来对应的样式也就是唯一的。这就要求我们给所有需要修改样式的元素都加上类或者自定义属性，以便于我们可以通过唯一的<code>css</code>选择器选中它。</p>
+<p>示例如下：</p>
+<p>创建一个<code>css</code>文件：<code>child.css</code></p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/b219ebc4b74543a90fb201cbabb26488b80114b8.png" alt="img"></p>
+<p>在tsx文件中引用</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/fc1f4134970a304e1b0d58d76c6d498cc9175c24.png" alt="img"></p>
+<p>除了上面这种保证样式名称唯一的方式以外，vue其实一直为我们提供了另外一种方式-css module，具体来讲就是把css作为模块引入到js中，然后会生成一个唯一的名称，在以前用webpack的时候还需要装额外的包，现在vite已经帮我们集成了，只需要在vite.config.ts中加一下配置即可。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/a8014c086e061d950aa47912cc51e4db63d9ca6e.png" alt="img"></p>
+<p>这里规定<code>css</code>类名的命名规则为小驼峰，即<code>child-item</code>类在<code>js</code>中会变成<code>childItem</code>变量。但是要实现<code>css module</code>的功能，对<code>css</code>文件命名由要求，必须在后缀名前面是<code>module</code>，例如<code>xxx.module.css</code>、<code>xxx.module.less</code>、<code>xxx.module.scss</code>。</p>
+<p>示例如下：</p>
+<p>创建一个<code>css</code>文件：<code>child.module.css</code></p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/b03533fa828ba61e0e3e9a13f7917900314e596e.png" alt="img"></p>
+<p>在tsx文件中引用</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/4bed2e738bd4b31cdbfb59ba5773c9759f2ff819.png" alt="img"></p>
+<p>打开浏览器看一下源码</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/6d81800a19d8bc3ee49d9c9d392e4814a9d34504.png" alt="img"></p>
+<p>可以看到元素上绑定的<code>css</code>和全局的<code>css</code>都出现了变化，这种方式我们就不需要去关注编写的<code>css</code>是否是唯一的，<code>vite</code>会帮我们自行处理，只是在使用的时候有一些区别。</p>
+<p>除了常规的<code>css</code>使用，我们还有动态<code>class</code>的使用。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/aec379310a55b3196ef56684f40c6c2ccefc1767.png" alt="img"></p>
+<p>我们把需要的<code>class</code>处理成一个数组给它即可。</p>
+<p>除了动态<code>class</code>还有动态<code>style</code>的使用。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/0824ab18972bd407486658c6c32c705b0eb3099c.png" alt="img"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://CJJJX.github.io">CJJJX</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://cjjjx.github.io/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/">http://cjjjx.github.io/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://CJJJX.github.io" target="_blank">CJJJX's BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/vue/">vue</a></div><div class="post_share"><div class="social-share" data-image="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/01/24/css%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8sass/" title="css预处理器sass"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">css预处理器sass</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/10/01/Vue%E4%B9%8BnextTick%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%9C%E7%94%A8/" title="Vue之nextTick原理与作用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-01</div><div class="title">Vue之nextTick原理与作用</div></div></a></div><div><a href="/2023/08/29/vue3-pinia/" title="vue3-pinia"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-29</div><div class="title">vue3-pinia</div></div></a></div><div><a href="/2023/09/09/vue3%E9%A1%B9%E7%9B%AErem%E8%87%AA%E9%80%82%E5%BA%94%E5%A4%A7%E5%B0%8F%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0/" title="vue3项目rem自适应大小如何实现"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-09</div><div class="title">vue3项目rem自适应大小如何实现</div></div></a></div><div><a href="/2023/09/14/vue3%E6%8F%92%E6%A7%BDslot%E7%94%A8%E6%B3%95%E6%B1%87%E6%80%BB/" title="vue3插槽slot用法汇总"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-14</div><div class="title">vue3插槽slot用法汇总</div></div></a></div><div><a href="/2023/08/06/vue%E5%AD%A6%E4%B9%A0Day1/" title="vue学习Day1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-06</div><div class="title">vue学习Day1</div></div></a></div><div><a href="/2023/08/07/vue%E5%AD%A6%E4%B9%A0Day2/" title="vue学习Day2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-07</div><div class="title">vue学习Day2</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJJJX</div><div class="author-info__description">Front-end/NWU/SE/2021</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">59</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CJJJX" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:2873180579@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客一起学习共同进步~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85JSX%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">安装JSX库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E5%AF%B9%E7%85%A7-SFC"><span class="toc-number">2.</span> <span class="toc-text">基本语法对照 SFC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defineComponent-%E5%92%8C-setup"><span class="toc-number">3.</span> <span class="toc-text">defineComponent 和 setup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-if"><span class="toc-number">4.</span> <span class="toc-text">v-if</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-bind"><span class="toc-number">5.</span> <span class="toc-text">v-bind</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-for"><span class="toc-number">6.</span> <span class="toc-text">v-for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="toc-number">7.</span> <span class="toc-text">自定义指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E6%A7%BD"><span class="toc-number">8.</span> <span class="toc-text">插槽</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props"><span class="toc-number">9.</span> <span class="toc-text">props</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emit"><span class="toc-number">10.</span> <span class="toc-text">emit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC"><span class="toc-number">11.</span> <span class="toc-text">事件监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7-%E4%BA%8B%E4%BB%B6%E7%BB%A7%E6%89%BF"><span class="toc-number">12.</span> <span class="toc-text">属性&#x2F;事件继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="toc-number">13.</span> <span class="toc-text">其他命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%BC%95%E7%94%A8"><span class="toc-number">14.</span> <span class="toc-text">组件引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%A4%96%E6%9A%B4%E9%9C%B2%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="toc-number">15.</span> <span class="toc-text">对外暴露属性和方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E4%BF%AE%E6%94%B9"><span class="toc-number">16.</span> <span class="toc-text">样式修改</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/" title="Vue3+tsx开发语法详解">Vue3+tsx开发语法详解</a><time datetime="2024-01-31T11:28:31.000Z" title="发表于 2024-01-31 19:28:31">2024-01-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/24/css%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8sass/" title="css预处理器sass">css预处理器sass</a><time datetime="2024-01-24T12:55:45.000Z" title="发表于 2024-01-24 20:55:45">2024-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/23/git%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/" title="git分支命名规范">git分支命名规范</a><time datetime="2024-01-23T01:11:13.000Z" title="发表于 2024-01-23 09:11:13">2024-01-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/21/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1-%E6%8D%95%E8%8E%B7-%E5%A7%94%E6%89%98/" title="事件冒泡,捕获,委托">事件冒泡,捕获,委托</a><time datetime="2024-01-21T11:41:24.000Z" title="发表于 2024-01-21 19:41:24">2024-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/20/js%E4%B8%AD%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8C%BA%E5%88%AB/" title="js中堆和栈的概念和区别">js中堆和栈的概念和区别</a><time datetime="2024-01-20T13:24:32.000Z" title="发表于 2024-01-20 21:24:32">2024-01-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By CJJJX</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addModeChange('mermaid', runMermaid)
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var qweather_key = 'b16a1fa0e63c46a4b8f28abfb06ae3fe';
+  var gaud_map_key = 'e2b04289e870b005374ee030148d64fd&s=rsv3';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '113.34532,23.15624';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><!-- hexo injector body_end end --></body></html>

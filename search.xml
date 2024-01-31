@@ -6041,4 +6041,102 @@
         <category>前端知识</category>
       </categories>
   </entry>
+  <entry>
+    <title>css预处理器sass</title>
+    <url>/2024/01/24/css%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8sass/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Vue3+tsx开发语法详解</title>
+    <url>/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p>很多组件库都使用了<code>TSX</code>的方式开发，主要因为其灵活性比较高，<code>TSX</code>和<code>SFC</code>开发的优缺点就不介绍了，这里主要说一下将<code>SFC</code>项目改造为<code>TSX</code>的过程。</p>
+<h3 id="安装JSX库"><a href="#安装JSX库" class="headerlink" title="安装JSX库"></a>安装JSX库</h3><p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/faedab64034f78f0b0cba4c5cf94e45fb2191c77.png" alt="img"></p>
+<p>安装完之后在vite.config.ts进行插件使用，代码如下：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/95eef01f3a292df52285b6930494b26a35a87326.png" alt="img"></p>
+<p>然后就可以愉快的使用<code>TSX</code>来开发<code>Vue</code>组件了，下面主要说一下<code>SFC</code>和<code>TSX</code>的部分区别。</p>
+<h3 id="基本语法对照-SFC"><a href="#基本语法对照-SFC" class="headerlink" title="基本语法对照 SFC"></a>基本语法对照 SFC</h3><h3 id="defineComponent-和-setup"><a href="#defineComponent-和-setup" class="headerlink" title="defineComponent 和 setup"></a>defineComponent 和 setup</h3><p>SFC方式结构固定：template、script、style</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/0823dd54564e92583b09a07125273f52cdbf4ea4.jpeg" alt="img"></p>
+<p>TSX方式就完全是一个ts文件的写法，没有模板template和样式style</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/9825bc315c6034a88dd8926e77b6a75e08237653.jpeg" alt="img"></p>
+<p>setup中函数的返回值有多种方式，可以直接返回html，这个适合结构简单的页面，如果返回比较多，可以使用如下方式：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/241f95cad1c8a7865d780621d8ac273771cf50fb.jpeg" alt="img"></p>
+<p>如果是多节点，可以使用空符号包裹</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/8435e5dde71190efb239bb2772be731cfffa60bc.jpeg" alt="img"></p>
+<p>在以上的方式中我们把除了布局以外的逻辑都写在&#x2F;&#x2F;Todo部分，但是有时候我们需要做一些按条件渲染的逻辑，那么也可以在return里加处理逻辑，例如：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/18d8bc3eb13533fa905a792d7876131540345b71.png" alt="img"></p>
+<p>这种方式类似v-if，但是和v-if还是有点区别，v-if可以作用在更小的范围，而这种方式只适合整个组件的条件渲染，这个可能不好理解，在下面v-if的使用中我们会看到区别。</p>
+<h3 id="v-if"><a href="#v-if" class="headerlink" title="v-if"></a>v-if</h3><p>使用条件判断语句来实现v-if的功能，一般是三目运算符</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/359b033b5bb5c9ea1a88924d639c580a3bf3b351.png" alt="img"></p>
+<p>在这里你可以看到<code>v-if</code>的使用和我们上面的条件返回不一样，区别就是整体渲染没有大的变化，只是其中部分地方要按条件显示。</p>
+<h3 id="v-bind"><a href="#v-bind" class="headerlink" title="v-bind"></a>v-bind</h3><p>绑定变量，也就是简写的:冒号，修改方式就是将冒号去掉，把双引号改为大括号</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/a71ea8d3fd1f41343015591d93ba7bc0d0c85ee7.png" alt="img"></p>
+<h3 id="v-for"><a href="#v-for" class="headerlink" title="v-for"></a>v-for</h3><p>采用map循环的方式，返回一个数组</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/dbb44aed2e738bd49628c0b3162e69dc267ff953.png" alt="img"></p>
+<h3 id="自定义指令"><a href="#自定义指令" class="headerlink" title="自定义指令"></a>自定义指令</h3><p>自定义指令和普通指令<code>v-model</code>一样</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/3ac79f3df8dcd1000330a86dc52ea91ab8122f7a.png" alt="img"></p>
+<h3 id="插槽"><a href="#插槽" class="headerlink" title="插槽"></a>插槽</h3><p>插槽有两种实现方式，一种是用<code>v-slots</code>绑定对象，一种是直接在元素中使用对象。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/63d9f2d3572c11df99d3de2bd5828cdaf603c2ec.png" alt="img"></p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/c995d143ad4bd113c66209cae50a4a0549fb05cf.png" alt="img"></p>
+<h3 id="props"><a href="#props" class="headerlink" title="props"></a>props</h3><p>父组件向子组件传值</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/6159252dd42a2834a8d017f7ee1027e014cebf0c.png" alt="img"></p>
+<p>需要注意的是，prop传递过来的值如果没有默认值，需要判断是否为空，可以使用计算属性或者条件渲染处理。</p>
+<h3 id="emit"><a href="#emit" class="headerlink" title="emit"></a>emit</h3><p>子组件向父组件传值</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/3ac79f3df8dcd100b93cd628c52ea91ab8122f42.png" alt="img"></p>
+<h3 id="事件监听"><a href="#事件监听" class="headerlink" title="事件监听"></a>事件监听</h3><p>事件监听就是<code>v-on</code>或者<code>@</code>，在<code>TSX</code>中事件以<code>on</code>开头，即使我们的自定义事件没有<code>on</code>，也要在监听的时候加上，一般都采用的是小驼峰的方式。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/7aec54e736d12f2e9c1d2cc9f7673b68843568ab.png" alt="img"></p>
+<p>自定义事件只需要在事件名前面加上on即可，参数传递与上面一致</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/f31fbe096b63f62464aa82053be105f21b4ca375.png" alt="img"></p>
+<p>在<code>TSX</code>中处理事件不能使用事件修饰符，因此需要在事件函数中自行处理，例如冒泡、阻止默认行为等。</p>
+<h3 id="属性-事件继承"><a href="#属性-事件继承" class="headerlink" title="属性&#x2F;事件继承"></a>属性&#x2F;事件继承</h3><p>对于这个我也不知道怎么描述，当我们给一个组件传递属性和事件时，一般子组件在<code>props</code>中接收属性值，<code>emits</code>中接收事件，但是我们也可以传一些额外的属性和事件，即不在<code>props</code>和<code>emits</code>中的属性和事件，虽然这是不推荐的做法，但是有时候当我们封装第三方库的时候，这种用法就非常的方便。具体看如下代码：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/d1a20cf431adcbef4e77c469120ac0d7a2cc9f4a.png" alt="img"></p>
+<p><code>SFC</code>中，在<code>template</code>中我们可以通过<code>$attrs</code>获取到额外的属性和方法，<code>script</code>中可以通过<code>getCurrentInstance</code>方法获取组件对象，然后通过<code>.attrs</code>拿到属性和方法。</p>
+<p><code>TSX</code>中，直接通过<code>attrs</code>获取属性和方法，通过<code>&#123;...attrs&#125;</code>把属性和方法传递给子元素。</p>
+<h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><p><code>v-show</code>和<code>v-model</code>与<code>SFC</code>中使用一样，这里不做示例</p>
+<h3 id="组件引用"><a href="#组件引用" class="headerlink" title="组件引用"></a>组件引用</h3><p>通过<code>ref</code>获取组件<code>dom</code>信息</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/9358d109b3de9c82c091223dd6246e0018d84338.png" alt="img"></p>
+<h3 id="对外暴露属性和方法"><a href="#对外暴露属性和方法" class="headerlink" title="对外暴露属性和方法"></a>对外暴露属性和方法</h3><p>在父组件中直接调用子组件的属性和方法</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/7aec54e736d12f2e0836b5e2fa673b68843568b5.png" alt="img"></p>
+<h3 id="样式修改"><a href="#样式修改" class="headerlink" title="样式修改"></a>样式修改</h3><p>样式的改造一度是我切换<code>TSX</code>的最大痛点，因为在<code>SFC</code>中最麻烦的是修改第三方库的样式，一般要用到<code>:deep</code>，而且有时候还不一定成功，非常麻烦，改为<code>TSX</code>后我一直不知道怎么解决这种问题，后来搞定以后再回过头来看，发现是<code>vue</code>写久了养成了固定思维。我们在<code>vue</code>文件中写的样式都包含在<code>scoped</code>下面，如果不加<code>scoped</code>就可能会造成全局样式污染。那为什么会造成全局样式污染？又为什么加了<code>scoped</code>就不会呢？实际上我们只要知道<code>CSS</code>基础，明白<code>CSS</code>中的样式优先级即可。<code>vue</code>生成的项目最终还是会回归到<code>html</code>、<code>css</code>、<code>js</code>来，因此我们从这里来理解就方便多了。</p>
+<ul>
+<li>为什么会造成全局样式污染？</li>
+</ul>
+<p>这个不是<code>vue</code>的专利，而是<code>css</code>本身的优先级问题，就是如果我们定义了相同的<code>css</code>类，并以相同的方式来使用它，那么根据先后加载顺序，就会导致后加载的覆盖掉先加载的样式，造成先加载的样式无效，这就是所谓的样式污染。</p>
+<ul>
+<li>为什么加了<code>scoped</code>就不会造成样式污染呢？</li>
+</ul>
+<p>我们看一个简单的例子：</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/562c11dfa9ec8a13b6bed33c41a67f85a2ecc0f3.png" alt="img"></p>
+<p>看一下html和css源码</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/a044ad345982b2b78ae47d4a870825e577099b71.png" alt="img"></p>
+<p>可以看到，<code>vue</code>组件在渲染的时候，会给元素增加一个属性<code>data-v-xxxx</code>，然后在生成样式的时候也会在样式上加上<code>[data-v-xxxxx]</code>，这是<code>css</code>属性选择器的用法，这样根据<code>css</code>选择器的优先级，这个属性就具有唯一性。</p>
+<p>但是在<code>TSX</code>中没有了<code>scoped</code>怎么办？很简单，回归原始的<code>css</code>即可。在原始<code>css</code>中需要我们自己来保证<code>css</code>选择的唯一性，具体做法就是给组件内使用的css类都加上唯一前缀，例如组件名称为<code>Child</code>，那么所有的<code>css</code>类都加上<code>child-xxx</code>，因为我们肯定要保证组件名称的唯一性，所以这样下来对应的样式也就是唯一的。这就要求我们给所有需要修改样式的元素都加上类或者自定义属性，以便于我们可以通过唯一的<code>css</code>选择器选中它。</p>
+<p>示例如下：</p>
+<p>创建一个<code>css</code>文件：<code>child.css</code></p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/b219ebc4b74543a90fb201cbabb26488b80114b8.png" alt="img"></p>
+<p>在tsx文件中引用</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/fc1f4134970a304e1b0d58d76c6d498cc9175c24.png" alt="img"></p>
+<p>除了上面这种保证样式名称唯一的方式以外，vue其实一直为我们提供了另外一种方式-css module，具体来讲就是把css作为模块引入到js中，然后会生成一个唯一的名称，在以前用webpack的时候还需要装额外的包，现在vite已经帮我们集成了，只需要在vite.config.ts中加一下配置即可。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/a8014c086e061d950aa47912cc51e4db63d9ca6e.png" alt="img"></p>
+<p>这里规定<code>css</code>类名的命名规则为小驼峰，即<code>child-item</code>类在<code>js</code>中会变成<code>childItem</code>变量。但是要实现<code>css module</code>的功能，对<code>css</code>文件命名由要求，必须在后缀名前面是<code>module</code>，例如<code>xxx.module.css</code>、<code>xxx.module.less</code>、<code>xxx.module.scss</code>。</p>
+<p>示例如下：</p>
+<p>创建一个<code>css</code>文件：<code>child.module.css</code></p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/b03533fa828ba61e0e3e9a13f7917900314e596e.png" alt="img"></p>
+<p>在tsx文件中引用</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/4bed2e738bd4b31cdbfb59ba5773c9759f2ff819.png" alt="img"></p>
+<p>打开浏览器看一下源码</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/6d81800a19d8bc3ee49d9c9d392e4814a9d34504.png" alt="img"></p>
+<p>可以看到元素上绑定的<code>css</code>和全局的<code>css</code>都出现了变化，这种方式我们就不需要去关注编写的<code>css</code>是否是唯一的，<code>vite</code>会帮我们自行处理，只是在使用的时候有一些区别。</p>
+<p>除了常规的<code>css</code>使用，我们还有动态<code>class</code>的使用。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/aec379310a55b3196ef56684f40c6c2ccefc1767.png" alt="img"></p>
+<p>我们把需要的<code>class</code>处理成一个数组给它即可。</p>
+<p>除了动态<code>class</code>还有动态<code>style</code>的使用。</p>
+<p><img src="/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/0824ab18972bd407486658c6c32c705b0eb3099c.png" alt="img"></p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
 </search>
