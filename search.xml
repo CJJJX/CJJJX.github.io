@@ -6042,11 +6042,6 @@
       </categories>
   </entry>
   <entry>
-    <title>css预处理器sass</title>
-    <url>/2024/01/24/css%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8sass/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>Vue3+tsx开发语法详解</title>
     <url>/2024/01/31/Vue3-tsx%E5%BC%80%E5%8F%91%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<p>很多组件库都使用了<code>TSX</code>的方式开发，主要因为其灵活性比较高，<code>TSX</code>和<code>SFC</code>开发的优缺点就不介绍了，这里主要说一下将<code>SFC</code>项目改造为<code>TSX</code>的过程。</p>
@@ -6166,6 +6161,65 @@
 ]]></content>
       <categories>
         <category>前端充电宝</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数组扁平化</title>
+    <url>/2024/02/05/%E6%95%B0%E7%BB%84%E6%89%81%E5%B9%B3%E5%8C%96/</url>
+    <content><![CDATA[<p>总结的数组扁平化方法如下：</p>
+<h3 id="1-数组自带的方法flat"><a href="#1-数组自带的方法flat" class="headerlink" title="1,数组自带的方法flat"></a>1,数组自带的方法flat</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>,[<span class="hljs-number">2</span>,[<span class="hljs-number">3</span>,[<span class="hljs-number">4</span>,<span class="hljs-number">5</span>]]],<span class="hljs-number">6</span>]<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(arr.<span class="hljs-title function_">flat</span>(<span class="hljs-title class_">Infinity</span>))<br></code></pre></td></tr></table></figure>
+
+<p><em>数组自带的扁平化方法,flat的参数代表的是需要展开几层，如果是Infinity的话，就是不过嵌套几层，</em></p>
+<p><em>全部都展开。</em></p>
+<p>如果写的是Infinity的话，就是不管你是多少维数组，都会直接转为一维数组</p>
+<h3 id="2-通过正则的方式来让数组扁平化"><a href="#2-通过正则的方式来让数组扁平化" class="headerlink" title="2,通过正则的方式来让数组扁平化"></a>2,通过正则的方式来让数组扁平化</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>,[<span class="hljs-number">2</span>,[<span class="hljs-number">3</span>,[<span class="hljs-number">4</span>,<span class="hljs-number">5</span>]]],<span class="hljs-number">6</span>]<br><span class="hljs-keyword">const</span> res = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(arr).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\[|\]/g</span>,<span class="hljs-string">&#x27;&#x27;</span>)<br><span class="hljs-keyword">const</span> res2 = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-string">&#x27;[&#x27;</span> + res + <span class="hljs-string">&#x27;]&#x27;</span>)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res2)<br></code></pre></td></tr></table></figure>
+
+<p>首先是使用JSON.stringify把arr转为字符串。</p>
+<p>接着使用正则把字符串里面的 [ 和 ]去掉。</p>
+<p>然后再拼接数组括号转为数组对象。</p>
+<h3 id="3-（简单粗暴）递归"><a href="#3-（简单粗暴）递归" class="headerlink" title="3,（简单粗暴）递归"></a>3,（简单粗暴）递归</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> array = []<br><span class="hljs-keyword">const</span>  <span class="hljs-title function_">fn</span> = (<span class="hljs-params">arr</span>)=&gt;&#123;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;i&lt;arr.<span class="hljs-property">length</span>; i++)&#123;<br>                <span class="hljs-keyword">if</span>(<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(arr[i]))&#123;<br>                    <span class="hljs-title function_">fn</span>(arr[i])<br>                &#125;<br>                <span class="hljs-keyword">else</span> &#123;<br>                    array.<span class="hljs-title function_">push</span>(arr[i])<br>                &#125;<br>            &#125;<br>      &#125;<br><span class="hljs-title function_">fn</span>(arr)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(array)<br></code></pre></td></tr></table></figure>
+
+<p>首先，先写一个函数用来让数组扁平，函数先定义一个空数组，作为新数组返回。</p>
+<p>接着，使用<a href="https://www.zhihu.com/search?q=for%E5%BE%AA%E7%8E%AF&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2605792650%7D">for循环</a>遍历数组的每一项，</p>
+<p>然后，使用Array.isArray()判断这一项是不是数组，</p>
+<p>如果是数组，就递归调用这个函数，不是就讲它放到新数组中。</p>
+<p>最后将数组返回。</p>
+<h3 id="4，（鲜为人知）array-reduce"><a href="#4，（鲜为人知）array-reduce" class="headerlink" title="4，（鲜为人知）array.reduce"></a>4，（鲜为人知）array.reduce</h3><p>定义和用法</p>
+<p>reduce() 方法接收一个函数作为<a href="https://www.zhihu.com/search?q=%E7%B4%AF%E5%8A%A0%E5%99%A8&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2605792650%7D">累加器</a>，数组中的每个值（从左到右）开始缩减，最终计算为一个值。</p>
+<p>reduce() 可以作为一个<a href="https://www.zhihu.com/search?q=%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2605792650%7D">高阶函数</a>，用于函数的 compose。</p>
+<p><strong>注意:</strong> reduce() 对于空数组是不会执行<a href="https://www.zhihu.com/search?q=%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2605792650%7D">回调函数</a>的。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">array.<span class="hljs-title function_">reduce</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">total, currentValue, currentIndex, arr</span>), initialValue)<br></code></pre></td></tr></table></figure>
+
+<p>reduce()方法是数组的通用方法，接受一个函数作为累加器，另外在接受一个数作为累加器中要用到的数据，可写可不写。</p>
+<p>这个回调函数中每个参数的意义如下：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>total</td>
+<td>必需。初始值，或者计算结束后的返回值。</td>
+</tr>
+<tr>
+<td>currentValue</td>
+<td>必须，当前元素。</td>
+</tr>
+<tr>
+<td>currentIndex</td>
+<td>可选。当前元素的索引</td>
+</tr>
+<tr>
+<td>arr</td>
+<td>可选。当前元素所属的数组对象。</td>
+</tr>
+</tbody></table>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">newArr</span> = (<span class="hljs-params">arr</span>)=&gt;&#123;<br>     <span class="hljs-keyword">return</span> arr.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">pre,cur</span>)=&gt;</span>&#123;<br>          <span class="hljs-keyword">return</span> pre.<span class="hljs-title function_">concat</span>(<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(cur) ? <span class="hljs-title function_">newArr</span>(cur) : cur)<br>     &#125;,[])<br>&#125;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">newArr</span>(arr),<span class="hljs-string">&quot;reduce方法&quot;</span>)<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>八股文</category>
       </categories>
   </entry>
 </search>
