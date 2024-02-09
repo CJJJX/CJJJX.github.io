@@ -5976,18 +5976,15 @@
 <ul>
 <li><strong>字面量：</strong>正则表达式直接放在<code>/ /</code>之中：</li>
 </ul>
-<p>复制</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const rex = /pattern/;<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li><strong>构造函数：</strong>RegExp 对象表示正则表达式的一个实例：</li>
 </ul>
-<p>复制</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const rex = new RegExp(&quot;pattern&quot;);<br></code></pre></td></tr></table></figure>
 
 <p>这两种方法的一大区别是对象的构造函数允许传递带引号的表达式，通过这种方式就可以<strong>动态创建</strong>正则表达式。</p>
 <p>通过这两种方法创建出来的 Regex 对象都具有相同的方法和属性：</p>
-<p>复制</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let RegExp1 = /a|b/<br>let RegExp2 = new RegExp(&#x27;a|b&#x27;)<br>console.log(RegExp1)  // 输出结果：/a|b/<br>console.log(RegExp2)  // 输出结果：/a|b/<br></code></pre></td></tr></table></figure>
 
 <h3 id="三、模式匹配"><a href="#三、模式匹配" class="headerlink" title="三、模式匹配"></a>三、模式匹配</h3><p>关于正则表达式最复杂的地方就是如何编写正则规则了，下面就来看如何编写正则表达式。</p>
@@ -6502,6 +6499,32 @@
       <tags>
         <tag>vue</tag>
         <tag>echarts</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最长回文子串</title>
+    <url>/2024/02/09/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/</url>
+    <content><![CDATA[<h3 id="力扣-5-最长回文子串"><a href="#力扣-5-最长回文子串" class="headerlink" title="力扣-5.最长回文子串"></a>力扣-5.最长回文子串</h3><p>给你一个字符串 <code>s</code>，找到 <code>s</code> 中最长的回文子串。</p>
+<p>如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：s = &quot;babad&quot;<br>输出：&quot;bab&quot;<br>解释：&quot;aba&quot; 同样是符合题意的答案。<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：s = &quot;cbbd&quot;<br>输出：&quot;bb&quot;<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h5><p>采用动态规划的思想，数组<code>dp[i][j]</code>用于表示从i到j的字符串是否为回文字符串。初始化<code>dp[i][i]</code>为true，因为单个字符必为回文字符串。随后确定j的取值范围为[1,length-1],i的取值范围为[0,length-2]。当s[i]!&#x3D;s[j]时,<code>dp[i][j]</code>设为false。相等时判断如果 j - i &lt; 3，即a,aa,aba这三种情况必为回文字符串，可以直接设<code>dp[i][j]</code>为ture。不满足j - i &lt; 3,则<code>dp[i][j]</code>&#x3D;<code>dp[i+1][j-1]</code>。</p>
+<h5 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var longestPalindrome = function(s) &#123;<br>    let length = s.length<br>    if(length &lt;= 1) return s<br>    let c = Array.from(s) //字符串s转为数组<br>    //初始化dp<br>    let dp = new Array(length).fill(false).map(()=&gt;new Array(length).fill(false))<br>    //<br>    for(let i = 0;i &lt; length;i ++)&#123;<br>        dp[i][i] = true<br>    &#125;<br>    let max = 1<br>    let start = 0<br>    for(let j = 1;j &lt; length;j ++)&#123;<br>        for(let i = 0;i &lt; length-1 &amp;&amp;i &lt; j;i ++)&#123;<br>            if(c[i]!=c[j])&#123;<br>                dp[i][j] = false<br>            &#125;else&#123;<br>                if(j - i &lt; 3)&#123;<br>                    dp[i][j] = true<br>                &#125;else&#123;<br>                    dp[i][j] = dp[i+1][j-1]<br>                &#125;<br>            &#125;<br>            if(dp[i][j] &amp;&amp; j - i + 1 &gt; max)&#123;<br>            max = j - i + 1<br>            start = i<br>            &#125;<br>        &#125; <br>    &#125;<br>    return s.substring(start, start + max)<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>手撕</tag>
       </tags>
   </entry>
 </search>
