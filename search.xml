@@ -6550,4 +6550,32 @@
         <tag>手撕</tag>
       </tags>
   </entry>
+  <entry>
+    <title>复原IP地址</title>
+    <url>/2024/02/11/%E5%A4%8D%E5%8E%9FIP%E5%9C%B0%E5%9D%80/</url>
+    <content><![CDATA[<h3 id="力扣-93-复原IP地址"><a href="#力扣-93-复原IP地址" class="headerlink" title="力扣-93.复原IP地址"></a>力扣-93.复原IP地址</h3><p><strong>有效 IP 地址</strong> 正好由四个整数（每个整数位于 <code>0</code> 到 <code>255</code> 之间组成，且不能含有前导 <code>0</code>），整数之间用 <code>&#39;.&#39;</code> 分隔。</p>
+<ul>
+<li>例如：<code>&quot;0.1.2.201&quot;</code> 和<code> &quot;192.168.1.1&quot;</code> 是 <strong>有效</strong> IP 地址，但是 <code>&quot;0.011.255.245&quot;</code>、<code>&quot;192.168.1.312&quot;</code> 和 <code>&quot;192.168@1.1&quot;</code> 是 <strong>无效</strong> IP 地址。</li>
+</ul>
+<p>给定一个只包含数字的字符串 <code>s</code> ，用以表示一个 IP 地址，返回所有可能的<strong>有效 IP 地址</strong>，这些地址可以通过在 <code>s</code> 中插入 <code>&#39;.&#39;</code> 来形成。你 <strong>不能</strong> 重新排序或删除 <code>s</code> 中的任何数字。你可以按 <strong>任何</strong> 顺序返回答案。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：s = &quot;25525511135&quot;<br>输出：[&quot;255.255.11.135&quot;,&quot;255.255.111.35&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：s = &quot;0000&quot;<br>输出：[&quot;0.0.0.0&quot;]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：s = &quot;101023&quot;<br>输出：[&quot;1.0.10.23&quot;,&quot;1.0.102.3&quot;,&quot;10.1.0.23&quot;,&quot;10.10.2.3&quot;,&quot;101.0.2.3&quot;]<br></code></pre></td></tr></table></figure>
+
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>使用递归回溯，对字符串进行1到3个字符分隔，并进行搜索，最后筛选出满足要求的作为答案。</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var restoreIpAddresses = function(s) &#123;<br><br>    let outputArr = []<br>    //index当前字符串位置,selectArr已经选择的子串数组<br>    function recursion(index,selectArr)&#123;<br>        // 如果已经选择了4个子串<br>       if(selectArr.length == 4)&#123;<br>           // 如果刚好将字符串分割为4个子串，证明能复原IP地址，添加结果<br>            if(index == s.length)<br>            outputArr.push(selectArr.join(&#x27;.&#x27;))<br>            // 如果分割后还存在字符，证明无法复原，舍去<br>            else return<br>        &#125;<br>        // 如果当前索引已经超出数组范围，则直接return<br>        if(index &gt;= s.length) return<br>        // 三种切割长度截取字符串<br>        for(let i = 1;i &lt;= 3;i ++)&#123;<br>            // 获得三种切割长度的字符串<br>            let perString = s.slice(index,index+i)<br>            // 判断是否满足IP单个片段的要求<br>            if(i&gt;1&amp;&amp;perString*1&lt;256&amp;&amp;perString[0]!=&#x27;0&#x27;||i==1)<br>            //满足则继续递归<br>            recursion(index+i,[...selectArr,perString])<br>        &#125;<br>    &#125;<br>    recursion(0,[])<br>    return outputArr<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>手撕</tag>
+      </tags>
+  </entry>
 </search>
