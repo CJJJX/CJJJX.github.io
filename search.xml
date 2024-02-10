@@ -6527,4 +6527,27 @@
         <tag>手撕</tag>
       </tags>
   </entry>
+  <entry>
+    <title>岛屿数量</title>
+    <url>/2024/02/10/%E5%B2%9B%E5%B1%BF%E6%95%B0%E9%87%8F/</url>
+    <content><![CDATA[<h3 id="力扣-200-岛屿的数量"><a href="#力扣-200-岛屿的数量" class="headerlink" title="力扣-200.岛屿的数量"></a>力扣-200.岛屿的数量</h3><p>给你一个由 <code>&#39;1&#39;</code>（陆地）和 <code>&#39;0&#39;</code>（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
+<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和&#x2F;或竖直方向上相邻的陆地连接形成。</p>
+<p>此外，你可以假设该网格的四条边均被水包围。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：grid = [<br>  [&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;0&quot;],<br>  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;],<br>  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],<br>  [&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;]<br>]<br>输出：1<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：grid = [<br>  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],<br>  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],<br>  [&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],<br>  [&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;]<br>]<br>输出：3<br></code></pre></td></tr></table></figure>
+
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>采用递归的方式，首先遍历数组元素。当遇到1时，将该元素赋值为0，当该元素上下左右四个方向有元素为1时，则继续递归，递归结束证明该岛屿所有板块找到，数量+1，继续遍历。</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var numIslands = function(grid) &#123;<br>    function recursion(i,j)&#123;<br>        // 将该元素置0<br>        grid[i][j] = 0<br>        // 上下左右四个方向有元素为1时，则继续递归<br>        if(i+1&lt;m &amp;&amp; grid[i+1][j]==1) recursion(i+1,j)<br>        if(i-1&gt;=0 &amp;&amp; grid[i-1][j]==1) recursion(i-1,j)<br>        if(j+1&lt;n &amp;&amp; grid[i][j+1]==1) recursion(i,j+1)<br>        if(j-1&gt;=0 &amp;&amp; grid[i][j-1]==1) recursion(i,j-1)<br>    &#125;<br>    let m = grid.length<br>    let n = grid[0].length<br>    //记录岛屿数量<br>    let cnt = 0<br>    //遍历数组元素<br>    for(let i = 0;i &lt; m;i ++)&#123;<br>        for(let j = 0;j &lt; n;j ++)&#123;<br>            //当遇到1时执行递归<br>            if(grid[i][j] == 1)&#123;<br>                recursion(i,j)<br>                // 递归结束，岛的数量+1<br>                cnt++<br>            &#125;<br>        &#125;<br>    &#125;<br>    return cnt<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>手撕</tag>
+      </tags>
+  </entry>
 </search>
