@@ -6578,4 +6578,55 @@
         <tag>手撕</tag>
       </tags>
   </entry>
+  <entry>
+    <title>用栈(队列)实现队列(栈)</title>
+    <url>/2024/02/13/%E7%94%A8%E6%A0%88-%E9%98%9F%E5%88%97-%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97-%E6%A0%88/</url>
+    <content><![CDATA[<h3 id="力扣-232-用栈实现队列"><a href="#力扣-232-用栈实现队列" class="headerlink" title="力扣-232. 用栈实现队列"></a>力扣-232. 用栈实现队列</h3><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（<code>push</code>、<code>pop</code>、<code>peek</code>、<code>empty</code>）：</p>
+<p>实现 <code>MyQueue</code> 类：</p>
+<ul>
+<li><code>void push(int x)</code> 将元素 x 推到队列的末尾</li>
+<li><code>int pop()</code> 从队列的开头移除并返回元素</li>
+<li><code>int peek()</code> 返回队列开头的元素</li>
+<li><code>boolean empty()</code> 如果队列为空，返回 <code>true</code> ；否则，返回 <code>false</code></li>
+</ul>
+<p><strong>说明：</strong></p>
+<ul>
+<li>你 <strong>只能</strong> 使用标准的栈操作 —— 也就是只有 <code>push to top</code>, <code>peek/pop from top</code>, <code>size</code>, 和 <code>is empty</code> 操作是合法的。</li>
+<li>你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：<br>[&quot;MyQueue&quot;, &quot;push&quot;, &quot;push&quot;, &quot;peek&quot;, &quot;pop&quot;, &quot;empty&quot;]<br>[[], [1], [2], [], [], []]<br>输出：<br>[null, null, null, 1, 1, false]<br><br>解释：<br>MyQueue myQueue = new MyQueue();<br>myQueue.push(1); // queue is: [1]<br>myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)<br>myQueue.peek(); // return 1<br>myQueue.pop(); // return 1, queue is [2]<br>myQueue.empty(); // return false<br></code></pre></td></tr></table></figure>
+
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>需要两个栈，一个输入栈，一个输出栈。在push数据的时候只需将数据放进输入栈。在pop数据时，若输出栈为空，就把输入栈中的数据<strong>全部弹出导入</strong>，再从输出栈弹出数据。如果输出栈不为空，则直接从输出栈弹出数据即可。如果输入栈和输出栈都为空的话，说明模拟的队列为空了。</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var MyQueue = function() &#123;<br>    this.in = []<br>    this.out = []<br>&#125;;<br><br>/** <br> * @param &#123;number&#125; x<br> * @return &#123;void&#125;<br> */<br>MyQueue.prototype.push = function(x) &#123;<br>    this.in.push(x)<br>&#125;;<br><br>/**<br> * @return &#123;number&#125;<br> */<br>MyQueue.prototype.pop = function() &#123;<br>    if(!this.out.length)&#123;<br>        while(this.in.length)&#123;<br>            this.out.push(this.in.pop())<br>        &#125;<br>    &#125;<br>    return this.out.pop()<br>&#125;;<br><br>/**<br> * @return &#123;number&#125;<br> */<br>MyQueue.prototype.peek = function() &#123;<br>    let peekNum = this.pop()<br>    this.out.push(peekNum)<br>    return peekNum<br>&#125;;<br><br>/**<br> * @return &#123;boolean&#125;<br> */<br>MyQueue.prototype.empty = function() &#123;<br>    return !this.in.length &amp;&amp; !this.out.length<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="力扣-225-用队列实现栈"><a href="#力扣-225-用队列实现栈" class="headerlink" title="力扣-225. 用队列实现栈"></a>力扣-225. 用队列实现栈</h3><p>请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（<code>push</code>、<code>top</code>、<code>pop</code> 和 <code>empty</code>）。</p>
+<p>实现 <code>MyStack</code> 类：</p>
+<ul>
+<li><code>void push(int x)</code> 将元素 x 压入栈顶。</li>
+<li><code>int pop()</code> 移除并返回栈顶元素。</li>
+<li><code>int top()</code> 返回栈顶元素。</li>
+<li><code>boolean empty()</code> 如果栈是空的，返回 <code>true</code> ；否则，返回 <code>false</code> 。</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>你只能使用队列的基本操作 —— 也就是 <code>push to back</code>、<code>peek/pop from front</code>、<code>size</code> 和 <code>is empty</code> 这些操作。</li>
+<li>你所使用的语言也许不支持队列。 你可以使用 list （列表）或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。</li>
+</ul>
+<p><strong>示例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：<br>[&quot;MyStack&quot;, &quot;push&quot;, &quot;push&quot;, &quot;top&quot;, &quot;pop&quot;, &quot;empty&quot;]<br>[[], [1], [2], [], [], []]<br>输出：<br>[null, null, null, 2, 2, false]<br><br>解释：<br>MyStack myStack = new MyStack();<br>myStack.push(1);<br>myStack.push(2);<br>myStack.top(); // 返回 2<br>myStack.pop(); // 返回 2<br>myStack.empty(); // 返回 False<br></code></pre></td></tr></table></figure>
+
+<h4 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h4><p>使用两个队列：队列1用于入栈，队列2用于备份队列1最后一个元素以外的元素。当需要出栈的时候，队列1中最后一个元素以外的元素备份到队列2中(使用一个队列：也可以直接将队列1中最后一个元素以外的元素shift后push到队列1中)，接下来弹出(pop)队列1中最后的元素，将队列2中备份的元素重新存储到队列1.</p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><h5 id="使用两个队列"><a href="#使用两个队列" class="headerlink" title="使用两个队列"></a>使用两个队列</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var MyStack = function() &#123;<br>    this.queue1 = []<br>    this.queue2 = []<br>&#125;;<br><br>/** <br> * @param &#123;number&#125; x<br> * @return &#123;void&#125;<br> */<br>MyStack.prototype.push = function(x) &#123;<br>    this.queue1.push(x)<br>&#125;;<br><br>/**<br> * @return &#123;number&#125;<br> */<br>MyStack.prototype.pop = function() &#123;<br>    let length = this.queue1.length-1<br>    while(length--)&#123;<br>        this.queue2.push(this.queue1.shift())<br>    &#125;<br>    let popNum = this.queue1.pop()<br>    let len = this.queue2.length<br>    while(len--)&#123;<br>        this.queue1.push(this.queue2.shift())<br>    &#125;<br>    return popNum<br>&#125;;<br><br>/**<br> * @return &#123;number&#125;<br> */<br>MyStack.prototype.top = function() &#123;<br>    let topNum = this.pop()<br>    this.queue1.push(topNum)<br>    return topNum<br>&#125;;<br><br>/**<br> * @return &#123;boolean&#125;<br> */<br>MyStack.prototype.empty = function() &#123;<br>    return !this.queue1.length &amp;&amp; !this.queue2.length<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h5 id="使用一个队列"><a href="#使用一个队列" class="headerlink" title="使用一个队列"></a>使用一个队列</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var MyStack = function() &#123;<br>    this.queue = [];<br>&#125;;<br><br>/**<br> * Push element x onto stack. <br> * @param &#123;number&#125; x<br> * @return &#123;void&#125;<br> */<br>MyStack.prototype.push = function(x) &#123;<br>    this.queue.push(x);<br>&#125;;<br><br>/**<br> * Removes the element on top of the stack and returns that element.<br> * @return &#123;number&#125;<br> */<br>MyStack.prototype.pop = function() &#123;<br>    let size = this.queue.length;<br>    while(size-- &gt; 1) &#123;<br>        this.queue.push(this.queue.shift());<br>    &#125;<br>    return this.queue.shift();<br>&#125;;<br><br>/**<br> * Get the top element.<br> * @return &#123;number&#125;<br> */<br>MyStack.prototype.top = function() &#123;<br>    const x = this.pop();<br>    this.queue.push(x);<br>    return x;<br>&#125;;<br><br>/**<br> * Returns whether the stack is empty.<br> * @return &#123;boolean&#125;<br> */<br>MyStack.prototype.empty = function() &#123;<br>    return !this.queue.length;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>手撕</tag>
+      </tags>
+  </entry>
 </search>
