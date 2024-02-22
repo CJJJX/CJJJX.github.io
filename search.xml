@@ -6629,4 +6629,47 @@
         <tag>手撕</tag>
       </tags>
   </entry>
+  <entry>
+    <title>前端笔试之Js-ACM模式</title>
+    <url>/2024/02/22/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E4%B9%8BJs-ACM%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前刷算法题都是用力扣。但是，力扣是核心代码模式，是不需要处理输入、输出的，只需要直接返回值就行。笔试、面试的时候，不一定是核心代码模式，也可能是ACM模式。如果没有了解过JavaScript的输入输出可能就寄了。下面是学习记录的两种JavaScript的ACM模式：<strong>V8模式</strong>，<strong>Nodejs模式</strong></p>
+<h3 id="V8模式"><a href="#V8模式" class="headerlink" title="V8模式"></a>V8模式</h3><h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><blockquote>
+<p> console.log(); </p>
+</blockquote>
+<h4 id="读取一行输入-read-line"><a href="#读取一行输入-read-line" class="headerlink" title="读取一行输入(read_line())"></a>读取一行输入(<code>read_line()</code>)</h4><blockquote>
+<p> 最多读取个字符，当还未达到1024个时如果遇到回车或结束符，提前结束。也有可能是<code>readline()</code>。牛客ACM模式就是<code>readline()</code>。 </p>
+</blockquote>
+<p>最重要的一个输入方法，可以通过该方法得到所有情况的输入，后面讲的其他输入方法，有可能没有。比如牛客的ACM模式，使用后面的输入，都会报错：xxx is not defined</p>
+<blockquote>
+<p> <code>read_line()</code>返回输入的一行，字符串形式。需要通过<code>split</code>、<code>parseInt</code>等方法来得到真正的输入。</p>
+</blockquote>
+<h5 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h5><h6 id="1-A-B-1"><a href="#1-A-B-1" class="headerlink" title="1. A+B(1)"></a>1. A+B(1)</h6><p><img src="/2024/02/22/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E4%B9%8BJs-ACM%E6%A8%A1%E5%BC%8F/n42jq5laxg.png" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs v8">let line<br>while(line = read_line())&#123;<br>	let nums = line.split(&#x27; &#x27;)<br>	let a = +nums[0] //字符串转数字<br>	let b = +nums[1]<br>	console.log(a+b)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h6 id="2-A-B-2"><a href="#2-A-B-2" class="headerlink" title="2. A+B(2)"></a>2. A+B(2)</h6><p><img src="/2024/02/22/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E4%B9%8BJs-ACM%E6%A8%A1%E5%BC%8F/d5f5a0e7f689ccd4e83926fca514fe9e.png" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let t<br>while(t = read_line())&#123;<br>	while(t--)&#123;<br>		let line = read_line()<br>		let [a,b] = line.split(&#x27; &#x27;).map(Number)<br>		console.log(a+b)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h6 id="3-A-B-4"><a href="#3-A-B-4" class="headerlink" title="3.  A+B(4)"></a>3.  A+B(4)</h6><p><img src="/2024/02/22/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E4%B9%8BJs-ACM%E6%A8%A1%E5%BC%8F/a45e287cb0efe03d9de0c98cf3dd69f4.png" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let line<br>while(line = read_line())&#123;<br>	let [n,...nums] = line.split(&#x27; &#x27;).map(Number)<br>	if(n === 0)<br>	break<br>	let sum = 0<br>	for(let num of nums)&#123;<br>		sum + = num<br>	&#125;<br>	console.log(sum)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h6 id="A-B-5"><a href="#A-B-5" class="headerlink" title=". A+B(5)"></a>. A+B(5)</h6><p><img src="/2024/02/22/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E4%B9%8BJs-ACM%E6%A8%A1%E5%BC%8F/3f6c125567cac6b9a2bae32894a07f9d.png" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let t<br><br>while(t = +read_line()) &#123;<br>  while(t--) &#123;<br>    let [n, ...nums] = read_line().split(&#x27; &#x27;).map(Number)<br><br>    let sum = 0;<br>    for(let i = 0; i &lt; n; i++) &#123;<br>        sum += nums[i]<br>    &#125;<br><br>    console.log(sum)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Nodejs模式"><a href="#Nodejs模式" class="headerlink" title="Nodejs模式"></a>Nodejs模式</h3><p>Nodejs输入主要有三大步骤：</p>
+<ol>
+<li>引入<code>readline</code>模块 </li>
+<li>调用<code>readline.createInterface()</code>，创建一个<code>readline的接口实例</code> </li>
+<li>监听<code>line</code>事件，事件处理函数的参数就是<code>输入的行</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const readline = require(&#x27;readline&#x27;)<br><br>const rl = readline.createInterface(&#123;<br>    input: process.stdin,<br>    output: process.stdout<br>&#125;)<br>rl.on(&#x27;line&#x27;, function (line) &#123;<br>    //enter your code<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h5 id="练习-1"><a href="#练习-1" class="headerlink" title="练习"></a>练习</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const readline = require(&#x27;readline&#x27;)<br><br>const rl = readline.createInterface(&#123;<br>    input: process.stdin,<br>    output: process.stdout<br>&#125;);<br>rl.on(&#x27;line&#x27;, function (line) &#123;<br>  let nums = line.split(&#x27; &#x27;)<br><br>  if(nums) &#123;<br><br>    let a = +nums[0]<br>    let b = +nums[1]<br><br>    console.log(a + b)<br>  &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
 </search>
