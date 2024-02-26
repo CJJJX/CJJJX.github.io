@@ -6672,4 +6672,34 @@
         <category>算法</category>
       </categories>
   </entry>
+  <entry>
+    <title>三数之和</title>
+    <url>/2024/02/26/%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
+    <content><![CDATA[<h3 id="力扣-15-三数之和"><a href="#力扣-15-三数之和" class="headerlink" title="力扣-15.三数之和"></a>力扣-15.三数之和</h3><p>给你一个整数数组 <code>nums</code> ，判断是否存在三元组 <code>[nums[i], nums[j], nums[k]]</code> 满足 <code>i != j</code>、<code>i != k</code> 且 <code>j != k</code> ，同时还满足 <code>nums[i] + nums[j] + nums[k] == 0</code> 。请</p>
+<p>你返回所有和为 <code>0</code> 且不重复的三元组。</p>
+<p><strong>注意：</strong>答案中不可以包含重复的三元组。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [-1,0,1,2,-1,-4]<br>输出：[[-1,-1,2],[-1,0,1]]<br>解释：<br>nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。<br>nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。<br>nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。<br>不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。<br>注意，输出的顺序和三元组的顺序并不重要。<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [0,1,1]<br>输出：[]<br>解释：唯一可能的三元组和不为 0 。<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [0,0,0]<br>输出：[[0,0,0]]<br>解释：唯一可能的三元组和为 0 。<br></code></pre></td></tr></table></figure>
+
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>最开始想到的就是暴力解法，先将数组排序，接着三层循环控制<code>i != j</code>、<code>i != k</code> 且 <code>j != k</code>，当nums[i]+nums[j]+nums[k]&#x3D;&#x3D;0时，将三元组存入结果数组中。但显然时间复杂度过高需要优化。看了题解学习了双指针将时间复杂度优化到o(n^2)。排序时间复杂度是o(nlogn)，外层循环枚举第一个数A时间复杂度为o(n)，就变成寻找两个数B,C的和为-A的问题(即两数之和),双指针o(n)，总时间复杂度o(n^2)</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><h5 id="1-暴力解法-TC-O-n-3-SC-O-n-，示例过高力扣显示超时"><a href="#1-暴力解法-TC-O-n-3-SC-O-n-，示例过高力扣显示超时" class="headerlink" title="1.暴力解法[TC:O(n^3)  SC:O(n)]，示例过高力扣显示超时"></a>1.暴力解法[TC:O(n^3)  SC:O(n)]，示例过高力扣显示超时</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var threeSum = function(nums) &#123;<br>	//将数组进行排序<br>	nums = nums.sort((a,b) =&gt; a-b)<br>	let res = []<br>	for(let i = 0;i &lt; nums.length;i ++)&#123;<br>	//当i不等于0且当前数字等于上一个数字时，该数字在上轮循环中已得出结果，为避免重复则跳过<br>		if(i != 0 &amp;&amp; nums[i] == nums[i-1]) continue<br>		for(let j = i + 1;j &lt; nums.length;j ++)&#123;<br>		//同上<br>			if(j != i + 1 &amp;&amp; nums[j] == nums[j-1]) continue<br>			for(let k = j + 1;k &lt; nums.length;k ++)&#123;<br>			//同上<br>				if(k != j + 1 &amp;&amp; nums[k] == nums[k-1]) continue<br>				if(nums[i] + nums[j] + nums[k] == 0)<br>				res.push(nums[i],nums[j],nums[k])<br>			&#125;<br>		&#125;<br>	 return res	<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="2-双指针优化-TC-O-n-2-SC-O-1"><a href="#2-双指针优化-TC-O-n-2-SC-O-1" class="headerlink" title="2.双指针优化[TC:O(n^2)  SC:O(1)]"></a>2.双指针优化[TC:O(n^2)  SC:O(1)]</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">var threeSum = function(nums) &#123;<br>	//将数组进行排序<br>	nums.sort((a,b) =&gt; a-b)<br>	let n = nums.length<br>	let res = []<br>	// i最大取到n-3,剩两位留给j,k<br>	for(let i = 0;i &lt; n - 2;i ++)&#123;<br>		//第一个取值重复跳过<br>		if(i != 0 &amp;&amp; nums[i] == nums[i-1]) continue<br>		//加上最小的两个数都大于0，i就不用再加了<br>        if(nums[i] + nums[i+1] + nums[i+2] &gt; 0) break<br>		//加上最大的两个数还要小,i还需要增大<br>		if(nums[i] + nums[n-2] + nums[n-1] &lt; 0) continue<br>        let j = i + 1<br>        let k = n - 1<br>        while(j &lt; k)&#123;<br>        	if(nums[i] + nums[j] + nums[k] &lt; 0)<br>        	j ++<br>        	else if(nums[i] + nums[j] + nums[k] &gt; 0)<br>        	k --<br>        	else&#123;<br>        		res.push([nums[i],nums[j],nums[k]])<br>        		j ++<br>        		//第二个取值重复跳过<br>        		while( j &lt; k &amp;&amp; nums[j] == nums[j-1]) j ++<br>        		k--<br>        		//第三个取值重复跳过<br>        		while( k &gt; j &amp;&amp; nums[k] == nums[k-1]) k --<br>        	&#125;<br>        &#125;<br>        return res<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>手撕</tag>
+      </tags>
+  </entry>
 </search>
