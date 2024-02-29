@@ -6702,4 +6702,52 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>es6中symbol的使用场景</title>
+    <url>/2024/02/29/es6%E4%B8%ADsymbol%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/</url>
+    <content><![CDATA[<p>Symbol是由ES6规范引入的一项新特性，它的功能类似于一种标识唯一性的ID。通常情况下，我们可以通过调用Symbol()函数来创建一个Symbol实例：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini">let <span class="hljs-attr">s1</span> = Symbol()<br></code></pre></td></tr></table></figure>
+
+<p>或者也可以在调用Symbol()函数时传入一个可选的字符串参数，相当于给你创建的Symbol实例一个描述信息：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini">let <span class="hljs-attr">s2</span> = Symbol(<span class="hljs-string">&#x27;another symbol&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="应用场景1：使用Symbol来作为对象属性名-key"><a href="#应用场景1：使用Symbol来作为对象属性名-key" class="headerlink" title="应用场景1：使用Symbol来作为对象属性名(key)"></a>应用场景1：使用Symbol来作为对象属性名(key)</h2><p>在这之前，我们通常定义或访问对象的属性时都是使用字符串，比如下面的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let obj = &#123;<br>  abc: 123,<br>  &quot;hello&quot;: &quot;world&quot;<br>&#125;<br><br>obj[&quot;abc&quot;] // 123<br>obj[&quot;hello&quot;] // &#x27;world&#x27;<br>而现在，Symbol可同样用于对象属性的定义和访问：<br><br>const PROP_NAME = Symbol()<br>const PROP_AGE = Symbol()<br><br>let obj = &#123;<br>  [PROP_NAME]: &quot;一斤代码&quot;<br>&#125;<br>obj[PROP_AGE] = 18<br><br>obj[PROP_NAME] // &#x27;一斤代码&#x27;<br>obj[PROP_AGE] // 18<br></code></pre></td></tr></table></figure>
+
+<p>随之而来的是另一个非常值得注意的问题：就是当使用了Symbol作为对象的属性key后，在对该对象进行key的枚举时，会有什么不同？在实际应用中，我们经常会需要使用Object.keys()或者for…in来枚举对象的属性名，那在这方面，Symbol类型的key表现的会有什么不同之处呢？来看以下示例代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">let obj = &#123;<br>   [Symbol(&#x27;name&#x27;)]: &#x27;一斤代码&#x27;,<br>   age: 18,<br>   title: &#x27;Engineer&#x27;<br>&#125;<br><br>Object.keys(obj)   // [&#x27;age&#x27;, &#x27;title&#x27;]<br><br>for (let p in obj) &#123;<br>   console.log(p)   // 分别会输出：&#x27;age&#x27; 和 &#x27;title&#x27;<br>&#125;<br><br>Object.getOwnPropertyNames(obj)   // [&#x27;age&#x27;, &#x27;title&#x27;]<br></code></pre></td></tr></table></figure>
+
+<p>由上代码可知，Symbol类型的key是不能通过Object.keys()或者for…in来枚举的，它未被包含在对象自身的属性名集合(property names)之中。所以，利用该特性，我们可以把一些不需要对外操作和访问的属性使用Symbol来定义。</p>
+<p>也正因为这样一个特性，当使用JSON.stringify()将对象转换成JSON字符串的时候，Symbol属性也会被排除在输出内容之外：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">JSON.stringify(obj)  // &#123;&quot;age&quot;:18,&quot;title&quot;:&quot;Engineer&quot;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们可以利用这一特点来更好的设计我们的数据对象，让“对内操作”和“对外选择性输出”变得更加优雅。</p>
+<p>然而，这样的话，我们就没办法获取以Symbol方式定义的对象属性了么？非也。还是会有一些专门针对Symbol的API，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 使用Object的API<br>Object.getOwnPropertySymbols(obj) // [Symbol(name)]<br><br>// 使用新增的反射API<br>Reflect.ownKeys(obj) // [Symbol(name), &#x27;age&#x27;, &#x27;title&#x27;]<br></code></pre></td></tr></table></figure>
+
+<h2 id="应用场景2：使用Symbol来替代常量"><a href="#应用场景2：使用Symbol来替代常量" class="headerlink" title="应用场景2：使用Symbol来替代常量"></a>应用场景2：使用Symbol来替代常量</h2><p>先来看一下下面的代码，是不是在你的代码里经常会出现？</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">TYPE_AUDIO</span> = <span class="hljs-string">&#x27;AUDIO&#x27;</span><br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">TYPE_VIDEO</span> = <span class="hljs-string">&#x27;VIDEO&#x27;</span><br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">TYPE_IMAGE</span> = <span class="hljs-string">&#x27;IMAGE&#x27;</span><br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">handleFileResource</span>(<span class="hljs-params">resource</span>) &#123;<br>  <span class="hljs-keyword">switch</span>(resource.<span class="hljs-property">type</span>) &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">TYPE_AUDIO</span>:<br>      <span class="hljs-title function_">playAudio</span>(resource)<br>      <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">TYPE_VIDEO</span>:<br>      <span class="hljs-title function_">playVideo</span>(resource)<br>      <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">TYPE_IMAGE</span>:<br>      <span class="hljs-title function_">previewImage</span>(resource)<br>      <span class="hljs-keyword">break</span><br>    <span class="hljs-attr">default</span>:<br>      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Unknown type of resource&#x27;</span>)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如上面的代码中那样，我们经常定义一组常量来代表一种业务逻辑下的几个不同类型，我们通常希望这几个常量之间是唯一的关系，为了保证这一点，我们需要为常量赋一个唯一的值（比如这里的’AUDIO’、’VIDEO’、 ‘IMAGE’），常量少的时候还算好，但是常量一多，你可能还得花点脑子好好为他们取个好点的名字。</p>
+<p>现在有了Symbol，我们大可不必这么麻烦了：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const TYPE_AUDIO = Symbol()<br>const TYPE_VIDEO = Symbol()<br>const TYPE_IMAGE = Symbol()<br></code></pre></td></tr></table></figure>
+
+<p>这样定义，直接就保证了三个常量的值是唯一的了！是不是挺方便的呢。</p>
+<h2 id="应用场景3：使用Symbol定义类的私有属性-方法"><a href="#应用场景3：使用Symbol定义类的私有属性-方法" class="headerlink" title="应用场景3：使用Symbol定义类的私有属性&#x2F;方法"></a>应用场景3：使用Symbol定义类的私有属性&#x2F;方法</h2><p>在JavaScript中，是没有如Java等面向对象语言的访问控制关键字private的，类上所有定义的属性或方法都是可公开访问的。因此这对我们进行API的设计时造成了一些困扰。</p>
+<p>而有了Symbol以及模块化机制，类的私有属性和方法才变成可能。例如：</p>
+<p>在文件 a.js中</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PASSWORD</span> = <span class="hljs-title class_">Symbol</span>()<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Login</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">username, password</span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">username</span> = username<br>    <span class="hljs-variable language_">this</span>[<span class="hljs-variable constant_">PASSWORD</span>] = password<br>  &#125;<br><br>  <span class="hljs-title function_">checkPassword</span>(<span class="hljs-params">pwd</span>) &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>[<span class="hljs-variable constant_">PASSWORD</span>] === pwd<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Login</span><br></code></pre></td></tr></table></figure>
+
+<p>在文件 b.js 中</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Login</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./a&#x27;</span><br><br><span class="hljs-keyword">const</span> login = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Login</span>(<span class="hljs-string">&#x27;admin&#x27;</span>, <span class="hljs-string">&#x27;123456&#x27;</span>)<br><br>login.<span class="hljs-title function_">checkPassword</span>(<span class="hljs-string">&#x27;123456&#x27;</span>)  <span class="hljs-comment">// true</span><br><br>login.<span class="hljs-property">PASSWORD</span>  <span class="hljs-comment">// oh!no!</span><br>login[<span class="hljs-variable constant_">PASSWORD</span>] <span class="hljs-comment">// oh!no!</span><br>login[<span class="hljs-string">&quot;PASSWORD&quot;</span>] <span class="hljs-comment">// oh!no!</span><br></code></pre></td></tr></table></figure>
+
+<p>由于Symbol常量PASSWORD被定义在a.js所在的模块中，外面的模块获取不到这个Symbol，也不可能再创建一个一模一样的Symbol出来（因为Symbol是唯一的），因此这个PASSWORD的Symbol只能被限制在a.js内部使用，所以使用它来定义的类属性是没有办法被模块外访问到的，达到了一个私有化的效果。</p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
 </search>
