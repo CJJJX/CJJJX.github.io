@@ -6750,4 +6750,24 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>处理message组件重复弹窗</title>
+    <url>/2024/03/01/%E5%A4%84%E7%90%86message%E7%BB%84%E4%BB%B6%E9%87%8D%E5%A4%8D%E5%BC%B9%E7%AA%97/</url>
+    <content><![CDATA[<p>​      在实习中遇到了message组件重复弹出的问题。当一个页面请求多个接口时，message放在响应拦截器里，如果多个接口返回异常或者错误时，message组件会多次弹出。</p>
+<p>这里对element-ui 的message组件做一层封装，防止此类问题出现</p>
+<h3 id="src-utils-resetMessage-js"><a href="#src-utils-resetMessage-js" class="headerlink" title="src&#x2F;utils&#x2F;resetMessage.js"></a>src&#x2F;utils&#x2F;resetMessage.js</h3><figure class="highlight tsx"><table><tr><td class="code"><pre><code class="hljs tsx"><span class="hljs-comment">/**重置message，防止重复点击重复弹出message弹框 */</span><br><span class="hljs-keyword">import</span> &#123;<br>  <span class="hljs-title class_">Message</span><br>&#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;element-ui&#x27;</span>;<br><br><span class="hljs-keyword">let</span> messageInstance = <span class="hljs-literal">null</span>;<br><span class="hljs-keyword">const</span> <span class="hljs-title function_">resetMessage</span> = (<span class="hljs-params">options</span>) =&gt; &#123;<br>  <span class="hljs-keyword">if</span> (messageInstance) &#123;<br>      messageInstance.<span class="hljs-title function_">close</span>()<br>  &#125;<br>  messageInstance = <span class="hljs-title class_">Message</span>(options)<br>&#125;;<br>[<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-string">&#x27;success&#x27;</span>, <span class="hljs-string">&#x27;info&#x27;</span>, <span class="hljs-string">&#x27;warning&#x27;</span>].<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">type</span> =&gt;</span> &#123;<br>  resetMessage[<span class="hljs-keyword">type</span>] = <span class="hljs-function"><span class="hljs-params">options</span> =&gt;</span> &#123;<br>      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> options === <span class="hljs-string">&#x27;string&#x27;</span>) &#123;<br>          options = &#123;<br>              <span class="hljs-attr">message</span>: options<br>          &#125;<br>      &#125;<br>      options.<span class="hljs-property">type</span> = <span class="hljs-keyword">type</span><br>      <span class="hljs-keyword">return</span> <span class="hljs-title function_">resetMessage</span>(options)<br>  &#125;<br>&#125;)<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> message = resetMessage<br></code></pre></td></tr></table></figure>
+
+<p>调用：</p>
+<figure class="highlight tsx"><table><tr><td class="code"><pre><code class="hljs tsx"><span class="hljs-keyword">import</span> &#123; message &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/utils/resetMessage&quot;</span><br><br> <span class="hljs-title function_">message</span>(&#123;<br>        <span class="hljs-attr">message</span>: error.<span class="hljs-property">response</span>.<span class="hljs-property">data</span>.<span class="hljs-property">message</span>,<br>        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-attr">duration</span>: <span class="hljs-number">5</span> * <span class="hljs-number">1000</span>,<br>        <span class="hljs-attr">showClose</span>: <span class="hljs-literal">true</span><br>&#125;);<br></code></pre></td></tr></table></figure>
+
+
+<p>链接：<a href="https://www.jianshu.com/p/d70224534e6c">https://www.jianshu.com/p/d70224534e6c</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+]]></content>
+      <categories>
+        <category>record</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
 </search>
