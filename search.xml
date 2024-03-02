@@ -6767,4 +6767,28 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>transform,transition,@keyframe的区别</title>
+    <url>/2024/03/02/transform-transition-keyframe%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h3 id="1-transform"><a href="#1-transform" class="headerlink" title="1.transform"></a>1.transform</h3><p>对元素自身的改变。</p>
+<p>包括：</p>
+<p>　　平移：translate(X&#x2F;Y)</p>
+<p>　　翻转:rotate(20deg)</p>
+<p>　　缩放:<a href="https://so.csdn.net/so/search?q=scale&spm=1001.2101.3001.7020">scale</a>(X&#x2F;Y)</p>
+<p>　　倾斜&#x2F;透视：skew(..)</p>
+<h3 id="2-transiton"><a href="#2-transiton" class="headerlink" title="2.transiton"></a>2.transiton</h3><p>对元素css样式的改变（width，height，opacity。。。。），有动效， 包含起始和终止两个状态。</p>
+<p>transition有四个属性：transition-property  transition-duration  transition-timing-function  transition-delay</p>
+<p>示例：　　transition: width 2s  linear 1s</p>
+<p>当元素的width属性发生变化时，该变化将在2s内以恒定的速度进行过渡，但在过渡开始前会有1s延迟</p>
+<h3 id="3-keyframe-annimation"><a href="#3-keyframe-annimation" class="headerlink" title="3.@keyframe annimation"></a>3.@keyframe annimation</h3><p>定义了一组关键帧，也就是几个状态。每个状态可以包含多个css样式</p>
+<p>如：　　</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">@keyframes mymove &#123;<br>0%   &#123;top:0px; left:0px; background:red;&#125;<br>25%  &#123;top:0px; left:100px; background:blue;&#125;<br>50%  &#123;top:100px; left:100px; background:yellow;&#125;<br>75%  &#123;top:100px; left:0px; background:green;&#125;<br>100% &#123;top:0px; left:0px; background:red;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
 </search>
