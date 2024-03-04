@@ -6791,4 +6791,87 @@
         <tag>css</tag>
       </tags>
   </entry>
+  <entry>
+    <title>原生ajax请求</title>
+    <url>/2024/03/04/%E5%8E%9F%E7%94%9Fajax%E8%AF%B7%E6%B1%82/</url>
+    <content><![CDATA[<h2 id="原生发送ajax大致可分为5步："><a href="#原生发送ajax大致可分为5步：" class="headerlink" title="原生发送ajax大致可分为5步："></a>原生发送ajax大致可分为5步：</h2><ol>
+<li>实例化<code>XMLHttpRequest</code>对象。</li>
+</ol>
+<ul>
+<li><code>XMLHttpRequest()</code> 是内置的 <code>JavaScript</code> 对象。它是浏览器提供的原生 <code>API</code>，无需任何额外的库或框架。你可以直接在 <code>JavaScript</code> 代码中使用 <code>XMLHttpRequest()</code> 对象，而无需进行任何安装或导入。</li>
+</ul>
+<ol>
+<li>设置请求方法和地址。</li>
+</ol>
+<ul>
+<li>使用<code>open()</code>方法设置</li>
+</ul>
+<ol>
+<li>设置请求头</li>
+</ol>
+<ul>
+<li>可以省略 如果后端需要，就要设置，不需要，设置了也没关系，可以自定义</li>
+<li><code>setRequestHeader()</code></li>
+</ul>
+<ol>
+<li>注册回调函数</li>
+<li>发送请求</li>
+</ol>
+<ul>
+<li><code>send（）</code></li>
+</ul>
+<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ajax_get</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-comment">// 1. 实例化xhr对象</span><br>            <span class="hljs-keyword">const</span> xhr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>()<br>            <span class="hljs-comment">// 2. 设置请求方法和地址 </span><br>            xhr.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;get&#x27;</span>, <span class="hljs-string">&#x27;http://ajax-api.itheima.net/api/news&#x27;</span>)<br>            <span class="hljs-comment">// 3. 设置请求头 （可省略，看需）</span><br>            xhr.<span class="hljs-title function_">setRequestHeader</span>(<span class="hljs-string">&#x27;myHeader&#x27;</span>, <span class="hljs-string">&#x27;goodHeader&#x27;</span>)<br>            <span class="hljs-comment">// 4. 注册回调函数  </span><br>            <span class="hljs-comment">//  readystatechange  ==&gt; 表示ajax请求的状态改变</span><br>            <span class="hljs-comment">// xhr.readystate ==&gt; 从我们实例化xhr对象开始，就在变化 0-4 值， 4 表示服务器已经把数据返回给我了</span><br>            xhr.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;readystatechange&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>                <span class="hljs-keyword">if</span> (xhr.<span class="hljs-property">readyState</span> === <span class="hljs-number">4</span>) &#123;<br><br>                    <span class="hljs-keyword">if</span> (xhr.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; xhr.<span class="hljs-property">status</span> &lt; <span class="hljs-number">300</span> || xhr.<span class="hljs-property">status</span> === <span class="hljs-number">304</span>) &#123;<br>                        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(xhr.<span class="hljs-property">response</span>)<br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;请求不成功&#x27;</span>)<br>                    &#125;<br><br>                &#125;<br>            &#125;)<br><br>            <span class="hljs-comment">// 5. 发送请求</span><br>            xhr.<span class="hljs-title function_">send</span>()<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="xhr-readyState"><a href="#xhr-readyState" class="headerlink" title="xhr.readyState"></a>xhr.readyState</h3><ul>
+<li><p>表示<code>ajax</code> <code>xhr</code>当前的状态码。</p>
+</li>
+<li><p>返回值是 0、1、2、3、4</p>
+</li>
+<li><p><img src="/2024/03/04/%E5%8E%9F%E7%94%9Fajax%E8%AF%B7%E6%B1%82/0c8930b6229e48ddb347bedb68ec423dtplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="image.png"></p>
+</li>
+</ul>
+<h3 id="xhr-status"><a href="#xhr-status" class="headerlink" title="xhr.status"></a>xhr.status</h3><ul>
+<li><code>xhr.status</code> 它实际上就是http状态码</li>
+<li>304： 资源未修改</li>
+<li>协商缓存： 两个请求头：一个是 <code>If-Modified-since</code>   &#x2F; <code>If-None-match</code></li>
+<li>览器在发送请求的时候，附加一个请求头，去问服务器，资源有没有改动。</li>
+<li>服务器，看到了这个请求头， 就会去它自己的本地查看一下是否修改，如果没有修改，返回<code>304</code>。</li>
+<li>告诉浏览器，资源没有修改，你可以直接用上次请求的那个资源。</li>
+</ul>
+<h2 id="xhr的load"><a href="#xhr的load" class="headerlink" title="xhr的load"></a>xhr的load</h2><ul>
+<li><code>load</code> 表示的是 <code>readyStateChange</code>为 <code>4</code>  即为<code>load</code>事件， 一次ajax请求，只会触发一次。</li>
+</ul>
+<h3 id="示例：-1"><a href="#示例：-1" class="headerlink" title="示例："></a>示例：</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ajax_get</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-keyword">const</span> xhr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>()<br>            xhr.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;get&#x27;</span>, <span class="hljs-string">&#x27;http://ajax-api.itheima.net/api/news&#x27;</span>)<br>            xhr.<span class="hljs-title function_">setRequestHeader</span>(<span class="hljs-string">&#x27;myHeader&#x27;</span>, <span class="hljs-string">&#x27;goodHeader&#x27;</span>)<br>            <span class="hljs-comment">// 一次ajax请求</span><br>            xhr.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;load&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>                    <span class="hljs-keyword">if</span> (xhr.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; xhr.<span class="hljs-property">status</span> &lt; <span class="hljs-number">300</span> || xhr.<span class="hljs-property">status</span> === <span class="hljs-number">304</span>) &#123;<br>                        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(xhr.<span class="hljs-property">response</span>)<br>                        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(xhr.<span class="hljs-property">responseText</span>)<br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;请求不成功&#x27;</span>)<br>                    &#125;<br>            &#125;)<br>            xhr.<span class="hljs-title function_">send</span>()<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>就只是改变了监听事件</li>
+<li><code>xhr.response</code> 是根据响应头里面的 <code>content-type</code>自动解析的，一般是二进制的数据，音视频</li>
+<li><code>xhr.responseText</code> 一般是文本数据，比如<code>html</code>，<code>json</code>，纯文本。</li>
+</ul>
+<h1 id="原生Ajax-get-请求传参"><a href="#原生Ajax-get-请求传参" class="headerlink" title="原生Ajax-get-请求传参"></a>原生Ajax-get-请求传参</h1><ul>
+<li>原生的<code>ajax</code>，<code>get</code>没有<code>params</code>，所以，直接拼接到<code>url</code>上。</li>
+<li>查询字符串  queryString   url?key&#x3D;val&amp;key2&#x3D;val2</li>
+</ul>
+<h2 id="示例：-2"><a href="#示例：-2" class="headerlink" title="示例："></a>示例：</h2><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ajax_get</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-keyword">const</span> xhr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>()<br>             <span class="hljs-comment">// ===&gt; 查询字符串  queryString   url?key=val&amp;key2=val2</span><br>            xhr.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;get&#x27;</span>,<span class="hljs-string">&#x27;http://ajax-api.itheima.net/api/robot?spoken=吃了没&#x27;</span>)<br>            xhr.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;load&#x27;</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;<br>                <span class="hljs-keyword">if</span>(xhr.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; xhr.<span class="hljs-property">status</span> &lt; <span class="hljs-number">300</span> || xhr.<span class="hljs-property">status</span><br>                 === <span class="hljs-number">304</span>) &#123;<br>                    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(xhr.<span class="hljs-property">response</span>)<br>                 &#125;<br>            &#125;)<br>            xhr.<span class="hljs-title function_">send</span>()<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>直接拼接在<code>open（）</code>方法url后面</li>
+</ul>
+<h1 id="原生Ajax-post-请求传参"><a href="#原生Ajax-post-请求传参" class="headerlink" title="原生Ajax-post-请求传参"></a>原生Ajax-post-请求传参</h1><ul>
+<li>如果是<code>post</code>请求，原生ajax，需要设置一个<strong>请求头</strong>，告诉后端，我发送的数据是什么格式的。</li>
+<li>后端接口文档中写了需要什么样格式的数据！，我们照着设置就好了</li>
+</ul>
+<h3 id="示例：-3"><a href="#示例：-3" class="headerlink" title="示例："></a>示例：</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ajax_get</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-keyword">const</span> xhr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>()<br>            xhr.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;post&#x27;</span>,<span class="hljs-string">&#x27;http://ajax-api.itheima.net/api/login&#x27;</span>)<br>            <span class="hljs-comment">// 如果是post请求，原生ajax，需要设置一个请求头，告诉后端，我发送的数据是什么格式的</span><br>            xhr.<span class="hljs-title function_">setRequestHeader</span>(<span class="hljs-string">&#x27;content-type&#x27;</span>, <span class="hljs-string">&#x27;application/x-www-form-urlencoded&#x27;</span>)<br>            xhr.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;load&#x27;</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;<br>                <span class="hljs-keyword">if</span>(xhr.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; xhr.<span class="hljs-property">status</span> &lt; <span class="hljs-number">300</span> || xhr.<span class="hljs-property">status</span><br>                 === <span class="hljs-number">304</span>) &#123;<br>                    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(xhr.<span class="hljs-property">response</span>)<br>                 &#125;<br>            &#125;)<br>            <span class="hljs-comment">// post请求，在这里写参数</span><br>            <span class="hljs-comment">// 如果是get请求，send可以为空，或者null</span><br>            xhr.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;username=admin&amp;password=123456&#x27;</span>)<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>请求参数写在<code>send()</code>方法中</li>
+</ul>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
 </search>
