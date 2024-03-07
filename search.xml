@@ -6874,4 +6874,597 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>原生js操作dom</title>
+    <url>/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/</url>
+    <content><![CDATA[<h1 id="Web-API"><a href="#Web-API" class="headerlink" title="Web API"></a>Web API</h1><p>Web API是浏览器提供的一套操作浏览器功能和页面元素的API(BOM和DOM)</p>
+<p>JavaScipt由三部分构成 ECMAScript、DOM和BOM。</p>
+<ul>
+<li>BOM浏览器对象模型，提供了与浏览器的交互方法和接口；</li>
+<li>DOM 文档对象模型，提供了处理网页内容、结构 、样式的方法和接口；</li>
+</ul>
+<h2 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h2><ul>
+<li><p>DOM文档对象模型 又称为DOM树</p>
+</li>
+<li><p>DOM树 由文档、元素、节点 组成</p>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/cf8097c4f81441df93908ed4962265dctplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550731974575"></p>
+<ul>
+<li>文档：一个页面就是一个文档，</li>
+<li>元素：文档中的所有标签都称为元素。DOM中使用Element表示</li>
+<li>节点：文档中的所有内容，在文档中都是节点（标签、属性、文本注释等）DOM中使用node表示</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取元素"><a href="#获取元素" class="headerlink" title="获取元素"></a>获取元素</h2><blockquote>
+<p>都以 document . 开头 例如：document.getElementById</p>
+<p>使用  <code>console.dir 可以打印出返回的元素对象，从而更好的查看属性和方法</code></p>
+</blockquote>
+<h3 id="getElementById-（元素ID"><a href="#getElementById-（元素ID" class="headerlink" title="getElementById （元素ID)"></a>getElementById （元素ID)</h3><ul>
+<li><p>获取标签为Id的元素  (文档中的id值是唯一的，没有重复的id)</p>
+</li>
+<li><p>参数：id值，区分大小写的字符串</p>
+</li>
+<li><p>返回id属性值的元素节点相对应的对象</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;time&quot;</span>&gt;</span>2019-9-9<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">        <span class="hljs-comment">// 因为我们文档页面从上往下加载，所以先得有标签 所以我们script写到标签的下面</span></span><br><span class="language-javascript">        <span class="hljs-keyword">var</span> timer = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;time&#x27;</span>);</span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(timer);</span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">typeof</span> timer);</span><br><span class="language-javascript">        <span class="hljs-comment">// console.dir 打印我们返回的元素对象 更好的查看里面的属性和方法</span></span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">dir</span>(timer);</span><br><span class="language-javascript">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="getElementsByTagName-标签名"><a href="#getElementsByTagName-标签名" class="headerlink" title="getElementsByTagName (标签名)"></a>getElementsByTagName (标签名)</h3><blockquote>
+<p>注意：得到的是一个对象数组 ，如需操作元素则需要<code>遍历伪数组</code> 并且伪数组不能使用数组的方法</p>
+</blockquote>
+<ul>
+<li><p>以标签名来获取元素</p>
+</li>
+<li><p>参数：标签名</p>
+</li>
+<li><p>返回的是一个对象数组 （伪数组）</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;nav&quot;</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>生僻字<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>生僻字<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>生僻字<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>生僻字<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>生僻字<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>     <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br>     <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">            <span class="hljs-comment">// 1.返回的是 获取过来元素对象的集合 以伪数组的形式存储的</span></span><br><span class="language-javascript">            <span class="hljs-keyword">var</span> lis = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&#x27;li&#x27;</span>);</span><br><span class="language-javascript">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(lis);</span><br><span class="language-javascript">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(lis[<span class="hljs-number">0</span>]);</span><br><span class="language-javascript">            <span class="hljs-comment">// 2. 我们想要依次打印里面的元素对象我们可以采取遍历的方式</span></span><br><span class="language-javascript">            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; lis.<span class="hljs-property">length</span>; i++) &#123;</span><br><span class="language-javascript">                <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(lis[i]);</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">            <span class="hljs-comment">// 3. element.getElementsByTagName()  可以得到这个元素里面的某些标签</span></span><br><span class="language-javascript">            <span class="hljs-keyword">var</span> nav = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;nav&#x27;</span>); <span class="hljs-comment">// 这个获得nav 元素</span></span><br><span class="language-javascript">            <span class="hljs-keyword">var</span> navLis = nav.<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&#x27;li&#x27;</span>);</span><br><span class="language-javascript">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(navLis);</span><br><span class="language-javascript">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：getElementsByTagName()获取到是<code>动态集合</code>，即：当页面增加了标签，这个集合中也就增加了元素。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="getElementsByCalssName-class类名"><a href="#getElementsByCalssName-class类名" class="headerlink" title="getElementsByCalssName (class类名)"></a>getElementsByCalssName (class类名)</h3><ul>
+<li><p>以class类名获取元素</p>
+</li>
+<li><p>参数 calss类名</p>
+</li>
+<li><p>返回 对应类名的元素对象集合</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span>盒子1<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span>盒子2<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;nav&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>首页<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>产品<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">     <span class="hljs-comment">//getElementsByClassName根据类名获得某些元素集合</span></span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> boxs=<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementsByClassName</span>(<span class="hljs-string">&quot;box&quot;</span>)</span><br><span class="language-javascript">    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(boxs)</span><br><span class="language-javascript">    &lt;script&gt;</span><br><span class="language-javascript"> &lt;body&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="querySelector-（选择器-）"><a href="#querySelector-（选择器-）" class="headerlink" title="querySelector （选择器 ）"></a>querySelector （选择器 ）</h3><ul>
+<li><p>可以是任意的选择器 例如：id、标签名、类名</p>
+</li>
+<li><p>参数: 可以是 id 、类名、标签 选择器</p>
+</li>
+<li><p>返回：该模式匹配的第一个元素</p>
+</li>
+<li><p><code>注意</code> : 需要在选择器前<code>加符号</code>  例如  .box 、 #nav。让querySelector 知道是什么选择器所以要加符号。 与前面介绍的不同</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span></span><br><span class="hljs-tag">    &lt;<span class="hljs-attr">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span>盒子1<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span>盒子2<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;nav&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>首页<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>产品<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">    <span class="hljs-comment">// 2. querySelector 返回指定选择器的第一个元素对象  切记 里面的选择器需要加符号 .box  #nav</span></span><br><span class="language-javascript">        <span class="hljs-keyword">var</span> firstBox = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.box&#x27;</span>); <span class="hljs-comment">//class类名</span></span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(firstBox);</span><br><span class="language-javascript">        <span class="hljs-keyword">var</span> nav = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#nav&#x27;</span>); <span class="hljs-comment">//id</span></span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(nav);</span><br><span class="language-javascript">        <span class="hljs-keyword">var</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;li&#x27;</span>);<span class="hljs-comment">//标签</span></span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(li);</span><br><span class="language-javascript">    &lt;script&gt;</span><br><span class="language-javascript"> &lt;body&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="querySelectorAll-（选择器）"><a href="#querySelectorAll-（选择器）" class="headerlink" title="querySelectorAll （选择器）"></a>querySelectorAll （选择器）</h3><ul>
+<li><p>可以是任意的选择器 例如：id、标签名、类名</p>
+</li>
+<li><p>参数: 可以是 id 、类名、标签 选择器</p>
+</li>
+<li><p>返回：该模式匹配的所有元素对象集合（伪数组 ）</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span></span><br><span class="hljs-tag">    &lt;<span class="hljs-attr">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span>盒子1<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span>盒子2<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;nav&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>首页<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>产品<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">   <span class="hljs-comment">// 3. querySelectorAll()返回指定选择器的所有元素对象集合</span></span><br><span class="language-javascript">        <span class="hljs-keyword">var</span> allBox = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;.box&#x27;</span>);</span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(allBox);</span><br><span class="language-javascript">        <span class="hljs-keyword">var</span> lis = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;li&#x27;</span>);</span><br><span class="language-javascript">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(lis);</span><br><span class="language-javascript">    &lt;script&gt;</span><br><span class="language-javascript"> &lt;body&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="获取特殊元素（body、html"><a href="#获取特殊元素（body、html" class="headerlink" title="获取特殊元素（body、html)"></a>获取特殊元素（body、html)</h3><ul>
+<li><p>获取body ：document.body</p>
+</li>
+<li><p>获取html : document.documentElement</p>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/65812f4d95df4ea18504a32156924530tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550733794816"></p>
+</li>
+</ul>
+<h3 id="获取元素之-节点获取"><a href="#获取元素之-节点获取" class="headerlink" title="获取元素之 节点获取"></a>获取元素之 节点获取</h3><blockquote>
+<p>页面中所有的内容都为节点，节点使用 <code>node</code>来表示</p>
+</blockquote>
+<ul>
+<li>DOM树可以把节点划分为不同的层级关系，常见的是父子兄层级关系</li>
+</ul>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/4e59dbce5d074a4883d6288162e657c0tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550970986988"></p>
+<h4 id="父级节点"><a href="#父级节点" class="headerlink" title="父级节点"></a>父级节点</h4><ul>
+<li>node.parentNode    &#x2F;&#x2F;node表示节点</li>
+<li>parentNode  &#x2F;&#x2F;可以返回某个节点的父节点，注意是<code>最近一级的父节点</code></li>
+<li>如果指定的节点没有父节点则返回null</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;div <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;demo&quot;</span>&gt;<br>        <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span></span><br><span class="language-xml">            <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;erweima&quot;</span>&gt;</span>×<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>    &lt;/div&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 1. 父节点 parentNode</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> erweima = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.erweima&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// var box = document.querySelector(&#x27;.box&#x27;);</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 得到的是离元素最近的父级节点(亲爸爸) 如果找不到父节点就返回为 null</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(erweima.<span class="hljs-property">parentNode</span>);</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<h4 id="子元素节点"><a href="#子元素节点" class="headerlink" title="子元素节点"></a>子元素节点</h4><ul>
+<li><p>parentNode.children  (各个浏览器都支持)  （不包含 元素节点，文本节点等）</p>
+</li>
+<li><p>parentNode.firstElementChild  (获取第一个元素节点)   具有兼容问题  ie9才支持</p>
+</li>
+<li><p>parentNode.lastElementChild  (获取最后一个子元素节点)  具有兼容问题   ie9才支持</p>
+</li>
+<li><p>parentNode.children[0]   (没有兼容性问题，并且返回第一个子元素)</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;ul&gt; <br>        <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>我是li<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br>        <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>我是li<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br>        <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>我是li<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br>        <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>我是li<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br>    &lt;/ul&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-comment">// 2. children 获取所有的子元素节点(不包括文本节点等）也是我们实际开发常用的</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ul.<span class="hljs-property">children</span>);</span></span><br><span class="language-javascript"><span class="language-xml">   <span class="hljs-comment">//2.firstElementChild 获取第一个子元素节点 ie9以上才支持</span></span></span><br><span class="language-javascript"><span class="language-xml">       <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ul.<span class="hljs-property">firstElementChild</span>)</span></span><br><span class="language-javascript"><span class="language-xml">   <span class="hljs-comment">//3.lastElementChild 获取最后一个子元素节点 ie9以上才支持</span></span></span><br><span class="language-javascript"><span class="language-xml">       <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ul.<span class="hljs-property">lastElementChild</span>)</span></span><br><span class="language-javascript"><span class="language-xml">   <span class="hljs-comment">//4.children[0] 开发中经常使用 没有兼容问题并且返回第一个子元素</span></span></span><br><span class="language-javascript"><span class="language-xml">       <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ul.<span class="hljs-property">children</span>[<span class="hljs-number">0</span>])</span></span><br><span class="language-javascript"><span class="language-xml">       <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ul.<span class="hljs-property">children</span>[children.<span class="hljs-property">length</span>-<span class="hljs-number">1</span>])</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="兄弟节点"><a href="#兄弟节点" class="headerlink" title="兄弟节点"></a>兄弟节点</h4><ul>
+<li><p>node.nexElementSibling   &#x2F;&#x2F;返回当前元素下一个兄弟元素节点，找不到则返回null</p>
+</li>
+<li><p>node.previousElementSibling    &#x2F;&#x2F; 返回当前元素上一个兄弟节点，找不到则返回null</p>
+</li>
+<li><p>两种方法都有兼容性的问题，IE9以上支持</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;div&gt;我是div&lt;/div&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>我是span<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> span=documnet.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;span&quot;</span>)</span></span><br><span class="language-javascript"><span class="language-xml">     <span class="hljs-comment">// 1. nextElementSibling 得到下一个兄弟元素节点</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-property">nextElementSibling</span>);</span></span><br><span class="language-javascript"><span class="language-xml">     <span class="hljs-comment">// 2.nextElementSibling 得到上一个兄弟元素节点</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(span.<span class="hljs-property">previousElementSibling</span>);</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<p>问：解决兼容性问题</p>
+<p>答：自己封装一个兼容性的函数</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getNextElementSibling</span>(<span class="hljs-params">element</span>) &#123;<br>      <span class="hljs-keyword">var</span> el = element;<br>      <span class="hljs-keyword">while</span> (el = el.<span class="hljs-property">nextSibling</span>) &#123;<br>        <span class="hljs-keyword">if</span> (el.<span class="hljs-property">nodeType</span> === <span class="hljs-number">1</span>) &#123;<br>            <span class="hljs-keyword">return</span> el;<br>        &#125;<br>      &#125;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;  <br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h2><p>javaScript程序中采用的是异步处理事件模型，事件处理分三部分。</p>
+<ul>
+<li><p>事件源 （具体作用在哪 个元素或标签上）</p>
+</li>
+<li><p>事件类型 （指的是 例如：鼠标的点击，双击，经过，键盘的按下的键）</p>
+</li>
+<li><p>处理程序 （ 指的是 事件触发后浏览器调用对应的处理程序(以函数的形式），也称为事件处理函数）</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br> <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span> 事件处理 <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><br> <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"> <span class="hljs-comment">//1.获取事件源</span></span><br><span class="language-javascript"> <span class="hljs-keyword">var</span> div=<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;div&quot;</span>) </span><br><span class="language-javascript"><span class="hljs-comment">// 2.绑定事件 注册事件</span></span><br><span class="language-javascript">  div.<span class="hljs-property">onclick</span></span><br><span class="language-javascript"> <span class="hljs-comment">//3.添加事件处理程序</span></span><br><span class="language-javascript">  div.<span class="hljs-property">onclick</span>=<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;</span><br><span class="language-javascript">     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;我&quot;</span>)</span><br><span class="language-javascript">  &#125;</span><br><span class="language-javascript">  &lt;script&gt;</span><br><span class="language-javascript">&lt;body&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="注册事件"><a href="#注册事件" class="headerlink" title="注册事件"></a>注册事件</h3><p>注册事件有三种方法</p>
+<ul>
+<li><p>使用HTML标签属性注册（例如 Vue的事件注册）</p>
+</li>
+<li><p>使用传统的DOM对象注册   (onclick)  具有唯一性</p>
+<blockquote>
+<p><code>注意:使用这种方式注册 一个事件源只能注册一个,如注册多个,后面的覆盖前面的注册事件</code></p>
+</blockquote>
+</li>
+<li><p>使用 <code>addEventListene</code>r（type,listener,useCapture）的方法<code>监听注册</code>方式 (即可添加多个,也可以取消事件)</p>
+<ul>
+<li>type :事件类型 , 例如：click、mouseover <code>注意</code>这是里不需要带on</li>
+<li>listener:事件处理函数，事件发生时，会调用该监听函数</li>
+<li>useCapture：可选参数，是一个布尔值，默认是false 。(false为捕获阶段，true为冒泡阶段)</li>
+</ul>
+<blockquote>
+<p><code>注意:addEventListener() 方法 不支持低版本的IE</code></p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">show()</span>&gt;</span> 注册事件的三种方法 <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><br> <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"> <span class="hljs-comment">//1.使用HTML属性注册 </span></span><br><span class="language-javascript">  <span class="hljs-keyword">function</span> <span class="hljs-title function_">show</span>(<span class="hljs-params"></span>)&#123;</span><br><span class="language-javascript">  <span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;div被点击了&quot;</span>)</span><br><span class="language-javascript">  &#125;</span><br><span class="language-javascript"> <span class="hljs-comment">//2.使用javaScipt的DOM注册事件</span></span><br><span class="language-javascript">     <span class="hljs-keyword">var</span> div=<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;div&quot;</span>)</span><br><span class="language-javascript">     <span class="hljs-comment">//注意 事件类型以 on开头 后面对应的事件名为小写</span></span><br><span class="language-javascript">     div.<span class="hljs-property">onclick</span>＝<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;</span><br><span class="language-javascript">     <span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;DOM注册点击div&quot;</span>)</span><br><span class="language-javascript">  &#125;</span><br><span class="language-javascript"><span class="hljs-comment">//3.使用addEventListener()方法注册事件</span></span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> div=<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;div&quot;</span>)</span><br><span class="language-javascript">   <span class="hljs-comment">//向div添加事件</span></span><br><span class="language-javascript">    div.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>,<span class="hljs-function">()=&gt;</span>&#123;</span><br><span class="language-javascript">     <span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;Div 注册点击事件&quot;</span>)</span><br><span class="language-javascript">  &#125;)</span><br><span class="language-javascript">  <span class="hljs-comment">//移除div事件</span></span><br><span class="language-javascript">   div.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&quot;click&quot;</span>,<span class="hljs-function">()=&gt;</span>&#123;</span><br><span class="language-javascript">       <span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;移除div事件&quot;</span>)</span><br><span class="language-javascript"> &#125;)</span><br><span class="language-javascript">  &lt;script&gt;</span><br><span class="language-javascript">&lt;body&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="删除事件（解绑事件）"><a href="#删除事件（解绑事件）" class="headerlink" title="删除事件（解绑事件）"></a>删除事件（解绑事件）</h3><ol>
+<li>移除传统的注册方式（DOM 对象的方法）<ul>
+<li>div.onclick&#x3D;null;</li>
+</ul>
+</li>
+<li>移除监听事件的方式  （使用匿名函数 ，无法移除 ）<ul>
+<li>div.removeEventListener (type,listener,useCapture);</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;body&gt;   <br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> divs = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;div&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        divs[<span class="hljs-number">0</span>].<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-title function_">alert</span>(<span class="hljs-number">11</span>);</span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-comment">// 1. 传统方式删除事件</span></span></span><br><span class="language-javascript"><span class="language-xml">            divs[<span class="hljs-number">0</span>].<span class="hljs-property">onclick</span> = <span class="hljs-literal">null</span>;</span></span><br><span class="language-javascript"><span class="language-xml">        &#125;</span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-comment">// 2. removeEventListener 删除事件</span></span></span><br><span class="language-javascript"><span class="language-xml">        divs[<span class="hljs-number">1</span>].<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, fn) <span class="hljs-comment">// 里面的fn 不需要调用加小括号</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">function</span> <span class="hljs-title function_">fn</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-title function_">alert</span>(<span class="hljs-number">22</span>);</span></span><br><span class="language-javascript"><span class="language-xml">            divs[<span class="hljs-number">1</span>].<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, fn);</span></span><br><span class="language-javascript"><span class="language-xml">        &#125;</span></span><br><span class="language-javascript"><span class="language-xml">       </span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br>&lt;body&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="鼠标事件"><a href="#鼠标事件" class="headerlink" title="鼠标事件"></a>鼠标事件</h3><ul>
+<li>鼠标事件的执行顺序</li>
+</ul>
+<p>​        mousedown-&gt;mouseup-&gt;click-&gt;mousedown-&gt;mouseup-&gt;click-&gt;dbclick</p>
+<table>
+<thead>
+<tr>
+<th>鼠标事件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>click</td>
+<td>鼠标点击左键并释放时触发</td>
+</tr>
+<tr>
+<td>dbclick</td>
+<td>双击鼠标左键时触发</td>
+</tr>
+<tr>
+<td>mousedown</td>
+<td>按下鼠标按键时触发</td>
+</tr>
+<tr>
+<td>mouseup</td>
+<td>释放鼠标按键时触发</td>
+</tr>
+<tr>
+<td><code>mouseover</code></td>
+<td>当鼠标经过时触发   <code>具有事件冒泡</code></td>
+</tr>
+<tr>
+<td><code>mouseout</code></td>
+<td>当鼠标离开时触发   <code>具有事件冒泡</code></td>
+</tr>
+<tr>
+<td><code>mouseenter</code></td>
+<td>当鼠标经过时触发    <code>不具有事件冒泡</code></td>
+</tr>
+<tr>
+<td><code>mouseleave</code></td>
+<td>当鼠标经过时触发    <code>不具有事件冒泡</code></td>
+</tr>
+<tr>
+<td>mousemove</td>
+<td>当移动鼠标时触发</td>
+</tr>
+<tr>
+<td>contextmenu</td>
+<td>禁止鼠标右键菜单</td>
+</tr>
+<tr>
+<td>selectstart</td>
+<td>禁止鼠标选中文字</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>只有在同一个元素上相继触发 mouseover 和 mouseup事件 才会触发click事件</p>
+<p>只有触发再两次click事件,才会触发一次dbclick事件</p>
+</blockquote>
+<ul>
+<li><p>mouseenter与mouseove的区别</p>
+<ul>
+<li>mouseenter经常与mouseleave搭配使用</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//1.mouseenter 鼠标经过  不具有事件冒泡，不会传递给son点击事件</span><br>   &lt;div <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;father&quot;</span>&gt;<br>        <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;son&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>    &lt;/div&gt;<br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> father = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.father&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> son = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.son&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        father.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mouseenter&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">11</span>);</span></span><br><span class="language-javascript"><span class="language-xml"></span></span><br><span class="language-javascript"><span class="language-xml">        &#125;)</span></span><br><span class="language-javascript"><span class="language-xml"> </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>禁止鼠标右键菜单</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//1.contextmenu 禁止鼠标右键菜单</span><br>documnet.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;contextmenu&quot;</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>)&#123;<br> e.<span class="hljs-title function_">preventDefault</span>(); <span class="hljs-comment">// 阻止事件的默认跳转行为</span><br>&#125;)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>禁止鼠标选中文字</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//2.selectstart 禁止鼠标选中文字</span><br>documnet.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;selectstart&quot;</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>)&#123;<br>   e.<span class="hljs-title function_">preventDefault</span>(); <span class="hljs-comment">//阻止事件的默认跳转行为</span><br>&#125;)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="焦点事件"><a href="#焦点事件" class="headerlink" title="焦点事件"></a>焦点事件</h3><table>
+<thead>
+<tr>
+<th>mous焦点事件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>blur</td>
+<td>元素失去焦点时触发,不会冒泡</td>
+</tr>
+<tr>
+<td>focus</td>
+<td>元素获得焦点时触发,不会冒泡</td>
+</tr>
+</tbody></table>
+<h3 id="键盘事件"><a href="#键盘事件" class="headerlink" title="键盘事件"></a>键盘事件</h3><blockquote>
+<p>一般键盘事件使用在 输入框的标签中</p>
+</blockquote>
+<ul>
+<li><p>当按下字符键的<code>执行顺序</code> (按下字符键 触发<code>三次事件</code>)</p>
+<p>keydown-&gt;keypress-&gt;keyup  其中 keydown和keypress在文件框发生变化之前触发,然后是keyup事件则是在文件框发生变化之后触发</p>
+</li>
+<li><p>当按下非字符键的<code>执行顺序</code>  (按下非字符, 触发<code>二次事件</code>)</p>
+<p>keydown-&gt;keyup  其中首先触发 keydown,最后触发keyup.</p>
+</li>
+<li><p><code>注意</code>：keydown和keypress在文本框里面特点：先执行事件的处理程序 在将文字落入到文本框中</p>
+</li>
+<li><p><code>keyup</code>在文本框里面的特点：先将文字落入到文本框中在执行事件的处理程序</p>
+</li>
+<li><p><code>keypress</code>不识别功能键，但是<code>keyCode</code>属性能区分大小写,返回不同的<code>ASCII</code>值</p>
+</li>
+<li><p><code>onkeydown</code>和<code>onkeyup</code>,不区分字母大小写，<code>onkeypress</code>区分字母大小字</p>
+</li>
+<li></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>键盘事件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>keydown</td>
+<td>按下键盘上的任意键触发;按住不放,重复触发</td>
+</tr>
+<tr>
+<td>keypress</td>
+<td>按下键盘上的字符键触发;按住不放,重复触发,<code>不识别功能键，如 箭头,ctrl,shift 等</code></td>
+</tr>
+<tr>
+<td>keyup</td>
+<td>释放键盘上的键时触发</td>
+</tr>
+<tr>
+<td>e.keyCode</td>
+<td>当用户按下按键时获取按键 <code>ASCII 编码</code></td>
+</tr>
+<tr>
+<td>e.key</td>
+<td>获取当用户按下按键时的 名称</td>
+</tr>
+</tbody></table>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;script&gt;<br>        <span class="hljs-comment">// 常用的键盘事件</span><br>        <span class="hljs-comment">//1. keyup 按键弹起的时候触发 </span><br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;keyup&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;我弹起了&#x27;</span>);<br>        &#125;)<br><br>        <span class="hljs-comment">//3. keypress 按键按下的时候触发  不能识别功能键 比如 ctrl shift 左右箭头啊</span><br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;keypress&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>                <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;我按下了press&#x27;</span>);<br>        &#125;)<br>        <span class="hljs-comment">//2. keydown 按键按下的时候触发  能识别功能键 比如 ctrl shift 左右箭头啊</span><br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;keydown&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>                <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;我按下了down&#x27;</span>);<br>        &#125;)<br>        <span class="hljs-comment">// 4. 三个事件的执行顺序  keydown -- keypress -- keyup</span><br><br>       <span class="hljs-comment">//  5.利用Keycode返回的ASCII码值来判断用户按下的是哪个键</span><br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;keyup&quot;</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>)&#123;<br>             <span class="hljs-keyword">if</span>(e.<span class="hljs-property">keyCode</span>===<span class="hljs-number">65</span>)&#123;<br>               <span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;你按下的是a键&quot;</span>)<br>             &#125;<span class="hljs-keyword">else</span>&#123;<br>               <span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;你没有按下a键&quot;</span>)<br>             &#125;<br>         &#125;)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="滚动条事件"><a href="#滚动条事件" class="headerlink" title="滚动条事件"></a>滚动条事件</h3><p>当出现滚动条时，向下滚动页面时，上面被隐藏掉的高度，被称为页面被卷去的部分，此时滚动条在滚动时会触发 <code>scroll事件</code></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">element.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;scroll&quot;</span>,<span class="hljs-function">()=&gt;</span>&#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(element.<span class="hljs-property">scrollTop</span>)<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h3 id="表单事件"><a href="#表单事件" class="headerlink" title="表单事件"></a>表单事件</h3><p><code>change</code>事件 当表单的值 发生改变时触发</p>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/88b315dad9f04cf5acd0c6566b8c6971tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="image-20210623174256679"></p>
+<h3 id="事件对象"><a href="#事件对象" class="headerlink" title="事件对象"></a>事件对象</h3><p>在触发DOM上的某个事件时会产生一个事件对象event ，这个对象中包含着所有与事件有关的信息。包括导致事件的元素、事件的类型以及其他与特定事件相关的信息。</p>
+<ul>
+<li><p>事件触发时系统会产生一个事件对象，并且系统会以实参的形式传给事件处理函数</p>
+</li>
+<li><p>在事件处理程序中声明一个形参用来接收事件参数。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//1. 方法一</span><br>eventTarget.onclick=function(event)&#123;<br><span class="hljs-comment">//这个event就是事件对象，我们还喜欢的写成 e 或者 evt</span><br>&#125;<br><br><span class="hljs-comment">// 2. 方法二</span><br><br>eventTarget.addEventListener(<span class="hljs-string">&quot;click&quot;</span>,function(event)&#123;<br> <span class="hljs-comment">//这个event就是事件对象，我们还喜欢的写成 e 或者 evt/这个</span><br>&#125;)<br><br>	<span class="hljs-comment">//3.方法三 </span><br> eventTarget.addEventListener(<span class="hljs-string">&quot;click&quot;</span>,fn)<br>  function(event)&#123;<br>  <span class="hljs-comment">//这个event就是事件对象，我们喜欢写成e或者evt</span><br>&#125;<br> <br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="事件对象的属性和方法"><a href="#事件对象的属性和方法" class="headerlink" title="事件对象的属性和方法"></a>事件对象的属性和方法</h4><table>
+<thead>
+<tr>
+<th>事件对象的属性和方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>e.target</td>
+<td>返回 <code>触发</code> 事件的对象     标准</td>
+</tr>
+<tr>
+<td>e.srcElement</td>
+<td>返回<code>触发</code>事件的对象         非标准 <code>ie6-8</code></td>
+</tr>
+<tr>
+<td>e.type</td>
+<td>返回事件的<code>类型</code> 比如 click  mouseover 不带 on</td>
+</tr>
+<tr>
+<td>e.canceIBubble</td>
+<td>该属性阻止冒泡 非标准 <code>ie6-8</code>使用</td>
+</tr>
+<tr>
+<td>e.returnValue</td>
+<td>该属性 阻止默认事件（默认行为）非标准 <code>ie6-8</code>使用 比如不让链接跳转</td>
+</tr>
+<tr>
+<td>e.preventDefault()</td>
+<td>该方法阻止默认事件（默认行为）标准 比如不让链接跳转</td>
+</tr>
+<tr>
+<td>e.stopPropagation()</td>
+<td>标准的阻止事件冒泡</td>
+</tr>
+</tbody></table>
+<h4 id="事件对象的-this与e-target的区别"><a href="#事件对象的-this与e-target的区别" class="headerlink" title="事件对象的 this与e.target的区别"></a>事件对象的 this与e.target的区别</h4><ul>
+<li><p>this 指向的是事件绑定的元素</p>
+</li>
+<li><p>e.target 指向的是事件触发元素   <code>别忘了e.</code></p>
+<blockquote>
+<p>通常情况下<code>e.target </code>  和 <code>this</code>  的指向是一致的</p>
+<p>但是有一种情况不同，那就是在事件冒泡时（父子元素有相同事件，单击子元素，父元素的事件处理函数也会被触发执行）</p>
+<p>​    这时候 this 指向的是元素，因为this使终指向的是事件绑定的元素</p>
+<p>​    target 指向的是子元素 ，因为target使终指向的是事件触发的元素</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;div&gt;<span class="hljs-number">123</span>&lt;/div&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>abc<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>abc<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>abc<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><br>     <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">   <span class="hljs-number">1.</span> <span class="hljs-comment">//target和this指向的一致</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        div.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// e.target 和 this指向的都是div</span></span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">target</span>);</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        &#125;);</span></span><br><span class="language-javascript"><span class="language-xml">   <span class="hljs-number">2.</span> <span class="hljs-comment">//在冒泡的情况下 target和this指向不同</span></span></span><br><span class="language-javascript"><span class="language-xml">     <span class="hljs-keyword">var</span> ul=<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;ul&quot;</span>)</span></span><br><span class="language-javascript"><span class="language-xml">      ul.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;click&quot;</span>，<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;</span></span><br><span class="language-javascript"><span class="language-xml">         <span class="hljs-comment">// 我们给ul 绑定了事件  那么this 就指向ul  </span></span></span><br><span class="language-javascript"><span class="language-xml">              <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>);  <span class="hljs-comment">// ul</span></span></span><br><span class="language-javascript"><span class="language-xml">              <span class="hljs-comment">// e.target 触发了事件的对象 我们点击的是li e.target 指向的就是li</span></span></span><br><span class="language-javascript"><span class="language-xml">              <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">target</span>);  <span class="hljs-comment">// li</span></span></span><br><span class="language-javascript"><span class="language-xml">&#125;)</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<h4 id="鼠标的事件对象"><a href="#鼠标的事件对象" class="headerlink" title="鼠标的事件对象"></a>鼠标的事件对象</h4><table>
+<thead>
+<tr>
+<th>鼠标事件对象</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>e.clientX</td>
+<td>返回鼠标相对于浏览器窗口可视区的 <code>X</code> 坐标</td>
+</tr>
+<tr>
+<td>e.clientY</td>
+<td>返回鼠标相对于浏览器窗口可视区的 <code>Y</code> 坐标</td>
+</tr>
+<tr>
+<td>e.pageX</td>
+<td>返回鼠标相对于文档页面的 <code>X</code>  坐标   IE9+ 支持</td>
+</tr>
+<tr>
+<td>e.pageY</td>
+<td>返回鼠标相对于文档页面的 <code>Y</code>  坐标   IE9+ 支持</td>
+</tr>
+<tr>
+<td>e.screenX</td>
+<td>返回鼠标相对于电脑屏幕的 X 坐标</td>
+</tr>
+<tr>
+<td>e.screenY</td>
+<td>返回鼠标相对于电脑屏幕的Y 坐标</td>
+</tr>
+</tbody></table>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;script&gt;<br>        <span class="hljs-comment">// 鼠标事件对象 MouseEvent</span><br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) &#123;<br>            <span class="hljs-comment">// 1. client 鼠标在可视区的x和y坐标</span><br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">clientX</span>);<br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">clientY</span>);<br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;---------------------&#x27;</span>);<br><br>            <span class="hljs-comment">// 2. page 鼠标在页面文档的x和y坐标</span><br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">pageX</span>);<br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">pageY</span>);<br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;---------------------&#x27;</span>);<br><br>            <span class="hljs-comment">// 3. screen 鼠标在电脑屏幕的x和y坐标</span><br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">screenX</span>);<br>            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">screenY</span>);<br><br>        &#125;)<br>    &lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="操作元素"><a href="#操作元素" class="headerlink" title="操作元素"></a>操作元素</h2><h3 id="修改元素内容"><a href="#修改元素内容" class="headerlink" title="修改元素内容"></a>修改元素内容</h3><blockquote>
+<p>个人推荐:  innerHTML 使用多</p>
+</blockquote>
+<ul>
+<li><p>Element.innerText</p>
+<blockquote>
+<p>只显示纯文本,去除html标签,同时去除了空格和换行</p>
+</blockquote>
+</li>
+<li><p>Element.innerHTML</p>
+<blockquote>
+<p>显示指定的元素的全部内容,包括HTML标签,同时保留空格和换行</p>
+</blockquote>
+</li>
+<li><p>innerText与innerHTML的区别</p>
+<ul>
+<li>使用innerText<code>获取内容</code>   <code>不识别</code>  HTML标签, 空格与换行</li>
+<li>使用innerText<code>设置内容</code> <code>不识别</code>  HTML标签</li>
+<li>使用innerHTML获取内容  <code>识别</code>  全部内容包括 HTML标签 ,会保留空格和换行</li>
+<li>使用innerHTML设置内容  <code>识别</code>  可设置HTML标签</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;body&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>显示当前系统时间<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>某个时间<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>1123<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 当我们点击了按钮，  div里面的文字会发生变化</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 1. 获取元素 </span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> btn = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 2.注册事件</span></span></span><br><span class="language-javascript"><span class="language-xml">        btn.<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// div.innerText = &#x27;2021-6-18&#x27;;</span></span></span><br><span class="language-javascript"><span class="language-xml">            div.<span class="hljs-property">innerHTML</span> = <span class="hljs-title function_">getDate</span>();</span></span><br><span class="language-javascript"><span class="language-xml">        &#125;</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">function</span> <span class="hljs-title function_">getDate</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">var</span> date = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// 我们写一个 2019年 5月 1日 星期三</span></span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">var</span> year = date.<span class="hljs-title function_">getFullYear</span>();</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">var</span> month = date.<span class="hljs-title function_">getMonth</span>() + <span class="hljs-number">1</span>;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">var</span> dates = date.<span class="hljs-title function_">getDate</span>();</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">var</span> arr = [<span class="hljs-string">&#x27;星期日&#x27;</span>, <span class="hljs-string">&#x27;星期一&#x27;</span>, <span class="hljs-string">&#x27;星期二&#x27;</span>, <span class="hljs-string">&#x27;星期三&#x27;</span>, <span class="hljs-string">&#x27;星期四&#x27;</span>, <span class="hljs-string">&#x27;星期五&#x27;</span>, <span class="hljs-string">&#x27;星期六&#x27;</span>];</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">var</span> day = date.<span class="hljs-title function_">getDay</span>();</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;今天是：&#x27;</span> + year + <span class="hljs-string">&#x27;年&#x27;</span> + month + <span class="hljs-string">&#x27;月&#x27;</span> + dates + <span class="hljs-string">&#x27;日 &#x27;</span> + arr[day];</span></span><br><span class="language-javascript"><span class="language-xml">        &#125;</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br>&lt;/body&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="属性的操作"><a href="#属性的操作" class="headerlink" title="属性的操作"></a>属性的操作</h3><blockquote>
+<p><code>this</code> 指向的是事件函数的调用者</p>
+</blockquote>
+<ul>
+<li>普通元素的属性操作</li>
+</ul>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/22e1ded6af0e4d74865f0d062fede6cftplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550735556297"></p>
+<ul>
+<li>表单元素的属性操作</li>
+</ul>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/3a379d0ceca74645b70dd2502607f4d0tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550736039005"></p>
+<ul>
+<li><p>获取属性的值</p>
+<blockquote>
+<p>元素对象.属性名</p>
+</blockquote>
+</li>
+<li><p>设置属性的值</p>
+<blockquote>
+<p>元素对象.属性名&#x3D;值</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;body&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>按钮<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;输入内容&quot;</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 1. 获取元素</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> btn = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> input = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;input&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 2. 注册事件 处理程序</span></span></span><br><span class="language-javascript"><span class="language-xml">        btn.<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// 表单里面的值 文字内容是通过 value 来修改的</span></span></span><br><span class="language-javascript"><span class="language-xml">            input.<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;被点击了&#x27;</span>;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// 如果想要某个表单被禁用 不能再点击 disabled  我们想要这个按钮 button禁用</span></span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// btn.disabled = true;</span></span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-variable language_">this</span>.<span class="hljs-property">disabled</span> = <span class="hljs-literal">true</span>;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// this 指向的是事件函数的调用者 btn</span></span></span><br><span class="language-javascript"><span class="language-xml">        &#125;</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="样式属性操作"><a href="#样式属性操作" class="headerlink" title="样式属性操作"></a>样式属性操作</h3><p>通过 js 修改元素大小,颜色,位置等模式</p>
+<p>常用方式</p>
+<ul>
+<li><p>Element.style.样式&#x3D;值                 &#x2F;&#x2F;行内样式操作   修改行内样式 权重较高</p>
+</li>
+<li><p>Element.className&#x3D;“类名”       &#x2F;&#x2F;类名样式操作     覆盖原先的类名</p>
+<ul>
+<li>Element.className&#x3D;“  ”      &#x2F;&#x2F;值为空或null      可使元素的类名置空</li>
+</ul>
+</li>
+<li><p>Element.classList.add (“类名”)   &#x2F;&#x2F; 添加类名操作  可添加多个 <code>不会覆盖原有的类名</code></p>
+<ul>
+<li>Element.classList.remove( “ 移除类名”)    &#x2F;&#x2F; 移除类名操作   <code>可移除多个类名</code></li>
+<li>Element.classList.toggle( “切换类名 ”)     &#x2F;&#x2F;切换类名   无则添加，有则移除</li>
+<li>Element.calssList.contains( “类名” )         &#x2F;&#x2F;是否包含此类名， <code>返回布尔值</code>判断是否为存在</li>
+</ul>
+<blockquote>
+<p>calssName是保留字,因此使用calssName来操作元素类名属性</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;body&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 1. 获取元素</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 2. 注册事件 处理程序</span></span></span><br><span class="language-javascript"><span class="language-xml">        div.<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">// div.style里面的属性 采取驼峰命名法 js中对大小写敏感</span></span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-variable language_">this</span>.<span class="hljs-property">style</span>.<span class="hljs-property">backgroundColor</span> = <span class="hljs-string">&#x27;purple&#x27;</span>;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-comment">//别忘了加 单位 px</span></span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-variable language_">this</span>.<span class="hljs-property">style</span>.<span class="hljs-property">width</span> = <span class="hljs-string">&#x27;250px&#x27;</span>;</span></span><br><span class="language-javascript"><span class="language-xml"> <span class="hljs-comment">// 2. 我们可以通过 修改元素的className更改元素的样式 适合于样式较多或者功能复杂的情况</span></span></span><br><span class="language-javascript"><span class="language-xml">   <span class="hljs-comment">// 3. 如果想要保留原先的类名，我们可以这么做 多类名选择器</span></span></span><br><span class="language-javascript"><span class="language-xml">   <span class="hljs-comment">// this.className = &#x27;change&#x27;;</span></span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-variable language_">this</span>.<span class="hljs-property">className</span> = <span class="hljs-string">&#x27;first change&#x27;</span>;</span></span><br><span class="language-javascript"><span class="language-xml">        &#125;</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br>&lt;/body&gt;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="取消-a-标签的默认跳转"><a href="#取消-a-标签的默认跳转" class="headerlink" title="取消 a 标签的默认跳转"></a>取消 a 标签的默认跳转</h2><ul>
+<li><p>方法一:  在处理程序内的最后 添加  <code>return false ;</code></p>
+</li>
+<li><p>方法二:  在 a标签中加   <code>javascript:;</code></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">javascript复制代码<span class="hljs-comment">//方法一: 事件处理程序中最后设置 return false;</span><br><br>&lt;body&gt;<br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;link&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://www.baidu.com&quot;</span>&gt;</span>点击<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span><br><span class="hljs-comment">//方式2：设置a标签的href属性值为：javascript:</span><br> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;javascript:;&quot;</span>&gt;</span>点击2<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span><br><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-keyword">var</span> link = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;link&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">    link.<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;</span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;你好&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-comment">// 方式1：取消a点击后的默认跳转行为 return false;</span></span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span></span><br><span class="language-javascript"><span class="language-xml">    &#125;;</span></span><br><span class="language-javascript"><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br>&lt;body&gt;<br><br><span class="hljs-comment">//方式2：设置a标签的href属性值为：javascript:;</span><br> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;javascript:;&quot;</span>&gt;</span>点击2<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span><br><span class="hljs-comment">//备注：</span><br><span class="hljs-comment">//	给a标签的herf值设置javascript: ,表示将来点击a时，会阻止默认跳转行为，并且仅仅会执行js代码</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="全选案例：全选"><a href="#全选案例：全选" class="headerlink" title="全选案例：全选"></a>全选案例：全选</h2><p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/808def605ded405c890f2be0c42472d4tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="image-20210613133543487"></p>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/2e03213e73f544029508267a00205a87tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550915005393"></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;script&gt;<br>        <span class="hljs-comment">// 1. 全选和取消全选做法：  让下面所有复选框的checked属性（选中状态） 跟随 全选按钮即可</span><br>        <span class="hljs-comment">// 获取元素</span><br>        <br>        <span class="hljs-keyword">var</span> j_cbAll = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;j_cbAll&#x27;</span>); <br>        <span class="hljs-keyword">var</span> j_tbs = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;j_tb&#x27;</span>).<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&#x27;input&#x27;</span>); <br>        <span class="hljs-comment">// 全选按钮注册事件</span><br>        j_cbAll.<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>                <span class="hljs-comment">// this.checked 当前复选框的选中状态</span><br>                <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">checked</span>);<br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; j_tbs.<span class="hljs-property">length</span>; i++) &#123;<br>                    j_tbs[i].<span class="hljs-property">checked</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">checked</span>;<br>                &#125;<br>         &#125;<br>         <span class="hljs-comment">// 给所有的子复选框注册单击事件</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; j_tbs.<span class="hljs-property">length</span>; i++) &#123;<br>            j_tbs[i].<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>                <span class="hljs-comment">// flag 控制全选按钮是否选中</span><br>                <span class="hljs-keyword">var</span> flag = <span class="hljs-literal">true</span>;<br>                <span class="hljs-comment">// 每次点击下面的复选框都要循环检查者4个小按钮是否全被选中</span><br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; j_tbs.<span class="hljs-property">length</span>; i++) &#123;<br>                    <span class="hljs-keyword">if</span> (!j_tbs[i].<span class="hljs-property">checked</span>) &#123;<br>                        flag = <span class="hljs-literal">false</span>;<br>                        <span class="hljs-keyword">break</span>; <br>                    &#125;<br>                &#125;<br>                <span class="hljs-comment">// 设置全选按钮的状态</span><br>                j_cbAll.<span class="hljs-property">checked</span> = flag;<br>            &#125;<br>        &#125;<br>    &lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="自定义属性操作"><a href="#自定义属性操作" class="headerlink" title="自定义属性操作"></a>自定义属性操作</h2><blockquote>
+<p>为什么需要自定义属性：用于在页面中存储数据而不用在数据库中存储</p>
+</blockquote>
+<h3 id="获取属性值"><a href="#获取属性值" class="headerlink" title="获取属性值"></a>获取属性值</h3><ul>
+<li>Element.属性  （内置属性通 点的方式 获取元素属性）</li>
+<li>Element.getAttribute(“属性”)   （一般用于 自定义属性）<code>兼容性获取</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;div id=<span class="hljs-string">&quot;demo&quot;</span> index=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;nav&quot;</span>&gt;&lt;/div&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">  <span class="hljs-comment">// 1. 获取元素的属性值</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// (1) element.属性</span></span></span><br><span class="language-javascript"><span class="language-xml">       <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-property">id</span>);</span></span><br><span class="language-javascript"><span class="language-xml">  <span class="hljs-comment">//(2) element.getAttribute(&#x27;属性&#x27;)  get得到获取 attribute 属性的意思 我们程序员自己添加的属性我们称为自定义属性 index</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;id&#x27;</span>));</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;index&#x27;</span>));</span></span><br><span class="language-javascript"><span class="language-xml">	</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="设置属性值"><a href="#设置属性值" class="headerlink" title="设置属性值"></a>设置属性值</h3><ul>
+<li>Element.属性&#x3D; “值”   （内置属性）</li>
+<li>Element.setAttribute( “属性”，”值“ )； &#x2F;&#x2F;一般用于自定义属性</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 2. 设置元素属性值</span><br>        <span class="hljs-comment">// (1) element.属性= &#x27;值&#x27;</span><br>        div.<span class="hljs-property">id</span> = <span class="hljs-string">&#x27;test&#x27;</span>;<br>        div.<span class="hljs-property">className</span> = <span class="hljs-string">&#x27;navs&#x27;</span>;<br>   <span class="hljs-comment">// (2) element.setAttribute(&#x27;属性&#x27;, &#x27;值&#x27;);  主要针对于自定义属性</span><br>        div.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;index&#x27;</span>, <span class="hljs-number">2</span>);<br>        div.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;class&#x27;</span>, <span class="hljs-string">&#x27;footer&#x27;</span>); <span class="hljs-comment">// class 特殊  这里面写的就是</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="移除属性值"><a href="#移除属性值" class="headerlink" title="移除属性值"></a>移除属性值</h3><ul>
+<li>Element.removeAttribute(“属性”)</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// class 不是className</span><br><span class="hljs-comment">// 3 移除属性 removeAttribute(属性)    </span><br>div.<span class="hljs-title function_">removeAttribute</span>(<span class="hljs-string">&#x27;index&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<h3 id="获取H5自定义属性"><a href="#获取H5自定义属性" class="headerlink" title="获取H5自定义属性"></a>获取H5自定义属性</h3><ul>
+<li><p>只能获取以 data开头 的自定义属性</p>
+</li>
+<li><p>Element.dataset.index 或者 Element.dataset[“index”]   ie11才支持</p>
+<blockquote>
+<p>使用 Element.dataset.属性 获得的是一个以 data- 开头的自定义属性集合</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="设置H5-自定义属性"><a href="#设置H5-自定义属性" class="headerlink" title="设置H5 自定义属性"></a>设置H5 自定义属性</h3><blockquote>
+<p>H5中规定 自定义属性要 以 data-开头做为属性名并且赋值。</p>
+</blockquote>
+<ul>
+<li><p>在标签中设置<code>&lt;div data-index=&quot;1&quot;&gt; &lt;/div&gt;</code></p>
+</li>
+<li><p>使用 js设置 <code>Element.setAttribute(“data-index”,2)</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;div getTime=<span class="hljs-string">&quot;20&quot;</span> data-index=<span class="hljs-string">&quot;2&quot;</span> data-list-name=<span class="hljs-string">&quot;andy&quot;</span>&gt;&lt;/div&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// console.log(div.getTime);</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;getTime&#x27;</span>));</span></span><br><span class="language-javascript"><span class="language-xml">        div.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;data-time&#x27;</span>, <span class="hljs-number">20</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;data-index&#x27;</span>));</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;data-list-name&#x27;</span>));</span></span><br><span class="language-javascript"><span class="language-xml"><span class="hljs-comment">// h5新增的获取自定义属性的方法 它只能获取data-开头的</span></span></span><br><span class="language-javascript"><span class="language-xml"><span class="hljs-comment">// dataset 是一个集合里面存放了所有以data开头的自定义属性</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-property">dataset</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-property">dataset</span>.<span class="hljs-property">index</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-property">dataset</span>[<span class="hljs-string">&#x27;index&#x27;</span>]);</span></span><br><span class="language-javascript"><span class="language-xml"><span class="hljs-comment">// 如果自定义属性里面有多个-链接的单词，我们获取的时候采取 驼峰命名法</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-property">dataset</span>.<span class="hljs-property">listName</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(div.<span class="hljs-property">dataset</span>[<span class="hljs-string">&#x27;listName&#x27;</span>]);</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Tab栏-案例-：tab栏"><a href="#Tab栏-案例-：tab栏" class="headerlink" title="Tab栏 案例 ：tab栏"></a>Tab栏 案例 ：tab栏</h2><p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/38ada686103f45db9e544b3cbd6ffc28tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550915567627"></p>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/9382666673b843cba08935c585668618tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="1550915590707"></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;script&gt;<br>        <span class="hljs-comment">// 获取元素</span><br>        <span class="hljs-keyword">var</span> tab_list = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.tab_list&#x27;</span>);<br>        <span class="hljs-keyword">var</span> lis = tab_list.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;li&#x27;</span>);<br>        <span class="hljs-keyword">var</span> items = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;.item&#x27;</span>);<br>        <span class="hljs-comment">// for循环，给选项卡绑定点击事件</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; lis.<span class="hljs-property">length</span>; i++) &#123;<br>            <span class="hljs-comment">// 开始给5个小li 设置索引号 </span><br>            lis[i].<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;index&#x27;</span>, i);<br>            lis[i].<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>                <span class="hljs-comment">// 1. 上的模块选项卡，当前这一个底色会是红色，其余不变（排他思想）</span><br>                <span class="hljs-comment">// 干掉所有人 其余的li清除 class 这个类</span><br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; lis.<span class="hljs-property">length</span>; i++) &#123;<br>                    lis[i].<span class="hljs-property">className</span> = <span class="hljs-string">&#x27;&#x27;</span>;<br>                &#125;<br>                <span class="hljs-comment">// 留下我自己 </span><br>                <span class="hljs-variable language_">this</span>.<span class="hljs-property">className</span> = <span class="hljs-string">&#x27;current&#x27;</span>;<br>                <span class="hljs-comment">// 2. 下面的显示内容模块</span><br>                <span class="hljs-keyword">var</span> index = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;index&#x27;</span>);<br>                <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(index);<br>                <span class="hljs-comment">// 干掉所有人 让其余的item 这些div 隐藏</span><br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; items.<span class="hljs-property">length</span>; i++) &#123;<br>                    items[i].<span class="hljs-property">style</span>.<span class="hljs-property">display</span> = <span class="hljs-string">&#x27;none&#x27;</span>;<br>                &#125;<br>                <span class="hljs-comment">// 留下我自己 让对应的item 显示出来</span><br>                items[index].<span class="hljs-property">style</span>.<span class="hljs-property">display</span> = <span class="hljs-string">&#x27;block&#x27;</span>;<br>            &#125;<br>        &#125;<br>    &lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="节点操作"><a href="#节点操作" class="headerlink" title="节点操作"></a>节点操作</h2><blockquote>
+<p>node 表示父级   child 表示子级</p>
+</blockquote>
+<h3 id="创建节点"><a href="#创建节点" class="headerlink" title="创建节点"></a>创建节点</h3><ul>
+<li>document.createElement(“标签”)<ul>
+<li>动态创建元素  创建之后需要添加</li>
+</ul>
+</li>
+</ul>
+<h3 id="添加节点"><a href="#添加节点" class="headerlink" title="添加节点"></a>添加节点</h3><ul>
+<li><p>node.appendchild(child )   &#x2F;&#x2F;node表示父级   child表示子级</p>
+<ul>
+<li>将节点添加到node表示的父节点的子节点列表的<code>末尾</code>，类似数组的方法push</li>
+</ul>
+</li>
+<li><p>node.insertBefore( child,指定节点的位置 )</p>
+<ul>
+<li>将节点添加到node表示的父节点的指定子节点的~&#96;前面&#96;，类似于css里面的before伪元素</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;body&gt;   <br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>123<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">     <span class="hljs-comment">// 1. 创建节点元素节点</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">     <span class="hljs-comment">// 2. 添加节点 node.appendChild(child)  node 父级  child 是子级 后面追加元素</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;ul&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        ul.<span class="hljs-title function_">appendChild</span>(li);</span></span><br><span class="language-javascript"><span class="language-xml">     <span class="hljs-comment">// 3. 添加节点 node.insertBefore(child, 指定元素);</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> lili = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        ul.<span class="hljs-title function_">insertBefore</span>(lili, ul.<span class="hljs-property">children</span>[<span class="hljs-number">0</span>]);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 4. 我们想要页面添加一个新的元素 ： 1. 创建元素 2. 添加元素</span></span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br>&lt;/body&gt;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h3><ul>
+<li><p>node.removeChild(  child ) 方法  在父级节点删除一个子节点，返回删除的节点</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;body&gt;  <br>   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>删除<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>熊大<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>熊二<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>光头强<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 1.获取元素</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;ul&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> btn = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 2. 删除元素  node.removeChild(child)</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// ul.removeChild(ul.children[0]);</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// 3. 点击按钮依次删除里面的孩子</span></span></span><br><span class="language-javascript"><span class="language-xml">        btn.<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">            <span class="hljs-keyword">if</span> (ul.<span class="hljs-property">children</span>.<span class="hljs-property">length</span> == <span class="hljs-number">0</span>) &#123;</span></span><br><span class="language-javascript"><span class="language-xml">                <span class="hljs-variable language_">this</span>.<span class="hljs-property">disabled</span> = <span class="hljs-literal">true</span>;</span></span><br><span class="language-javascript"><span class="language-xml">            &#125; <span class="hljs-keyword">else</span> &#123;</span></span><br><span class="language-javascript"><span class="language-xml">                ul.<span class="hljs-title function_">removeChild</span>(ul.<span class="hljs-property">children</span>[<span class="hljs-number">0</span>]);</span></span><br><span class="language-javascript"><span class="language-xml">            &#125;</span></span><br><span class="language-javascript"><span class="language-xml">        &#125;</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br>&lt;/body&gt;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="复制（克隆）节点"><a href="#复制（克隆）节点" class="headerlink" title="复制（克隆）节点"></a>复制（克隆）节点</h3><ul>
+<li><p>node.cloneNode()   &#x2F;&#x2F;返回调用 该方法的节点的一个副本，也称为克隆节点&#x2F;拷贝节点</p>
+</li>
+<li><p>如果括号参数为空或者为 false，则是浅拷贝，即只克隆复制节点本身，不克隆里面的子节点</p>
+</li>
+<li><p>如果括号参数为true，则是深度拷贝，会复制节点本身以及里面所有的子节点</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;body&gt;  <br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span> </span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>1111<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;ul&#x27;</span>);</span></span><br><span class="language-javascript"><span class="language-xml">     <span class="hljs-comment">// 1. node.cloneNode(); 括号为空或者里面是false 浅拷贝 只复制标签不复制里面的内容</span></span></span><br><span class="language-javascript"><span class="language-xml">    <span class="hljs-comment">// 2. node.cloneNode(true); 括号为true 深拷贝 复制标签复制里面的内容</span></span></span><br><span class="language-javascript"><span class="language-xml">        <span class="hljs-keyword">var</span> lili = ul.<span class="hljs-property">children</span>[<span class="hljs-number">0</span>].<span class="hljs-title function_">cloneNode</span>(<span class="hljs-literal">true</span>);</span></span><br><span class="language-javascript"><span class="language-xml">        ul.<span class="hljs-title function_">appendChild</span>(lili);</span></span><br><span class="language-javascript"><span class="language-xml">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br>&lt;/body&gt;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="DOM的核心总结"><a href="#DOM的核心总结" class="headerlink" title="DOM的核心总结"></a>DOM的核心总结</h2><blockquote>
+<p>DOM操作，我们主要针对于元素的操作。主要有创建，添加，删除，改，查。</p>
+</blockquote>
+<h3 id="创建元素的三种方式"><a href="#创建元素的三种方式" class="headerlink" title="创建元素的三种方式"></a>创建元素的三种方式</h3><ul>
+<li>document.write()</li>
+<li>Element.innerHTML&#x3D;  值</li>
+<li>document.createElement()</li>
+</ul>
+<p><img src="/2024/03/07/%E5%8E%9F%E7%94%9Fjs%E6%93%8D%E4%BD%9Cdom/59c3eb2515374b06b6b499c13f4af8d7tplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="image-20210614125034124"></p>
+<p>innerHTML数组方式（效率高）</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&lt;script&gt;<br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">fn</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">var</span> d1 = +<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();<br>        <span class="hljs-keyword">var</span> array = [];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) &#123;<br>        <span class="hljs-comment">//使用数组的方法push 在末尾添加标签</span><br>array.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;&lt;div style=&quot;width:100px; height:2px; border:1px solid blue;&quot;&gt;&lt;/div&gt;&#x27;</span>);<br>        &#125;<br>        <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">innerHTML</span> = array.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);<br>        <span class="hljs-keyword">var</span> d2 = +<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(d2 - d1);<br>    &#125;<br>    <span class="hljs-title function_">fn</span>();<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h3><ul>
+<li>appendChild   &#x2F;&#x2F;在父节点的末尾添加节点</li>
+<li>insertBefore  &#x2F;&#x2F;可以指定子节点的添加位置</li>
+</ul>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><ul>
+<li>removeChild</li>
+</ul>
+<h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><ul>
+<li>主要修改DOM元素的属性，DOM元素的内容，属性，表单的值等。</li>
+<li>修改元素属性: src、href、title等</li>
+<li>修改元素的普通内容: innerHMTL、innerText</li>
+<li>修改表单元素：value、type、disabled等</li>
+<li>修改元素的模式，style、className</li>
+</ul>
+<h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><ul>
+<li>DOM提供的API：getElementById，getElementByTagName 古老用法不太推荐使用</li>
+<li>H5提供的新方法：querySelector,querySelectorAll  推荐</li>
+<li>利用节点操作获取元素：父（parentNode)、子(children)、兄弟（previousElementSibling、nextElementSibling) 推荐</li>
+</ul>
+<h3 id="操作自定义属性"><a href="#操作自定义属性" class="headerlink" title="操作自定义属性"></a>操作自定义属性</h3><ul>
+<li>主要操作自定义属性</li>
+<li>setAttribute: 设置自定义属性</li>
+<li>getAttribute：获取自定义属性</li>
+<li>removeAttribute：移除属性</li>
+</ul>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
 </search>
