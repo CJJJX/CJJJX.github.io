@@ -7467,4 +7467,18 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>vue中@click.native</title>
+    <url>/2024/03/08/vue%E4%B8%AD-click-native/</url>
+    <content><![CDATA[<p>在组件中时常看到@click.native。在项目中遇到后，简单介绍下：@click.native是给组件绑定原生事件</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17832216-1cbb8c79e629e00f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1029/format/webp" alt="img"></p>
+<p>项目标签  ‘ListCell’ 是子组件引到当前父组件<br>当父组件中引入子组件的时候，当要触发子组件点击事件的时候@click 不生效。<br> 有两种解决方式<br> <a href="mailto:&#x31;&#x2e;&#x40;&#x63;&#x6c;&#x69;&#99;&#107;&#46;&#x6e;&#97;&#x74;&#x69;&#x76;&#101;">&#x31;&#x2e;&#x40;&#x63;&#x6c;&#x69;&#99;&#107;&#46;&#x6e;&#97;&#x74;&#x69;&#x76;&#101;</a><br> 2.在子组件中添加this.$emit ( “事件名” ，value )方法 将子组件的值传到父组件。</p>
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
 </search>
