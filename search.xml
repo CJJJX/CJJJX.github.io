@@ -7505,4 +7505,155 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>css隐藏元素的方法</title>
+    <url>/2024/03/23/css%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><p>通过css实现隐藏元素方法有如下：</p>
+<p>1.display: none: 渲染树不会渲染对象</p>
+<p>2.visibility: hidden: 元素在页面中仍占据空间，但是不会响应绑定的监听事件。</p>
+<p>3.opacity: 0: 元素在页面中仍然占据空间，并且能够响应元素绑定的监听事件。</p>
+<p>4.position: absolute: 通过使用绝对定位将元素移除可视区域内，以此来实现元素的隐藏。</p>
+<p>5.z-index: 负值:来使其他元素遮盖住该元素，以此来实现隐藏。</p>
+<p>6.clip&#x2F;clip-path: 元素仍在页面中占据位置，但是不会响应绑定的监听事件。</p>
+<p>7.transform: scale(0,0): 将元素缩放为 0，元素仍在页面中占据位置，但是不会响应绑定的监听事件。</p>
+<p>8、color alpha 透明度</p>
+<p>9、可以通过使用width、height、padding、border-width 或 font-size 来缩小元素的尺寸</p>
+<p>10、覆盖另一个元素</p>
+<p>11、transform 属性可以用于元素的平移、缩放、旋转或倾斜等。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">解释1. visibility: hidden;   这个属性只是简单的隐藏某个元素, 但是元素占用的空间任然存在 <br><br>2. opacity: 0;   一个CSS3属性, 设置 0 可以使一个元素完全透明, 制作出和 visibility 一样的效果 。 与 visibility 相比, 它可以被 transition 和 animate 。<br><br>3. position: absolute;    使元素脱离文档流, 处于普通文档之上, 给它设置一个很大的 left 负值定位, 使元素定位在可见区域之外 。<br><br>4. display: none;  元素会变得不可见, 并且不会再占用文档的空间 。<br><br>5. transform: scale(0);   将一个元素设置为无限小, 这个元素将不可见 。 这个元素原来所在的位置将被保留 。<br><br>6. HTML5 hidden attribute; hidden 属性的效果和 display:none; 相同, 这个属性用于记录一个元素的状态 。<br><br>7. height: 0; overflow: hidden; 将元素在垂直方向上收缩为0, 使元素消失 。 只要元素没有可见的边框, 该技术就可以正常工作 。<br><br>8. filter: blur(0); 将一个元素的模糊度设置为0, 从而使这个元素“消失”在页面中 。<br></code></pre></td></tr></table></figure>
+
+<h2 id="display-none"><a href="#display-none" class="headerlink" title="display:none"></a>display:none</h2><p>设置元素的display为none是最常用的隐藏元素的方法</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.hide</span> &#123;<br>    <span class="hljs-attribute">display</span>:none;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>将元素设置为display:none后，元素在页面上将彻底消失</p>
+<p>元素本身占有的空间就会被其他元素占有，也就是说它会导致浏览器的重排和重绘</p>
+<p>消失后，自身绑定的事件不会触发，也不会有过渡效果</p>
+<p>特点：元素不可见，不占据空间，无法响应点击事件</p>
+<h2 id="color-alpha-透明度"><a href="#color-alpha-透明度" class="headerlink" title="color alpha 透明度"></a>color alpha 透明度</h2><p>可以将元素的color、background-color 和 border-color 等属性设置为rgba(0,0,0,0)，这样就会使元素完全透明：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">解释<span class="hljs-selector-tag">div</span> &#123;<br> <span class="hljs-attribute">color</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);<br>  <span class="hljs-attribute">background-color</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这三个属性都是支持设置动画效果的，需要注意，透明度不能应用于带有背景图片的元素，除非它们是使用 linear-gradient 或类似方法生成的。</p>
+<p>Alpha 通道可以设置为：</p>
+<ul>
+<li>transparent：完全透明（中间不能插入动画）；</li>
+<li>rgba(r, g, b, a)：红色、绿色、蓝色和 alpha；</li>
+<li>hsla(h, s, l, a)：色相、饱和度、亮度和 alpha；</li>
+<li>#RRGGBBAA 或 #RGBA。</li>
+</ul>
+<h2 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h2><p>transform 属性可以用于元素的平移、缩放、旋转或倾斜等。可以使用 scale(0) 或者 translate(-9999px, 0px) 属性值来将元素隐藏：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">解释<span class="hljs-selector-tag">div</span> &#123;<br> <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">scale</span>(<span class="hljs-number">0</span>);<br>&#125;<br><br><span class="hljs-selector-tag">div</span> &#123;<br> translate(-<span class="hljs-number">9999px</span>, <span class="hljs-number">0px</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>transform 属性提供了出色的性能和硬件加速，因为元素被有效地移动到了单独的层中，并且可以在 2D 或 3D 中进行动画处理。原始的布局空间会保持原样，并不会受影响。使用这种方式隐藏的元素不会触发任何事件。</p>
+<h2 id="z-index"><a href="#z-index" class="headerlink" title="z-index"></a>z-index</h2><p>可以通过将元素的 z-index 属性设置为负值，以实现元素的隐藏。这实际上就是将元素放在了我们看不到的层。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">div</span> &#123;<br>  <span class="hljs-attribute">z-index</span>: -<span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="position"><a href="#position" class="headerlink" title="position"></a>position</h2><p>position属性允许使用top、bottom、left、right 从页面中的默认位置移动元素。因此，绝对定位的元素可以通过左键：-9999px 等值移出屏幕：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">解释<span class="hljs-selector-tag">div</span> &#123;<br>  <span class="hljs-attribute">position</span>: absolute;<br>  <span class="hljs-attribute">left</span>: -<span class="hljs-number">999px</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="覆盖另一个元素"><a href="#覆盖另一个元素" class="headerlink" title="覆盖另一个元素"></a>覆盖另一个元素</h2><p>通过在元素的上面放置与背景颜色相同的元素，可以在视觉上隐藏一个元素。下面来使用::after伪元素来实现：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">解释<span class="hljs-selector-tag">div</span><span class="hljs-selector-pseudo">::after</span> &#123;<br>  <span class="hljs-attribute">position</span>: absolute;<br>  <span class="hljs-attribute">content</span>: <span class="hljs-string">&#x27;&#x27;</span>;<br>  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">bottom</span>: <span class="hljs-number">100%</span>;<br>  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">right</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#fff</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>虽然这从技术上讲是可以实现的，但是这样做需要更多的代码。</p>
+<h2 id="缩小尺寸"><a href="#缩小尺寸" class="headerlink" title="缩小尺寸"></a>缩小尺寸</h2><p>可以通过使用width、height、padding、border-width 或 font-size 来缩小元素的尺寸以实现元素的隐藏。可能还需要应用 overflow: hidden; 来确保内容不会溢出。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">解释<span class="hljs-selector-tag">div</span> &#123;<br>  <span class="hljs-attribute">height</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">overflow</span>: hidden;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>使用这种形式我们可以在隐藏过程中使用动画效果，并且他的性能会比 transform 好很多。</p>
+<h2 id="visibility-hidden"><a href="#visibility-hidden" class="headerlink" title="visibility:hidden"></a>visibility:hidden</h2><p>设置元素的visibility为hidden也是一种常用的隐藏元素的方法</p>
+<p>从页面上仅仅是隐藏该元素，DOM结果均会存在，只是当时在一个不可见的状态，不会触发重排，但是会触发重绘</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.hidden</span>&#123;<br>    <span class="hljs-attribute">visibility</span>:hidden<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>给人的效果是隐藏了，所以他自身的事件不会触发</p>
+<p>特点：元素不可见，占据页面空间，无法响应点击事件</p>
+<h2 id="opacity-0"><a href="#opacity-0" class="headerlink" title="opacity:0"></a>opacity:0</h2><p>opacity属性表示元素的透明度，将元素的透明度设置为0后，在我们用户眼中，元素也是隐藏的</p>
+<p>opacity: N 和 filter: opacity(N) 属性可以传递一个 0 到 1 之间的数字，或者 0% 和 100% 之间的百分比，对应地表示完全透明和完全不透明。</p>
+<ul>
+<li>opacity: N：该属性用来设置元素的透明度；</li>
+<li>filter: opacity(N) ：filter属性用来设置元素的滤镜，opacity是滤镜重的透明度，用来设置元素的透明度。</li>
+</ul>
+<p>不会引发重排，一般情况下也会引发重绘</p>
+<blockquote>
+<p>如果利用 animation 动画，对 opacity 做变化（animation会默认触发GPU加速），则只会触发 GPU 层面的 composite，不会触发重绘</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.transparent</span> &#123;<br>    <span class="hljs-attribute">opacity</span>:<span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由于其仍然是存在于页面上的，所以他自身的的事件仍然是可以触发的，但被他遮挡的元素是不能触发其事件的</p>
+<p>需要注意的是：其子元素不能设置opacity来达到显示的效果</p>
+<p>特点：改变元素透明度，元素不可见，占据页面空间，可以响应点击事件</p>
+<p>在现代浏览器中，这两者之间几乎没有实际的区别，但如果同时应用多种效果（模糊、对比度、灰度等）时，应该使用 filter 属性。 </p>
+<p>注意：opacity 可以设置动画并提供出色的性能，但页面上保留完全透明的元素可能会触发事件。</p>
+<h2 id="设置height、width属性为0"><a href="#设置height、width属性为0" class="headerlink" title="设置height、width属性为0"></a>设置height、width属性为0</h2><p>将元素的margin，border，padding，height和width等影响元素盒模型的属性设置成0，如果元素内有子元素或内容，还应该设置其overflow:hidden来隐藏其子元素</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">解释<span class="hljs-selector-class">.hiddenBox</span> &#123;<br>    <span class="hljs-attribute">margin</span>:<span class="hljs-number">0</span>;     <br>    <span class="hljs-attribute">border</span>:<span class="hljs-number">0</span>;<br>    <span class="hljs-attribute">padding</span>:<span class="hljs-number">0</span>;<br>    <span class="hljs-attribute">height</span>:<span class="hljs-number">0</span>;<br>    <span class="hljs-attribute">width</span>:<span class="hljs-number">0</span>;<br>    <span class="hljs-attribute">overflow</span>:hidden;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>特点：元素不可见，不占据页面空间，无法响应点击事件</p>
+<h2 id="position-absolute"><a href="#position-absolute" class="headerlink" title="position:absolute"></a>position:absolute</h2><p>将元素移出可视区域</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">解释<span class="hljs-selector-class">.hide</span> &#123;<br>   <span class="hljs-attribute">position</span>: absolute;<br>   <span class="hljs-attribute">top</span>: -<span class="hljs-number">9999px</span>;<br>   <span class="hljs-attribute">left</span>: -<span class="hljs-number">9999px</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>特点：元素不可见，不影响页面布局</p>
+<h2 id="clip-path"><a href="#clip-path" class="headerlink" title="clip-path"></a>clip-path</h2><p>通过裁剪的形式</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.hide</span> &#123;<br>  <span class="hljs-attribute">clip-path</span>: <span class="hljs-built_in">polygon</span>(<span class="hljs-number">0px</span> <span class="hljs-number">0px</span>,<span class="hljs-number">0px</span> <span class="hljs-number">0px</span>,<span class="hljs-number">0px</span> <span class="hljs-number">0px</span>,<span class="hljs-number">0px</span> <span class="hljs-number">0px</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>特点：元素不可见，占据页面空间，无法响应点击事件</p>
+<p>最常见常用的三种方法为display: none、visibility: hidden、opacity: 0。</p>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>关于display: none、visibility: hidden、opacity: 0的区别，如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>display: none</th>
+<th>visibility: hidden</th>
+<th>opacity: 0</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>页面中</td>
+<td>不存在</td>
+<td>存在</td>
+<td>存在</td>
+</tr>
+<tr>
+<td>重排</td>
+<td>会</td>
+<td>不会</td>
+<td>不会</td>
+</tr>
+<tr>
+<td>重绘</td>
+<td>会</td>
+<td>会</td>
+<td>不一定</td>
+</tr>
+<tr>
+<td>自身绑定事件</td>
+<td>不触发</td>
+<td>不触发</td>
+<td>可触发</td>
+</tr>
+<tr>
+<td>transition</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>子元素可复原</td>
+<td>不能</td>
+<td>能</td>
+<td>不能</td>
+</tr>
+<tr>
+<td>被遮挡的元素可触发事件</td>
+<td>能</td>
+<td>能</td>
+<td>不能</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>八股文</tag>
+        <tag>css</tag>
+      </tags>
+  </entry>
 </search>
