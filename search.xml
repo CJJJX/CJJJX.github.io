@@ -7737,4 +7737,22 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>模拟new操作</title>
+    <url>/2024/03/25/%E6%A8%A1%E6%8B%9Fnew%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h5 id="new操作的执行过程"><a href="#new操作的执行过程" class="headerlink" title="new操作的执行过程"></a>new操作的执行过程</h5><p>1.创建一个新对象</p>
+<p>2.将新对象的-proto-指向constructor(构造函数).prototype,挂载到原型链上</p>
+<p>3.执行构造函数，并将构造函数的this指向新对象</p>
+<p>4.返回新对象</p>
+<h5 id="实现代码如下"><a href="#实现代码如下" class="headerlink" title="实现代码如下"></a>实现代码如下</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 自定义new创建实例<br>function create(constructor,...args)&#123;<br>    let newObj = Object.create(constructor.prototype)<br>    // Object.craete()方法相当于下面两行代码<br>    // let obj = &#123;&#125;<br>    // obj.__proto__ = constructor.prototype<br>    let res = constructor.apply(newObj,args)<br>    // 如果调用构造函数返回的是对象则返回该对象，否则返回newObj<br>    return res instanceof Object ? res : newObj<br>&#125;<br>function person(name=&#x27;cjx&#x27;,age=&#x27;20&#x27;)&#123;<br>    this.name = name<br>    this.age = age<br>&#125;<br>const person1 = create(person,&#x27;hhh&#x27;,&#x27;24&#x27;)<br>console.log(person1)<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+        <tag>手撕</tag>
+      </tags>
+  </entry>
 </search>
