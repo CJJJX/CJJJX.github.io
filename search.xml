@@ -8156,4 +8156,51 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>观察者模式和发布订阅模式</title>
+    <url>/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><strong>一.Vue响应式原理</strong></p>
+<p><strong>首先要了解几个概念：</strong></p>
+<p>数据响应式：数据模型仅仅是普通的Javascript对象，而我们修改数据时，视图会进行更新，避免了繁琐的DOM操作，提高开发效率。</p>
+<p>双向绑定：数据改变，视图改变，数据也随之改变，我们可以使用v-model在表单上创建双向数据绑定。</p>
+<p>数据驱动是Vue最独特的特性之一：开发过程中仅需要关注数据本身，不需要关心数据是如何渲染到视图。</p>
+<p><strong>vue2.X中的响应式原理是基于defineProperty，兼容IE8以上版本，核心原理代码如下：</strong></p>
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">      let data=&#123;<br> msg:&#x27;hello&#x27;,<br> count:10<br>  &#125;<br>let vm=&#123;&#125;<br>proxyData(data)<br>function proxyData(data)&#123;<br>    Object.keys(data).forEach(key=&gt;&#123;<br>        Object.defineProperty(vm,key,&#123;<br>            enumerable:true,<br>            configurable:true,<br>            writeable:true,<br>            //获取值的时候执行<br>            get()&#123;<br>                console.log(&#x27;get:&#x27;,key,data[key])<br>                return data[key]<br>            &#125;,<br>            //设置值的时候执行<br>            set(newValue)&#123;<br>                data[key]=newValue<br>                console.log(&#x27;set:&#x27;,key,newValue)<br>                document.querySelector(&#x27;#app&#x27;).textContent=data[key]<br>            &#125;<br>        &#125;)<br>    &#125;)<br>&#125;<br> vm.msg //获取(get方法) hello<br> vm.msg=&#x27;hello World&#x27; //设置新属性值并渲染到页面（set方法）<br> vm.msg //hello World  <br></code></pre></td></tr></table></figure>
+
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<p><strong>vue3.X中的响应式原理是基于Proxy,直接监听对象,而非属性,ES6中新增,IE不支持,性能由浏览器优化,性能比defineProperty要好,代码的话相比较defineProperty要简洁一些,对于多个属性的值不需要进行循环遍历处理。</strong></p>
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">        let data=&#123;<br>    msg:&#x27;hello&#x27;,<br>    count:0<br>&#125;<br><br>//模拟 Vue 实例<br>let vm=new Proxy(data,&#123;<br>    //执行代理行为的函数<br>    //当访问 vm 的成员会执行<br>    get(target,key)&#123;<br>        console.log(&#x27;get,key:&#x27;,key,target[key])<br>        return target[key]<br>    &#125;,<br>    set(target,key,newValue)&#123;<br>        console.log(&#x27;set,key:&#x27;,key,newValue)<br>        if(target[key] === newValue)&#123;<br>            return <br>        &#125;<br>        target[key]=newValue<br>        document.querySelector(&quot;#app&quot;).textContent=target[key]<br>    &#125;<br>&#125;)<br>//测试<br>vm.msg=&#x27;Hello World&#x27;<br>console.log(vm.msg)<br></code></pre></td></tr></table></figure>
+
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<p><strong>二.发布订阅模式和观察者模式</strong></p>
+<p><strong>1.发布&#x2F;订阅模式</strong><br>这个概念有些抽象,下面举个例子说明下,家长比较关心孩子成绩,天天问孩子成绩出来没,假设可以到孩子所在班级去订阅孩子成绩,一旦考试成绩出来，相当于触发了一个事件,最后有班级的老师以短信的形式通知给家长,</p>
+<p>不需要天天问孩子成绩出来没,家长就是事件的订阅者,老师是事件的发布者,孩子所在的班级可以假想成一个事件的中心。vue中的自定义事件都是基于发布&#x2F;订阅模式的。下面模拟下发布订阅模式的运行机制：</p>
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">//事件触发器<br>        class EventEmitter()&#123;<br>            constructor()&#123;<br>                // 初始化对象&#123; &#x27;click&#x27;:[fn1,fn2],&#x27;change&#x27;:[fn] &#125;<br>                this.subs=Object.create(null)<br>            &#125;<br>            //注册事件<br>            $on(eventType,handler)&#123;<br>                this.subs[eventType] = this.subs[eventType] || []<br>                this.subs[eventType].push(handler)<br>            &#125;<br>            //触发事件<br>            $emit(eventType)&#123;<br>                if(this.subs[eventType])&#123;<br>                    this.subs[eventType].forEach(handler =&gt; &#123;<br>                        handler()<br>                    &#125;)<br>                &#125;<br>            &#125;<br>        &#125;<br>        //测试<br>        <br>        let em =new EventEmitter()<br>        <br>        em.$on(&#x27;click&#x27;,()=&gt;&#123;<br>            console.log(&#x27;click1&#x27;)<br>        &#125;)<br>        em.$on(&#x27;click&#x27;,()=&gt;&#123;<br>            console.log(&#x27;click2&#x27;)<br>        &#125;)<br>        em.$emit(&#x27;click&#x27;) //打印结果 click1,click2<br></code></pre></td></tr></table></figure>
+
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<p><strong>二.观察者模式</strong></p>
+<p>观察者模式和订阅模式的区别是没有事件中心,只有发布者和订阅者,并且发布者需要知道订阅者的存在.</p>
+<p>概念：</p>
+<p>观察者 –Watcher</p>
+<p>update():当事件发生时，具体要做的事情。</p>
+<p>发布者 –Dep</p>
+<p>subs数组：存储所有的观察者</p>
+<p>addSub():添加观察者</p>
+<p>notify():当事件发生，调用所有观察者的update()方法</p>
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">//发布者-目标<br>        class Dep&#123;<br>            constructor() &#123;<br>                //记录所有的订阅者<br>                this.subs=[]<br>            &#125;<br>            //添加订阅者<br>            addsub(sub)&#123;<br>                if(sub &amp;&amp; sub.update)&#123;<br>                    this.subs.push(sub)<br>                &#125;<br>            &#125;<br>            //发布通知<br>            notify()&#123;<br>                this.subs.forEach(sub=&gt;&#123;<br>                    sub.update()<br>                &#125;)<br>            &#125;<br>        &#125;<br>        //订阅者-观察者<br>        class Watcher&#123;<br>            update()&#123;<br>                console.log(&#x27;update&#x27;)<br>            &#125;<br>        &#125;<br>        //测试<br>        let dep=new Dep()<br>        let watcher=new Watcher()<br>        dep.addsub(watcher)<br>        dep.notify() //打印结果 update<br></code></pre></td></tr></table></figure>
+
+<p><a href="javascript:void(0);"><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/copycode.gif" alt="复制代码"></a></p>
+<p><strong>总结：</strong></p>
+<p><strong>观察者模式是由具体目标调度，比如当事件触发，Dep就会去调用观察者的方法，所以观察者的订阅者和发布者之间是存在依赖的。</strong></p>
+<p><strong>发布订阅模式由统一调度中心调用，因此发布者和订阅者不需要知道对方的存在。</strong></p>
+<p><strong><img src="/2024/04/19/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/2257600-20210808182444250-1714715156.png" alt="img"></strong></p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+  </entry>
 </search>
