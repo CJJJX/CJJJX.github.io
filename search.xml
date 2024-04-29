@@ -8203,4 +8203,30 @@
         <category>前端知识</category>
       </categories>
   </entry>
+  <entry>
+    <title>vue中set方法实现原理</title>
+    <url>/2024/04/29/vue%E4%B8%ADset%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<p>vue2响应式原理中，Object.defineProperty()这个方法对对象的属性方法的添加或者删除不能做到实时的监听，数组通过索引去修改数组都是不能被检测？所以vue实现了set方法，那么实现的set方法的原理是什么呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">vm.$set( target, propertyName/index, value )<br></code></pre></td></tr></table></figure>
+
+<h5 id="参数："><a href="#参数：" class="headerlink" title="参数："></a>参数：</h5><p>{Object | Array} target<br>{string | number} propertyName&#x2F;index<br>{any} value</p>
+<h5 id="用法："><a href="#用法：" class="headerlink" title="用法："></a>用法：</h5><p>向响应式对象中添加一个属性，并确保这个新属性同样是响应式的，且触发视图更新。它必须用于向响应式对象上添加新属性，因为 Vue 无法探测普通的新增属性。</p>
+<p><strong>注意：对象不能是 Vue 实例，或者 Vue 实例的根数据对象。</strong></p>
+<p>源码： src&#x2F;core&#x2F;observer&#x2F;index.js</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">export function set (target, key, val)&#123;<br>    if (process.env.NODE_ENV !== &#x27;production&#x27; &amp;&amp;<br>        (isUndef(target) || isPrimitive(target))<br>       ) &#123;<br>        warn(`Cannot set reactive property on undefined, null, or primitive value: $&#123;(target: any)&#125;`)<br>    &#125;<br>    if (Array.isArray(target) &amp;&amp; isValidArrayIndex(key)) &#123;<br>        target.length = Math.max(target.length, key)<br>        target.splice(key, 1, val)<br>        return val<br>    &#125;<br>    if (key in target &amp;&amp; !(key in Object.prototype)) &#123;<br>        target[key] = val<br>        return val<br>    &#125;<br>    const ob = (target: any).__ob__<br>    if (target._isVue || (ob &amp;&amp; ob.vmCount)) &#123;<br>        process.env.NODE_ENV !== &#x27;production&#x27; &amp;&amp; warn(<br>            &#x27;Avoid adding reactive properties to a Vue instance or its root $data &#x27; +<br>            &#x27;at runtime - declare it upfront in the data option.&#x27;<br>        )<br>        return val<br>    &#125;<br>    if (!ob) &#123;<br>        target[key] = val<br>        return val<br>    &#125;<br>    defineReactive(ob.value, key, val)<br>    ob.dep.notify()<br>    return val<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<p>首先，判断在非生产环境，传入的target如果是undefined、null或是原始类型，则直接跑出错误。</p>
+<p>其次，如果判断target如果是个数组，并且key是索引的话，那么就取当前数组长度与key这两者的最大值作为数组的新长度，然后使用数组的splice方法将传入的索引key对应的val值添加进数组。Array类型数据的变化侦测方式时说过，数组的splice方法已经被我们创建的拦截器重写了，也就是说，当使用splice方法向数组内添加元素时，该元素会自动被变成响应式的。</p>
+<p>接下来，如果传入的target不是数组，那就当作是对象来处理。首先判断传入的key是否已经存在于target中，如果存在，表明这次操作不是新增属性，而是对已有的属性进行简单的修改值，那么就只修改属性值即可，接下来获取到traget的__ob__属性，我们说过，该属性是否为true标志着target是否为响应式对象，接着判断如果tragte是 Vue 实例，或者是 Vue 实例的根数据对象，则抛出警告并退出程序，接着判断如果ob属性为false，那么表明target不是一个响应式对象，那么我们只需简单给它添加上新的属性，不用将新属性转化成响应式，最后，如果target是对象，并且是响应式，那么就调用defineReactive方法将新属性值添加到target上，defineReactive方会将新属性添加完之后并将其转化成响应式，最后通知依赖更新。</p>
+<p>总的来说set的执行流程应该是这样的：</p>
+<p><img src="/2024/04/29/vue%E4%B8%ADset%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/format,png.png" alt="img"></p>
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
 </search>
