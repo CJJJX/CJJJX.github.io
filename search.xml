@@ -8229,4 +8229,47 @@
         <tag>vue</tag>
       </tags>
   </entry>
+  <entry>
+    <title>单点登录实现方式</title>
+    <url>/2024/04/30/%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<p>实现单点登录的关键在于，如何让 Session ID（或 Token）在多个域中共享。</p>
+<h3 id="实现方式一：父域-Cookie"><a href="#实现方式一：父域-Cookie" class="headerlink" title="实现方式一：父域 Cookie"></a><strong>实现方式一：父域 Cookie</strong></h3><p>在将具体实现之前，我们先来聊一聊 Cookie 的作用域。</p>
+<p>Cookie 的作用域由 domain 属性和 path 属性共同决定。</p>
+<p>domain 属性的有效值为当前域或其父域的域名&#x2F;IP地址，在 Tomcat 中，domain 属性默认为当前域的域名&#x2F;IP地址。path 属性的有效值是以“&#x2F;”开头的路径，在 Tomcat 中，path 属性默认为当前 Web 应用的上下文路径。</p>
+<p>如果将 Cookie 的 domain 属性设置为当前域的父域，那么就认为它是父域 Cookie。Cookie 有一个特点，即父域中的 Cookie 被子域所共享，换言之，子域会自动继承父域中的Cookie。</p>
+<p>利用 Cookie 的这个特点，不难想到，将 Session ID（或 Token）保存到父域中不就行了。没错，我们只需要将 Cookie 的 domain 属性设置为父域的域名（主域名），同时将 Cookie 的 path 属性设置为根路径，这样所有的子域应用就都可以访问到这个 Cookie 了。</p>
+<p>不过这要求应用系统的域名需建立在一个共同的主域名之下，如 tieba.baidu.com 和 map.baidu.com，它们都建立在 baidu.com 这个主域名之下，那么它们就可以通过这种方式来实现单点登录。</p>
+<p>总结：此种实现方式比较简单，但不支持跨主域名。</p>
+<h3 id="实现方式二：认证中心"><a href="#实现方式二：认证中心" class="headerlink" title="实现方式二：认证中心"></a><strong>实现方式二：认证中心</strong></h3><p>我们可以部署一个认证中心，认证中心就是一个专门负责处理登录请求的独立的 Web 服务。</p>
+<p>用户统一在认证中心进行登录，登录成功后，认证中心记录用户的登录状态，并将 Token 写入 Cookie。（注意这个 Cookie 是认证中心的，应用系统是访问不到的。）</p>
+<p>应用系统检查当前请求有没有 Token，如果没有，说明用户在当前系统中尚未登录，那么就将页面跳转至认证中心。由于这个操作会将认证中心的 Cookie 自动带过去，因此，认证中心能够根据 Cookie 知道用户是否已经登录过了。</p>
+<p>如果认证中心发现用户尚未登录，则返回登录页面，等待用户登录，如果发现用户已经登录过了，就不会让用户再次登录了，而是会跳转回目标 URL ，并在跳转前生成一个 Token，拼接在目标 URL 的后面，回传给目标应用系统。</p>
+<p>应用系统拿到 Token 之后，还需要向认证中心确认下 Token 的合法性，防止用户伪造。确认无误后，应用系统记录用户的登录状态，并将 Token 写入 Cookie，然后给本次访问放行。（注意这个 Cookie 是当前应用系统的，其他应用系统是访问不到的。）当用户再次访问当前应用系统时，就会自动带上这个 Token，应用系统验证 Token 发现用户已登录，于是就不会有认证中心什么事了。</p>
+<p>这里顺便介绍两款认证中心的开源实现：</p>
+<ul>
+<li>Apereo CAS 是一个企业级单点登录系统，其中 CAS 的意思是”Central Authentication Service“。它最初是耶鲁大学实验室的项目，后来转让给了 JASIG 组织，项目更名为 JASIG CAS，后来该组织并入了Apereo 基金会，项目也随之更名为 Apereo CAS。</li>
+<li>XXL-SSO 是一个简易的单点登录系统，由大众点评工程师许雪里个人开发，代码比较简单，没有做安全控制，因而不推荐直接应用在项目中，这里列出来仅供参考。</li>
+</ul>
+<p>总结：此种实现方式相对复杂，支持跨域，扩展性好，是单点登录的标准做法。</p>
+<h3 id="实现方式三：LocalStorage-跨域"><a href="#实现方式三：LocalStorage-跨域" class="headerlink" title="实现方式三：LocalStorage 跨域"></a><strong>实现方式三：LocalStorage 跨域</strong></h3><p>前面，我们说实现单点登录的关键在于，如何让 Session ID（或 Token）在多个域中共享。</p>
+<p>父域 Cookie 确实是一种不错的解决方案，但是不支持跨域。那么有没有什么奇淫技巧能够让 Cookie 跨域传递呢？</p>
+<p>很遗憾，浏览器对 Cookie 的跨域限制越来越严格。Chrome 浏览器还给 Cookie 新增了一个 SameSite 属性，此举几乎禁止了一切跨域请求的 Cookie 传递（超链接除外），并且只有当使用 HTTPs 协议时，才有可能被允许在 AJAX 跨域请求中接受<a href="https://cloud.tencent.com/act/pro/promotion-cvm?from_column=20065&from=20065">服务器</a>传来的 Cookie。</p>
+<p>不过，在前后端分离的情况下，完全可以不使用 Cookie，我们可以选择将 Session ID （或 Token ）保存到浏览器的 LocalStorage 中，让前端在每次向后端发送请求时，主动将 LocalStorage 的数据传递给服务端。这些都是由前端来控制的，后端需要做的仅仅是在用户登录成功后，将 Session ID （或 Token ）放在响应体中传递给前端。</p>
+<p>在这样的场景下，单点登录完全可以在前端实现。前端拿到 Session ID （或 Token ）后，除了将它写入自己的 LocalStorage 中之外，还可以通过特殊手段将它写入多个其他域下的 LocalStorage 中。</p>
+<p>关键代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 获取 token</span><br><span class="hljs-keyword">var</span> token = result.<span class="hljs-property">data</span>.<span class="hljs-property">token</span>;<br><br><span class="hljs-comment">// 动态创建一个不可见的iframe，在iframe中加载一个跨域HTML</span><br><span class="hljs-keyword">var</span> iframe = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&quot;iframe&quot;</span>);<br>iframe.<span class="hljs-property">src</span> = <span class="hljs-string">&quot;http://app1.com/localstorage.html&quot;</span>;<br><span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">append</span>(iframe);<br><span class="hljs-comment">// 使用postMessage()方法将token传递给iframe</span><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    iframe.<span class="hljs-property">contentWindow</span>.<span class="hljs-title function_">postMessage</span>(token, <span class="hljs-string">&quot;http://app1.com&quot;</span>);<br>&#125;, <span class="hljs-number">4000</span>);<br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    iframe.<span class="hljs-title function_">remove</span>();<br>&#125;, <span class="hljs-number">6000</span>);<br><br><span class="hljs-comment">// 在这个iframe所加载的HTML中绑定一个事件监听器，当事件被触发时，把接收到的token数据写入localStorage</span><br><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&#x27;token&#x27;</span>, event.<span class="hljs-property">data</span>)<br>&#125;, <span class="hljs-literal">false</span>);<br></code></pre></td></tr></table></figure>
+
+<p>前端通过 iframe+postMessage() 方式，将同一份 Token 写入到了多个域下的 LocalStorage 中，前端每次在向后端发送请求之前，都会主动从 LocalStorage 中读取 Token 并在请求中携带，这样就实现了同一份 Token 被多个域所共享。</p>
+<p>总结：此种实现方式完全由前端控制，几乎不需要后端参与，同样支持跨域。</p>
+<h3 id="补充：域名分级"><a href="#补充：域名分级" class="headerlink" title="补充：域名分级"></a><strong>补充：域名分级</strong></h3><p>从专业的角度来说（根据《计算机网络》中的定义），.com、.cn 为一级域名（也称顶级域名），.com.cn、baidu.com 为二级域名，sina.com.cn、tieba.baidu.com 为三级域名，以此类推，N 级域名就是 N-1 级域名的直接子域名。</p>
+<p>从使用者的角度来说，一般把可支持独立<a href="https://cloud.tencent.com/product/ba?from_column=20065&from=20065">备案</a>的主域名称作一级域名，如 baidu.com、sina.com.cn 皆可称作一级域名，在主域名下建立的直接子域名称作二级域名，如 tieba.baidu.com 为二级域名。</p>
+<p>为了避免歧义，本人将使用“主域名“替代”一级域名“的说法。</p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+      <tags>
+        <tag>项目</tag>
+      </tags>
+  </entry>
 </search>
