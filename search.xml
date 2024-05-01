@@ -8272,4 +8272,35 @@
         <tag>项目</tag>
       </tags>
   </entry>
+  <entry>
+    <title>翻转二叉树</title>
+    <url>/2024/05/01/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<h3 id="力扣-226-翻转二叉树"><a href="#力扣-226-翻转二叉树" class="headerlink" title="力扣-226.翻转二叉树"></a>力扣-226.翻转二叉树</h3><p>给你一棵二叉树的根节点 <code>root</code> ，翻转这棵二叉树，并返回其根节点。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="/2024/05/01/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/invert1-tree.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：root = [4,2,7,1,3,6,9]<br>输出：[4,7,2,9,6,3,1]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<p><img src="/2024/05/01/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/invert2-tree.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：root = [2,1,3]<br>输出：[2,3,1]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：root = []<br>输出：[]<br></code></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li>树中节点数目范围在 <code>[0, 100]</code> 内</li>
+<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+</ul>
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>可以在遍历二叉树的过程中，对每个根节点，交换它的左右子树。但是需注意中序遍历无法实现，遍历过程中一直在处理左子树，右子树没有处理到。时间复杂度O(n),空间复杂度O(h)</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">//  1.递归法只能使用前序或后序，中序会导致一直处理左子树，右子树没处理到<br>var invertTree = function(root) &#123;<br>    if(root == null)<br>    return null<br>    // 保存右子树<br>    const rightNode = root.right<br>    // 将左子树移到右子树<br>    root.right = invertTree(root.left)<br>    // 将右子树移到左子树<br>    root.left = invertTree(rightNode)<br>    return root    <br>&#125;;<br>// 2.迭代前序<br>var invertTree = function(root) &#123;<br>    const invertNode = function(root,left,right)&#123;<br>        let tmp = left<br>        left = right<br>        right = tmp<br>        root.left = left<br>        root.right = right<br>    &#125;<br>    // 前序遍历为根左右，则入栈顺序应为右左根，根节点会先出栈被处理<br>    if(root == null)<br>    return null<br>    let stack = []<br>    stack.push(root)<br>    while(stack.length)&#123;<br>        let node = stack.pop()<br>        if(node !== null)&#123;<br>            // 按右左根入栈<br>            node.right &amp;&amp; stack.push(node.right)<br>            node.left &amp;&amp; stack.push(node.left)<br>            stack.push(node)<br>            // 根节点入栈后push一个空节点做标记，出栈的时候空节点的下一节点即为根节点<br>            stack.push(null)<br>        &#125;else&#123;<br>            // 处理根节点，交换根节点的左右子树<br>            node = stack.pop()<br>            invertNode(node,node.left,node.right)<br>        &#125;<br>    &#125;<br>    return root<br>&#125;<br>// 3.层序遍历<br>var invertTree = function(root) &#123;<br>    const invertNode = function(root,left,right)&#123;<br>        let tmp = left<br>        left = right<br>        right = tmp<br>        root.left = left<br>        root.right = right<br>    &#125;<br>    if(root == null)<br>    return null<br>    let queue = []<br>    queue.push(root)<br>    while(queue.length)&#123;<br>        let levelLength = queue.length<br>        while(levelLength--)&#123;<br>            let node = queue.shift()<br>            invertNode(node,node.left,node.right)<br>            node.left &amp;&amp; queue.push(node.left)<br>            node.right &amp;&amp; queue.push(node.right)<br>        &#125;<br>    &#125;<br>    return root<br>&#125;<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>手撕</tag>
+      </tags>
+  </entry>
 </search>
