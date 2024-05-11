@@ -8303,4 +8303,43 @@
         <tag>手撕</tag>
       </tags>
   </entry>
+  <entry>
+    <title>css选择器权重</title>
+    <url>/2024/05/11/css%E9%80%89%E6%8B%A9%E5%99%A8%E6%9D%83%E9%87%8D/</url>
+    <content><![CDATA[<h2 id="选择器的种类"><a href="#选择器的种类" class="headerlink" title="选择器的种类"></a>选择器的种类</h2><ul>
+<li>!important</li>
+<li>内联样式</li>
+<li>ID选择器</li>
+<li>class选择器</li>
+<li>元素选择器</li>
+<li>通配符选择器</li>
+</ul>
+<h2 id="权值和权级的概念"><a href="#权值和权级的概念" class="headerlink" title="权值和权级的概念"></a>权值和权级的概念</h2><p>我们可以通过给选择器添加<strong>权值</strong>和<strong>权级</strong>这两个概念的方式来更好的理解选择器的权重<br>（注意:“权值”和“权级”的概念是为了更好的理解权重而提出的，并不是真是存在的)</p>
+<p><img src="/2024/05/11/css%E9%80%89%E6%8B%A9%E5%99%A8%E6%9D%83%E9%87%8D/v2-fc467ae9254e881b8c0d4278f170db7e_1440w.webp" alt="img"></p>
+<h2 id="选择器的权重"><a href="#选择器的权重" class="headerlink" title="选择器的权重"></a>选择器的权重</h2><p>有了权值和权级的概念以后，我们就可以参考表格来对元素的权重进行理解。<br>选择器的权重可以相加，例：</p>
+<p><img src="/2024/05/11/css%E9%80%89%E6%8B%A9%E5%99%A8%E6%9D%83%E9%87%8D/image-20240511104724511.png" alt="image-20240511104724511"></p>
+<p>span的权值为 &#x3D; id选择器100+类选择器10+元素选择器1 &#x3D; 111</p>
+<h2 id="权值相同时"><a href="#权值相同时" class="headerlink" title="权值相同时"></a>权值相同时</h2><p>由于HTML代码的执行特点时从上往下执行，因此在权值相同的情况下，<strong>后面的选择器会覆盖前面的选择器相同的属性</strong><br>例：</p>
+<p><img src="/2024/05/11/css%E9%80%89%E6%8B%A9%E5%99%A8%E6%9D%83%E9%87%8D/image-20240511104745047.png" alt="image-20240511104745047"></p>
+<p>两个类选择器同时选中div元素，且color属性发生冲突，此时生效的是后面的class2，因此元素的前景色为蓝色</p>
+<h2 id="权值不同时"><a href="#权值不同时" class="headerlink" title="权值不同时"></a>权值不同时</h2><p>两种选择器覆盖了同一属性，此时<strong>权重高的选择器生效</strong>。</p>
+<p>例：</p>
+<p><img src="/2024/05/11/css%E9%80%89%E6%8B%A9%E5%99%A8%E6%9D%83%E9%87%8D/image-20240511104808198.png" alt="image-20240511104808198"></p>
+<p>当前形况下，元素选择器的权值为1，大于通配选择器的权值0，因此对div生效的样式应该是元素选择器里的样式。</p>
+<h2 id="权值跃迁"><a href="#权值跃迁" class="headerlink" title="权值跃迁"></a>权值跃迁</h2><p>权值跃迁讨论的问题是，当有11个元素选择器和1个类选择器同时选中同一元素时，哪个选择器的样式会生效。<br>结论是：权级高的选择器的样式会生效。<br><strong>理解方式1</strong><br>因为权值不能跃迁，也就意味着无论有多少个0级的选择器，生效的仍然是1级选择器，因 为<strong>选择器的权级无法跃迁</strong>。<br><strong>理解方式2</strong><br>CSS里面的进制并不是10进制，而是256进制，所以10个低级选择器并不能等于1个高级选择器</p>
+<h2 id="其他选择器"><a href="#其他选择器" class="headerlink" title="其他选择器"></a>其他选择器</h2><ul>
+<li>伪类选择器</li>
+<li>属性选择器<br><strong>伪类选择器</strong>和<strong>属性选择器</strong>的权重相当于类选择器的权重，权级为2级。</li>
+<li>伪元素选择器<br><strong>伪元素选择器</strong>的权重相当于元素选择器的权重，权级为1级。</li>
+<li>子代选择器</li>
+<li>后代选择器<br>子代和后代有可能是元素选择器、类选择器、id选择器，因此要根据具体情况来具体分析。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>css</category>
+      </categories>
+      <tags>
+        <tag>前端知识</tag>
+      </tags>
+  </entry>
 </search>
