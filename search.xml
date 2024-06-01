@@ -8376,4 +8376,30 @@
         <tag>网络</tag>
       </tags>
   </entry>
+  <entry>
+    <title>React如何实现插槽</title>
+    <url>/2024/06/01/React%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8F%92%E6%A7%BD/</url>
+    <content><![CDATA[<p>​		新入职的实习单位有React的项目，后面可能要写。在初学react的过程中觉得对比vue学习会上手得更快。今天突然想到的问题是React如何实现类似Vue的插槽效果。下面是个人总结。</p>
+<h3 id="一、插槽的概念"><a href="#一、插槽的概念" class="headerlink" title="一、插槽的概念"></a>一、插槽的概念</h3><p>插槽是一种让组件变得更加灵活和可复用的技术。它允许我们在组件内部预留一些位置，然后在组件使用时填充这些位置，实现外部内容的嵌套。</p>
+<h3 id="二、实现React插槽的方法"><a href="#二、实现React插槽的方法" class="headerlink" title="二、实现React插槽的方法"></a>二、实现React插槽的方法</h3><p>在React中，实现插槽可以通过两种方式：props传递和children属性。</p>
+<h5 id="1-通过props传递："><a href="#1-通过props传递：" class="headerlink" title="1.通过props传递："></a>1.通过props传递：</h5><p>这是一种最简单的插槽实现方式，父组件通过props将内容传递给子组件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">import React from &#x27;react&#x27;;<br><br>function Card(props) &#123;<br>  return (<br>    &lt;div className=&quot;card&quot;&gt;<br>      &#123;props.header&#125;<br>    &lt;/div&gt;<br>  );<br>&#125;<br><br>function App() &#123;<br>  return (<br>    &lt;Card header=&#123;&lt;h2&gt;Title&lt;/h2&gt;&#125; /&gt;<br>  );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="2-使用children属性："><a href="#2-使用children属性：" class="headerlink" title="2. 使用children属性："></a><strong>2. 使用<code>children</code>属性：</strong></h5><p>React组件有一个特殊的<code>children</code>属性，它可以用于访问组件的嵌套内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">import React from &#x27;react&#x27;;<br><br>function Card(props) &#123;<br>  return (<br>    &lt;div className=&quot;card&quot;&gt;<br>      &lt;div className=&quot;content&quot;&gt;<br>        &#123;props.children&#125;<br>      &lt;/div&gt;<br>    &lt;/div&gt;<br>  );<br>&#125;<br><br>function App() &#123;<br>  return (<br>    &lt;Card&gt;<br>      &lt;p&gt;Card content here.&lt;/p&gt;<br>    &lt;/Card&gt;<br>  );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意：若是传递多个元素，children则为数组类型</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">import React from &#x27;react&#x27;;<br><br>function Card(props) &#123;<br>  return (<br>    &lt;div className=&quot;card&quot;&gt;<br>      &lt;div className=&quot;content&quot;&gt;<br>        &#123;props.children[0]&#125;<br>        &#123;props.children[1]&#125;<br>      &lt;/div&gt;<br>      //或者可以直接写props.children<br>      &lt;div className=&quot;content&quot;&gt;<br>        &#123;props.children&#125;<br>      &lt;/div&gt;<br>    &lt;/div&gt;<br>  );<br>&#125;<br><br>function App() &#123;<br>  return (<br>    &lt;Card&gt;<br>      &lt;p&gt;Card content here.&lt;/p&gt;<br>      &lt;span&gt;Else content&lt;/span&gt;<br>    &lt;/Card&gt;<br>  );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="三、作用域插槽"><a href="#三、作用域插槽" class="headerlink" title="三、作用域插槽"></a><strong>三、作用域插槽</strong></h5><p>React实现作用域插槽还是使用props传值，只不过是要传递一个回调函数用来接收参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">import React from &#x27;react&#x27;;<br><br>function Card(props) &#123;<br>  return (<br>    &lt;div className=&quot;card&quot;&gt;<br>      &#123;props.setHeader(&quot;CardHeader&quot;)&#125;<br>    &lt;/div&gt;<br>  );<br>&#125;<br><br>function App() &#123;<br>  return (<br>    &lt;Card setHeader=&#123;text =&gt; &lt;p&gt;&#123;text&#125;&lt;/p&gt;&#125; /&gt;<br>  );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>前端充电宝</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
 </search>
