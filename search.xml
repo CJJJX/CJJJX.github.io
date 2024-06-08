@@ -8402,4 +8402,74 @@
         <tag>React</tag>
       </tags>
   </entry>
+  <entry>
+    <title>react是如何防xss的</title>
+    <url>/2024/06/08/react%E6%98%AF%E5%A6%82%E4%BD%95%E9%98%B2xss%E7%9A%84/</url>
+    <content><![CDATA[<p>​	本文会先回顾xss攻击的概念和类型，再介绍react中做了哪些事情来实现xss安全性防御。</p>
+<h2 id="XSS-攻击"><a href="#XSS-攻击" class="headerlink" title="XSS 攻击"></a>XSS 攻击</h2><p>Cross-Site Scripting （跨站脚步攻击）简称XSS, 是一种代码注入攻击。XSS攻击通常指利用网页漏洞，攻击者通过技巧注入xss代码到网页，因为浏览器无法分辨哪些是可信的，导致XSS脚步被执行。XSS脚本通常能够窃取用户数据并发送到攻击者的网站，或者冒充用户，调用目标接口并执行攻击者指定操作。</p>
+<h3 id="XSS攻击类型"><a href="#XSS攻击类型" class="headerlink" title="XSS攻击类型"></a>XSS攻击类型</h3><h4 id="反射型"><a href="#反射型" class="headerlink" title="反射型"></a>反射型</h4><ul>
+<li>XSS脚本来自当前HTTP请求</li>
+<li>当服务器在HTTP请求中接收数据并将该数据拼接在HTML中返回时</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 某网站具有搜索功能，该功能通过URL参数接收用户提供的搜索词<br>// https://xxx.com/search?query=123<br>// 服务器在此URL的响应中回显提供的搜索词:<br>&lt;p&gt;您的搜索是：123 &lt;/p&gt;<br>// 如果服务器不对数据进行转义等处理，则攻击者可以构造如下链接进行攻击<br>// https://xxx.com/search?query=&lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&#x27;xss&#x27;)&quot; /&gt;<br>// 改url会导致运行alert(&quot;xss&quot;)的响应<br>&lt;p&gt;您的搜索是： &lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&#x27;xss&#x27;)&quot; /&gt;&lt;/p&gt;<br>// 如果有用户请求攻击者的URL，则攻击者提供的脚本将在用户的浏览器中执行<br></code></pre></td></tr></table></figure>
+
+<h4 id="存储型"><a href="#存储型" class="headerlink" title="存储型"></a>存储型</h4><ul>
+<li><p>XSS 脚本来自服务器数据库中</p>
+</li>
+<li><p>攻击者将恶意代码提交到目标网站的数据库中，普通用户访问网站时服务器将恶意代码返回，浏览器默认执行</p>
+<pre><code class="html">// 某个评论页，能查看用户评论
+// 攻击者将恶意代码当做评论提交，服务器没对数据进行转义等处理
+// 评论输入：
+&lt;textarea&gt;
+  &lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&quot;xss&quot;)&quot; /&gt;
+&lt;/textarea&gt;
+// 则攻击者提供的脚本将在所有访问该评论页的用户浏览器执行
+</code></pre>
+</li>
+</ul>
+<h3 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h3><p>该漏洞存在于客户端代码，与服务器无关</p>
+<ul>
+<li>类似反射型，区别在于DOM型XSS并不会和后台进行交互，前端直接将URL中的数据不做处理并动态插入到HTML中，是纯粹的前端安全问题，要做防御也只能在客户端进行防御。</li>
+</ul>
+<h2 id="React如何防止XSS攻击"><a href="#React如何防止XSS攻击" class="headerlink" title="React如何防止XSS攻击"></a>React如何防止XSS攻击</h2><p>无论使用哪种攻击方式，其本质就是将恶意代码注入到应用中，浏览器去默认执行。react官方提到 <code>React DOM</code>在渲染所有输入内容之前，<strong>默认会进行转义</strong>。它可以确保在应用中，<strong>永远不会注入那些并非自己明确编写的内容</strong>。所有的内容在渲染之前都被转换为字符串，因此恶意代码无法成功注入，从而有效的防止XSS攻击。<br> 具体如下：</p>
+<h4 id="自动转义"><a href="#自动转义" class="headerlink" title="自动转义"></a>自动转义</h4><p>React 在渲染HTML内容和渲染DOM属性时会将<code>&quot; &#39; &amp; &lt; &gt;</code>这几个字符进行转义，转义部分源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">for</span>(index = match.<span class="hljs-property">index</span>; index&lt;str.<span class="hljs-property">length</span>; index++)&#123;<br>  <span class="hljs-keyword">switch</span> (str.<span class="hljs-title function_">charCodeAt</span>(index))&#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">34</span>: <span class="hljs-comment">// &quot;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;quot;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">38</span>: <span class="hljs-comment">// &amp;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;amp;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">39</span>: <span class="hljs-comment">// &#x27;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;#x27;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">60</span>: <span class="hljs-comment">// &lt;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;lt;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">62</span>: <span class="hljs-comment">// &gt;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;gt;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-attr">default</span>:<br>       <span class="hljs-keyword">continue</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这段代码是React在渲染到浏览器前进行转义，可以看到对浏览器有特殊含义的字符都被转义了，恶意代码在渲染到HTML前都被转成字符串，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext"> var p = document.getElementById(&quot;p&quot;);<br>// 一段恶意代码<br>const str = `&lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&#x27;xss&#x27;)&quot; /&gt;`;<br>    let _str = &quot;&quot;;<br>    for (let index = 0; index &lt; str.length; index++) &#123;<br>      let escape = &quot;&quot;;<br>      switch (str.charCodeAt(index)) &#123;<br>        case 34: // &quot;<br>          escape = &quot;&amp;quot;&quot;;<br>          break;<br>        case 38: // &amp;<br>          escape = &quot;&amp;amp;&quot;;<br>          break;<br>        case 39: // &#x27;<br>          escape = &quot;&amp;#x27;&quot;;<br>          break;<br>        case 60: // &lt;<br>          escape = &quot;&amp;lt;&quot;;<br>          break;<br>        case 62: // &gt;<br>          escape = &quot;&amp;gt;&quot;;<br>          break;<br>        default:<br>          escape = str[index];<br>        // continue;<br>      &#125;<br>      console.log(escape);<br>      _str += escape;<br>    &#125;<br>    console.log(_str); // &amp;lt;img src=&amp;quot;empty.png&amp;quot; onerror=&amp;quot;alert(&amp;#x27;xss&amp;#x27;)&amp;quot; /&amp;gt;<br>    p.innerHTML = `您的搜索是：$&#123;_str&#125;`;<br></code></pre></td></tr></table></figure>
+
+<h3 id="JSX语法"><a href="#JSX语法" class="headerlink" title="JSX语法"></a>JSX语法</h3><p>JSX实际上是一种语法糖，Babel会把JSX编译成<code>React.createElement()</code>函数调用，最终返回一个<code>ReactElement</code>，以下为这几个步骤的对应代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const element= (<br>  &lt;h1 className=&quot;greeting&quot;&gt;<br>    hello world!<br>  &lt;/h1&gt;<br>)<br>// 通过babel编译后的代码<br>const element = React.createElement(<br>  &quot;h1&quot;,<br>  &#123;className: &quot;greeting&quot;&#125;,<br>  &quot;hello world!&quot;<br>)<br>// React.createElement()  返回ReactElement<br>const element = &#123;<br>  $$typeof: Symbol(&quot;react.element&quot;),<br>  type: &quot;h1&quot;,<br>  key: null,<br>  props:  &#123;<br>    children: &quot;Hello world!&quot;,<br>    className: &quot;greeting&quot;<br>  &#125;<br>...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> symbolFor = <span class="hljs-title class_">Symbol</span>.<span class="hljs-property">for</span>;<br><span class="hljs-variable constant_">REACT_ELEMENT_TYPE</span> = <span class="hljs-title function_">symbolFor</span>(<span class="hljs-string">&quot;react.element&quot;</span>);<br><span class="hljs-keyword">const</span> <span class="hljs-title class_">ReactElement</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">type, key, ref, self, source, owner, props</span>)&#123;<br>  <span class="hljs-keyword">const</span> element =&#123;<br>    <span class="hljs-comment">// 这个tag唯一标识了此为ReactElement</span><br>    <span class="hljs-attr">$$typeof</span>: <span class="hljs-variable constant_">REACT_ELEMENT_TYPE</span>,<br>    <span class="hljs-comment">// 元素的内置属性</span><br>    <span class="hljs-attr">type</span>:type, <br>    <span class="hljs-attr">key</span>: key,<br>    <span class="hljs-attr">ref</span>: ref,<br>    <span class="hljs-attr">props</span>: props,<br>    <span class="hljs-comment">// 记录创建此元素的组件</span><br>    <span class="hljs-attr">_owner</span>: owner,<br>  &#125;<br>  ...<br>  <span class="hljs-keyword">return</span> element;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>$$typeof</code>标记对象是一个<code>ReactElement</code>属性，在渲染时会通过此属性校验，校验不通过会抛出错误。React利用这个属性来防止通过构造特殊的<code>Children</code>来进行XSS攻击，原因是<code>$$typeof</code>是个Symbol类型，进行JSON转换后Symbol值会丢失，无法在前后端进行传输。如果用户提交了特殊的Children, 后台传回的数据进行JSON转换后Symbol值会丢失，也无法进行渲染，利用此特性，可以防止存储型XSS攻击。</p>
+<h2 id="在React中可引起的漏洞的一些写法"><a href="#在React中可引起的漏洞的一些写法" class="headerlink" title="在React中可引起的漏洞的一些写法"></a>在React中可引起的漏洞的一些写法</h2><h3 id="使用dangerouslySetInnerHTML"><a href="#使用dangerouslySetInnerHTML" class="headerlink" title="使用dangerouslySetInnerHTML"></a>使用<code>dangerouslySetInnerHTML</code></h3><p><code>dangerouslySetInnerHTML</code>是React为浏览器DOM提供的<code>innerHTML</code>替换方案，通常来讲，使用代码直接设置HTML存在的风险，因为很容易使用户暴露在XSS攻击下，因为当使用<code>dangerouslySetInnerHTML</code>时， React将不会对输入进行任何处理并直接渲染到HTML中，如果攻击者在<code>dangerouslySetInerHTML</code>传入了恶意代码，那么浏览器将会运行恶意代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// dangerouslySetInerHTML 源码<br>function getNonChildrenInnerMarkup(props)&#123;<br>  const innerHTML = props.dangerouslySetInnerHTML;<br>  if(innerHTML != null)&#123;<br>    if(innerHTML.__html != null)&#123;<br>      return innerHTML.__html;<br>    &#125;<br>  &#125; else &#123;<br>    const content = props.children;<br>    if(typeof content === &quot;string&quot; || typeof content === &quot;number&quot;)&#123;<br>       return escapeTextForBrowser(content);<br>    &#125;<br>  &#125;<br>  return null;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>所以平时开发应避免使用<code>dangerouslySetInnerHTML</code>, 如果不得不使用，必须对输入进行相关的验证，例如对特殊输入进行过滤、转义等处理。前端这边可以使用<code>xss</code>白名单过滤，通过白名单控制允许HTML标签及各标签属性。</p>
+<h3 id="通过用户提供的对象来创建React组件"><a href="#通过用户提供的对象来创建React组件" class="headerlink" title="通过用户提供的对象来创建React组件"></a>通过用户提供的对象来创建React组件</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">// 用户输入<br>const userProvidePropString = `&#123;&quot;dangerouslySetInnerHTML&quot;:&#123;&quot;__html&quot;:&quot;&lt;img onerror=&#x27;alert(\&quot;xss\&quot;)&#x27; src=&#x27;empty.png&#x27; /&gt; &quot;&#125;&#125;`;<br>// 经过JSON转换<br>const userProvideProps = JSON.parse(userProvidePropsString);<br>render()&#123;<br>  return &lt;div &#123;...userProvideProps&#125; /&gt;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>中断代码将用户提供的数据进行json转换后直接当做div的属性，当用户构造了一个类似列子中的特殊字符串时，页面就会被注入恶意代码，所以要注意平时在开发中不要直接使用用户输入作为属性。</p>
+<h3 id="使用用户输入的值来渲染a标签的href属性，或类似的img-标签的src属性等"><a href="#使用用户输入的值来渲染a标签的href属性，或类似的img-标签的src属性等" class="headerlink" title="使用用户输入的值来渲染a标签的href属性，或类似的img 标签的src属性等"></a>使用用户输入的值来渲染a标签的<code>href</code>属性，或类似的img 标签的src属性等</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">const userWebsite = &quot;javascript:alert(&#x27;xss&#x27;);&quot;;<br>&lt;a href=&#123;userWebsite&#125;&gt;&lt;/a&gt;<br></code></pre></td></tr></table></figure>
+
+<p>如果没有对该URL进行过滤以防止通过<code>JavaScript:</code>或<code>data:</code>来执行<code>JavaScript</code>，则攻击者可以构造XSS攻击，此处会有潜在的安全问题。用户提供的URL需要前端或服务端在入库之前进行校验并过滤。</p>
+<h2 id="服务端如何防止XSS攻击"><a href="#服务端如何防止XSS攻击" class="headerlink" title="服务端如何防止XSS攻击"></a>服务端如何防止XSS攻击</h2><p>服务端作为最后一道防线，也需要做一些措施以防止XSS攻击的，一般涉及以下几方面：</p>
+<ul>
+<li>在收到用户输入时，需要对输入尽可能的严格过滤，过滤或移除特殊的HTML标签、js事件的关键字等</li>
+<li>在输出时对数据进行转义，根据输出语境进行对应的转义</li>
+<li>对关键Cookie设置<code>http-only</code>属性，js脚本就不能访问到<code>http-only</code>的Cookie</li>
+<li>利用CSP来抵御或削弱XSS攻击，一个CSP兼容的浏览器将会仅执行从白名单获取到的脚本文件，忽略所有的其他脚本（包括内联脚本和HTML的事件处理属性）</li>
+</ul>
+<h3 id="CSP"><a href="#CSP" class="headerlink" title="CSP"></a>CSP</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;self&#x27;; img-src https://*; child-src &#x27;none&#x27;;&quot;&gt; <br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>前端知识</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+        <tag>react</tag>
+      </tags>
+  </entry>
 </search>

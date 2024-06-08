@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>react是如何防xss的 | CJJJX's BLOG</title><meta name="author" content="CJJJX"><meta name="copyright" content="CJJJX"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="​	本文会先回顾xss攻击的概念和类型，再介绍react中做了哪些事情来实现xss安全性防御。 XSS 攻击Cross-Site Scripting （跨站脚步攻击）简称XSS, 是一种代码注入攻击。XSS攻击通常指利用网页漏洞，攻击者通过技巧注入xss代码到网页，因为浏览器无法分辨哪些是可信的，导致XSS脚步被执行。XSS脚本通常能够窃取用户数据并发送到攻击者的网站，或者冒充用户，调用目标接口并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react是如何防xss的">
+<meta property="og:url" content="http://cjjjx.github.io/2024/06/08/react%E6%98%AF%E5%A6%82%E4%BD%95%E9%98%B2xss%E7%9A%84/index.html">
+<meta property="og:site_name" content="CJJJX&#39;s BLOG">
+<meta property="og:description" content="​	本文会先回顾xss攻击的概念和类型，再介绍react中做了哪些事情来实现xss安全性防御。 XSS 攻击Cross-Site Scripting （跨站脚步攻击）简称XSS, 是一种代码注入攻击。XSS攻击通常指利用网页漏洞，攻击者通过技巧注入xss代码到网页，因为浏览器无法分辨哪些是可信的，导致XSS脚步被执行。XSS脚本通常能够窃取用户数据并发送到攻击者的网站，或者冒充用户，调用目标接口并">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg">
+<meta property="article:published_time" content="2024-06-08T14:02:55.000Z">
+<meta property="article:modified_time" content="2024-06-08T15:34:51.296Z">
+<meta property="article:author" content="CJJJX">
+<meta property="article:tag" content="安全">
+<meta property="article:tag" content="react">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://cjjjx.github.io/2024/06/08/react%E6%98%AF%E5%A6%82%E4%BD%95%E9%98%B2xss%E7%9A%84/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'react是如何防xss的',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-08 23:34:51'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">89</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="CJJJX's BLOG"><span class="site-name">CJJJX's BLOG</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> about</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">react是如何防xss的</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-08T14:02:55.000Z" title="发表于 2024-06-08 22:02:55">2024-06-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-08T15:34:51.296Z" title="更新于 2024-06-08 23:34:51">2024-06-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86/">前端知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="react是如何防xss的"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>​	本文会先回顾xss攻击的概念和类型，再介绍react中做了哪些事情来实现xss安全性防御。</p>
+<h2 id="XSS-攻击"><a href="#XSS-攻击" class="headerlink" title="XSS 攻击"></a>XSS 攻击</h2><p>Cross-Site Scripting （跨站脚步攻击）简称XSS, 是一种代码注入攻击。XSS攻击通常指利用网页漏洞，攻击者通过技巧注入xss代码到网页，因为浏览器无法分辨哪些是可信的，导致XSS脚步被执行。XSS脚本通常能够窃取用户数据并发送到攻击者的网站，或者冒充用户，调用目标接口并执行攻击者指定操作。</p>
+<h3 id="XSS攻击类型"><a href="#XSS攻击类型" class="headerlink" title="XSS攻击类型"></a>XSS攻击类型</h3><h4 id="反射型"><a href="#反射型" class="headerlink" title="反射型"></a>反射型</h4><ul>
+<li>XSS脚本来自当前HTTP请求</li>
+<li>当服务器在HTTP请求中接收数据并将该数据拼接在HTML中返回时</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">// 某网站具有搜索功能，该功能通过URL参数接收用户提供的搜索词<br>// https://xxx.com/search?query=123<br>// 服务器在此URL的响应中回显提供的搜索词:<br>&lt;p&gt;您的搜索是：123 &lt;/p&gt;<br>// 如果服务器不对数据进行转义等处理，则攻击者可以构造如下链接进行攻击<br>// https://xxx.com/search?query=&lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&#x27;xss&#x27;)&quot; /&gt;<br>// 改url会导致运行alert(&quot;xss&quot;)的响应<br>&lt;p&gt;您的搜索是： &lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&#x27;xss&#x27;)&quot; /&gt;&lt;/p&gt;<br>// 如果有用户请求攻击者的URL，则攻击者提供的脚本将在用户的浏览器中执行<br></code></pre></td></tr></table></figure>
+
+<h4 id="存储型"><a href="#存储型" class="headerlink" title="存储型"></a>存储型</h4><ul>
+<li><p>XSS 脚本来自服务器数据库中</p>
+</li>
+<li><p>攻击者将恶意代码提交到目标网站的数据库中，普通用户访问网站时服务器将恶意代码返回，浏览器默认执行</p>
+<pre><code class="html">// 某个评论页，能查看用户评论
+// 攻击者将恶意代码当做评论提交，服务器没对数据进行转义等处理
+// 评论输入：
+&lt;textarea&gt;
+  &lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&quot;xss&quot;)&quot; /&gt;
+&lt;/textarea&gt;
+// 则攻击者提供的脚本将在所有访问该评论页的用户浏览器执行
+</code></pre>
+</li>
+</ul>
+<h3 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h3><p>该漏洞存在于客户端代码，与服务器无关</p>
+<ul>
+<li>类似反射型，区别在于DOM型XSS并不会和后台进行交互，前端直接将URL中的数据不做处理并动态插入到HTML中，是纯粹的前端安全问题，要做防御也只能在客户端进行防御。</li>
+</ul>
+<h2 id="React如何防止XSS攻击"><a href="#React如何防止XSS攻击" class="headerlink" title="React如何防止XSS攻击"></a>React如何防止XSS攻击</h2><p>无论使用哪种攻击方式，其本质就是将恶意代码注入到应用中，浏览器去默认执行。react官方提到 <code>React DOM</code>在渲染所有输入内容之前，<strong>默认会进行转义</strong>。它可以确保在应用中，<strong>永远不会注入那些并非自己明确编写的内容</strong>。所有的内容在渲染之前都被转换为字符串，因此恶意代码无法成功注入，从而有效的防止XSS攻击。<br> 具体如下：</p>
+<h4 id="自动转义"><a href="#自动转义" class="headerlink" title="自动转义"></a>自动转义</h4><p>React 在渲染HTML内容和渲染DOM属性时会将<code>&quot; &#39; &amp; &lt; &gt;</code>这几个字符进行转义，转义部分源码如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">for</span>(index = match.<span class="hljs-property">index</span>; index&lt;str.<span class="hljs-property">length</span>; index++)&#123;<br>  <span class="hljs-keyword">switch</span> (str.<span class="hljs-title function_">charCodeAt</span>(index))&#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">34</span>: <span class="hljs-comment">// &quot;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;quot;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">38</span>: <span class="hljs-comment">// &amp;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;amp;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">39</span>: <span class="hljs-comment">// &#x27;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;#x27;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">60</span>: <span class="hljs-comment">// &lt;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;lt;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">62</span>: <span class="hljs-comment">// &gt;</span><br>      <span class="hljs-built_in">escape</span> = <span class="hljs-string">&quot;&amp;gt;&quot;</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-attr">default</span>:<br>       <span class="hljs-keyword">continue</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这段代码是React在渲染到浏览器前进行转义，可以看到对浏览器有特殊含义的字符都被转义了，恶意代码在渲染到HTML前都被转成字符串，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs plaintext"> var p = document.getElementById(&quot;p&quot;);<br>// 一段恶意代码<br>const str = `&lt;img src=&quot;empty.png&quot; onerror=&quot;alert(&#x27;xss&#x27;)&quot; /&gt;`;<br>    let _str = &quot;&quot;;<br>    for (let index = 0; index &lt; str.length; index++) &#123;<br>      let escape = &quot;&quot;;<br>      switch (str.charCodeAt(index)) &#123;<br>        case 34: // &quot;<br>          escape = &quot;&amp;quot;&quot;;<br>          break;<br>        case 38: // &amp;<br>          escape = &quot;&amp;amp;&quot;;<br>          break;<br>        case 39: // &#x27;<br>          escape = &quot;&amp;#x27;&quot;;<br>          break;<br>        case 60: // &lt;<br>          escape = &quot;&amp;lt;&quot;;<br>          break;<br>        case 62: // &gt;<br>          escape = &quot;&amp;gt;&quot;;<br>          break;<br>        default:<br>          escape = str[index];<br>        // continue;<br>      &#125;<br>      console.log(escape);<br>      _str += escape;<br>    &#125;<br>    console.log(_str); // &amp;lt;img src=&amp;quot;empty.png&amp;quot; onerror=&amp;quot;alert(&amp;#x27;xss&amp;#x27;)&amp;quot; /&amp;gt;<br>    p.innerHTML = `您的搜索是：$&#123;_str&#125;`;<br></code></pre></td></tr></table></figure>
+
+<h3 id="JSX语法"><a href="#JSX语法" class="headerlink" title="JSX语法"></a>JSX语法</h3><p>JSX实际上是一种语法糖，Babel会把JSX编译成<code>React.createElement()</code>函数调用，最终返回一个<code>ReactElement</code>，以下为这几个步骤的对应代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">const element= (<br>  &lt;h1 className=&quot;greeting&quot;&gt;<br>    hello world!<br>  &lt;/h1&gt;<br>)<br>// 通过babel编译后的代码<br>const element = React.createElement(<br>  &quot;h1&quot;,<br>  &#123;className: &quot;greeting&quot;&#125;,<br>  &quot;hello world!&quot;<br>)<br>// React.createElement()  返回ReactElement<br>const element = &#123;<br>  $$typeof: Symbol(&quot;react.element&quot;),<br>  type: &quot;h1&quot;,<br>  key: null,<br>  props:  &#123;<br>    children: &quot;Hello world!&quot;,<br>    className: &quot;greeting&quot;<br>  &#125;<br>...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> symbolFor = <span class="hljs-title class_">Symbol</span>.<span class="hljs-property">for</span>;<br><span class="hljs-variable constant_">REACT_ELEMENT_TYPE</span> = <span class="hljs-title function_">symbolFor</span>(<span class="hljs-string">&quot;react.element&quot;</span>);<br><span class="hljs-keyword">const</span> <span class="hljs-title class_">ReactElement</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">type, key, ref, self, source, owner, props</span>)&#123;<br>  <span class="hljs-keyword">const</span> element =&#123;<br>    <span class="hljs-comment">// 这个tag唯一标识了此为ReactElement</span><br>    <span class="hljs-attr">$$typeof</span>: <span class="hljs-variable constant_">REACT_ELEMENT_TYPE</span>,<br>    <span class="hljs-comment">// 元素的内置属性</span><br>    <span class="hljs-attr">type</span>:type, <br>    <span class="hljs-attr">key</span>: key,<br>    <span class="hljs-attr">ref</span>: ref,<br>    <span class="hljs-attr">props</span>: props,<br>    <span class="hljs-comment">// 记录创建此元素的组件</span><br>    <span class="hljs-attr">_owner</span>: owner,<br>  &#125;<br>  ...<br>  <span class="hljs-keyword">return</span> element;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>$$typeof</code>标记对象是一个<code>ReactElement</code>属性，在渲染时会通过此属性校验，校验不通过会抛出错误。React利用这个属性来防止通过构造特殊的<code>Children</code>来进行XSS攻击，原因是<code>$$typeof</code>是个Symbol类型，进行JSON转换后Symbol值会丢失，无法在前后端进行传输。如果用户提交了特殊的Children, 后台传回的数据进行JSON转换后Symbol值会丢失，也无法进行渲染，利用此特性，可以防止存储型XSS攻击。</p>
+<h2 id="在React中可引起的漏洞的一些写法"><a href="#在React中可引起的漏洞的一些写法" class="headerlink" title="在React中可引起的漏洞的一些写法"></a>在React中可引起的漏洞的一些写法</h2><h3 id="使用dangerouslySetInnerHTML"><a href="#使用dangerouslySetInnerHTML" class="headerlink" title="使用dangerouslySetInnerHTML"></a>使用<code>dangerouslySetInnerHTML</code></h3><p><code>dangerouslySetInnerHTML</code>是React为浏览器DOM提供的<code>innerHTML</code>替换方案，通常来讲，使用代码直接设置HTML存在的风险，因为很容易使用户暴露在XSS攻击下，因为当使用<code>dangerouslySetInnerHTML</code>时， React将不会对输入进行任何处理并直接渲染到HTML中，如果攻击者在<code>dangerouslySetInerHTML</code>传入了恶意代码，那么浏览器将会运行恶意代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">// dangerouslySetInerHTML 源码<br>function getNonChildrenInnerMarkup(props)&#123;<br>  const innerHTML = props.dangerouslySetInnerHTML;<br>  if(innerHTML != null)&#123;<br>    if(innerHTML.__html != null)&#123;<br>      return innerHTML.__html;<br>    &#125;<br>  &#125; else &#123;<br>    const content = props.children;<br>    if(typeof content === &quot;string&quot; || typeof content === &quot;number&quot;)&#123;<br>       return escapeTextForBrowser(content);<br>    &#125;<br>  &#125;<br>  return null;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>所以平时开发应避免使用<code>dangerouslySetInnerHTML</code>, 如果不得不使用，必须对输入进行相关的验证，例如对特殊输入进行过滤、转义等处理。前端这边可以使用<code>xss</code>白名单过滤，通过白名单控制允许HTML标签及各标签属性。</p>
+<h3 id="通过用户提供的对象来创建React组件"><a href="#通过用户提供的对象来创建React组件" class="headerlink" title="通过用户提供的对象来创建React组件"></a>通过用户提供的对象来创建React组件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">// 用户输入<br>const userProvidePropString = `&#123;&quot;dangerouslySetInnerHTML&quot;:&#123;&quot;__html&quot;:&quot;&lt;img onerror=&#x27;alert(\&quot;xss\&quot;)&#x27; src=&#x27;empty.png&#x27; /&gt; &quot;&#125;&#125;`;<br>// 经过JSON转换<br>const userProvideProps = JSON.parse(userProvidePropsString);<br>render()&#123;<br>  return &lt;div &#123;...userProvideProps&#125; /&gt;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>中断代码将用户提供的数据进行json转换后直接当做div的属性，当用户构造了一个类似列子中的特殊字符串时，页面就会被注入恶意代码，所以要注意平时在开发中不要直接使用用户输入作为属性。</p>
+<h3 id="使用用户输入的值来渲染a标签的href属性，或类似的img-标签的src属性等"><a href="#使用用户输入的值来渲染a标签的href属性，或类似的img-标签的src属性等" class="headerlink" title="使用用户输入的值来渲染a标签的href属性，或类似的img 标签的src属性等"></a>使用用户输入的值来渲染a标签的<code>href</code>属性，或类似的img 标签的src属性等</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">const userWebsite = &quot;javascript:alert(&#x27;xss&#x27;);&quot;;<br>&lt;a href=&#123;userWebsite&#125;&gt;&lt;/a&gt;<br></code></pre></td></tr></table></figure>
+
+<p>如果没有对该URL进行过滤以防止通过<code>JavaScript:</code>或<code>data:</code>来执行<code>JavaScript</code>，则攻击者可以构造XSS攻击，此处会有潜在的安全问题。用户提供的URL需要前端或服务端在入库之前进行校验并过滤。</p>
+<h2 id="服务端如何防止XSS攻击"><a href="#服务端如何防止XSS攻击" class="headerlink" title="服务端如何防止XSS攻击"></a>服务端如何防止XSS攻击</h2><p>服务端作为最后一道防线，也需要做一些措施以防止XSS攻击的，一般涉及以下几方面：</p>
+<ul>
+<li>在收到用户输入时，需要对输入尽可能的严格过滤，过滤或移除特殊的HTML标签、js事件的关键字等</li>
+<li>在输出时对数据进行转义，根据输出语境进行对应的转义</li>
+<li>对关键Cookie设置<code>http-only</code>属性，js脚本就不能访问到<code>http-only</code>的Cookie</li>
+<li>利用CSP来抵御或削弱XSS攻击，一个CSP兼容的浏览器将会仅执行从白名单获取到的脚本文件，忽略所有的其他脚本（包括内联脚本和HTML的事件处理属性）</li>
+</ul>
+<h3 id="CSP"><a href="#CSP" class="headerlink" title="CSP"></a>CSP</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;self&#x27;; img-src https://*; child-src &#x27;none&#x27;;&quot;&gt; <br></code></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://CJJJX.github.io">CJJJX</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://cjjjx.github.io/2024/06/08/react%E6%98%AF%E5%A6%82%E4%BD%95%E9%98%B2xss%E7%9A%84/">http://cjjjx.github.io/2024/06/08/react%E6%98%AF%E5%A6%82%E4%BD%95%E9%98%B2xss%E7%9A%84/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://CJJJX.github.io" target="_blank">CJJJX's BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a><a class="post-meta__tags" href="/tags/react/">react</a></div><div class="post_share"><div class="social-share" data-image="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/06/01/React%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8F%92%E6%A7%BD/" title="React如何实现插槽"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">React如何实现插槽</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://zms-uploads.oss-cn-qingdao.aliyuncs.com/2020/11/ASEN.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJJJX</div><div class="author-info__description">Front-end/NWU/SE/2021</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">89</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CJJJX" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:2873180579@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客一起学习共同进步~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS-%E6%94%BB%E5%87%BB"><span class="toc-number">1.</span> <span class="toc-text">XSS 攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS%E6%94%BB%E5%87%BB%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">XSS攻击类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">反射型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">存储型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM%E5%9E%8BXSS"><span class="toc-number">1.2.</span> <span class="toc-text">DOM型XSS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2XSS%E6%94%BB%E5%87%BB"><span class="toc-number">2.</span> <span class="toc-text">React如何防止XSS攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B9%89"><span class="toc-number">2.0.1.</span> <span class="toc-text">自动转义</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E8%AF%AD%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">JSX语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8React%E4%B8%AD%E5%8F%AF%E5%BC%95%E8%B5%B7%E7%9A%84%E6%BC%8F%E6%B4%9E%E7%9A%84%E4%B8%80%E4%BA%9B%E5%86%99%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">在React中可引起的漏洞的一些写法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8dangerouslySetInnerHTML"><span class="toc-number">3.1.</span> <span class="toc-text">使用dangerouslySetInnerHTML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E7%9A%84%E5%AF%B9%E8%B1%A1%E6%9D%A5%E5%88%9B%E5%BB%BAReact%E7%BB%84%E4%BB%B6"><span class="toc-number">3.2.</span> <span class="toc-text">通过用户提供的对象来创建React组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E7%9A%84%E5%80%BC%E6%9D%A5%E6%B8%B2%E6%9F%93a%E6%A0%87%E7%AD%BE%E7%9A%84href%E5%B1%9E%E6%80%A7%EF%BC%8C%E6%88%96%E7%B1%BB%E4%BC%BC%E7%9A%84img-%E6%A0%87%E7%AD%BE%E7%9A%84src%E5%B1%9E%E6%80%A7%E7%AD%89"><span class="toc-number">3.3.</span> <span class="toc-text">使用用户输入的值来渲染a标签的href属性，或类似的img 标签的src属性等</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2XSS%E6%94%BB%E5%87%BB"><span class="toc-number">4.</span> <span class="toc-text">服务端如何防止XSS攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CSP"><span class="toc-number">4.1.</span> <span class="toc-text">CSP</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/08/react%E6%98%AF%E5%A6%82%E4%BD%95%E9%98%B2xss%E7%9A%84/" title="react是如何防xss的">react是如何防xss的</a><time datetime="2024-06-08T14:02:55.000Z" title="发表于 2024-06-08 22:02:55">2024-06-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/01/React%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8F%92%E6%A7%BD/" title="React如何实现插槽">React如何实现插槽</a><time datetime="2024-06-01T15:37:43.000Z" title="发表于 2024-06-01 23:37:43">2024-06-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/31/%E9%95%BF%E7%9F%AD%E8%BD%AE%E8%AF%A2%E5%92%8C%E9%95%BF%E7%9F%AD%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/" title="长短轮询和长短连接的区别">长短轮询和长短连接的区别</a><time datetime="2024-05-31T15:36:47.000Z" title="发表于 2024-05-31 23:36:47">2024-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/11/css%E9%80%89%E6%8B%A9%E5%99%A8%E6%9D%83%E9%87%8D/" title="css选择器权重">css选择器权重</a><time datetime="2024-05-11T02:42:56.000Z" title="发表于 2024-05-11 10:42:56">2024-05-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/01/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/" title="翻转二叉树">翻转二叉树</a><time datetime="2024-05-01T07:05:18.000Z" title="发表于 2024-05-01 15:05:18">2024-05-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By CJJJX</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addModeChange('mermaid', runMermaid)
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var qweather_key = 'b16a1fa0e63c46a4b8f28abfb06ae3fe';
+  var gaud_map_key = 'e2b04289e870b005374ee030148d64fd&s=rsv3';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '113.34532,23.15624';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><!-- hexo injector body_end end --></body></html>
