@@ -789,6 +789,8 @@
 </ul>
 <h3 id="CSP"><a href="#CSP" class="headerlink" title="CSP"></a>CSP</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;self&#x27;; img-src https://*; child-src &#x27;none&#x27;;&quot;&gt; <br></code></pre></td></tr></table></figure>
 
+
+
 ]]></content>
       <categories>
         <category>前端知识</category>
